@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Trading Game</title>
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+    <script type="text/javascript" data-main="/js/main" src="/js/require.js"></script>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+  </head>
+  <body>
+    <div id="tabs">
+      <ul id="tab_select">
+        <li><a href="#tab_buying"><span>Buying</span></a></li>
+        <li><a href="#tab_selling"><span>Selling</span></a></li>
+        <!--<li><a href="#tab_inventory">Inventory</a></li>
+        <li><a href="#tab_pseudonyms">Pseudonyms</a></li>-->
+        <li><a href="#tab_transactions">Transactions</a></li>
+        <li id="timer" class="ui-corner-all"><div>0:00</div></li>
+        <li id="wallet" class="ui-corner-all"><span class="label">Wallet: </span><span id="wallet_amount">$0.<span class="decimal">00</span></span></li>
+      </ul>
+      <div id="tab_buying"></div>
+      <div id="tab_selling"></div>
+      <!--<div id="tab_inventory"></div>
+      <div id="tab_pseudonyms">
+        Pseudonyms
+      </div>-->
+      <div id="tab_transactions">
+        <table id="transactions">
+          <thead>
+            <tr>
+              <th class="description">Description</th>
+              <th class="net">Net</th>
+              <th class="balance">Balance</th>
+            </tr>
+          </thead>
+          <tbody class="list">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

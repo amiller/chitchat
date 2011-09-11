@@ -1,0 +1,331 @@
+/* General classes */
+.hidden { 
+display: none; }
+
+.show { display: block; }
+.inline { display: inline; }
+
+.lfloat { float: left; }
+.rfloat { float: right; }
+.clear { clear: both; }
+
+.hand {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.money { color: #76EE00; }
+.item_display { color: #D2691E; }
+
+
+/* Global */
+body {
+  background: transparent url(../img/background.png) repeat-y left top;
+  margin-left: 0;
+}
+
+.rating .positive { color: #228B22; }
+.rating .negative { color: #CD2626; }
+.rating img {
+  height: 12px;
+  padding-left: 1px;
+  width: 9px;
+}
+
+
+/* Tabs */
+.ui-tabs-vertical.ui-tabs {
+  height: 100%;
+  padding-left: 0;
+  width: 100%;
+}
+.ui-tabs-vertical.ui-widget-content {
+  background: none;
+  border: 0px none;
+}
+.ui-tabs-vertical.ui-tabs .ui-tabs-nav {
+  border-right: 1px solid;
+  float: left;
+  padding: .2em .1em .2em 0;
+  width: 150px;
+}
+.ui-tabs-vertical .ui-tabs-nav.ui-widget-header {
+  background: none;
+  border: 0px none;
+  height: 100%;
+}
+.ui-tabs-vertical .ui-tabs-nav .ui-state-default.ui-state-active { background-color: white !important; }
+.ui-tabs-vertical .ui-tabs-nav .ui-state-default:hover { background-color: #4B67A1; }
+.ui-tabs .ui-state-hover a:hover { color: #1C94C4; }
+.ui-tabs .ui-state-hover.ui-state-active a:hover { color: #EB8F00; }
+.ui-tabs-vertical .ui-tabs-nav .ui-state-default {
+  background: none;
+  border: 0px none;
+}
+.ui-tabs-vertical .ui-tabs-nav li.ui-state-default {
+  clear: left;
+  width: 100%;
+  border-right-width: 0 !important;
+  margin: 0 -1px 0 0;
+  cursor: pointer;
+  cursor: hand;
+}
+.ui-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-state-default a {
+  cursor: pointer;
+  cursor: hand;
+  float: right;
+}
+.ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-selected {
+  padding-bottom: 0;
+  padding-right: .1em;
+}
+.ui-tabs-vertical .ui-tabs-panel {
+  float: left;
+  padding: 1em;
+  padding-left: 0;
+}
+
+/* Timer */
+#timer {
+  color: black;
+  background: #F0FFF0 url(../img/stopwatch.png) no-repeat 5px center;
+  font-size: 1.4em;
+  letter-spacing: 2px;
+  margin-left: 10px;
+  margin-top: 20px;
+  min-height: 15px;
+  padding: 6px 10px;
+  text-align: center;
+  width: 110px;
+}
+#timer div { margin-left: 24px; }
+
+/* Wallet */
+#wallet {
+  background-color: #4B67A1;
+  font-size: 0.6em;
+  margin-left: 10px;
+  margin-top: 2em;
+  padding: 10px 10px;
+  text-align: center;
+  width: 110px;
+}
+#wallet #wallet_amount {
+  color: #76EE00;
+  font-size: 1.2em;
+}
+#wallet #wallet_amount span.decimal { font-style: italic; }
+
+
+/* Notifications */
+.ui-tabs .ui-tabs-nav li.notification.first { margin-top: 2em; }
+.ui-tabs .ui-tabs-nav li.notification {
+  background-color: #4B67A1;
+  font-size: 0.6em;
+  margin-left: 10px;
+  margin-top: 1em;
+  padding: 10px 10px;
+  white-space: normal;
+  width: 110px;
+}
+.ui-tabs .ui-tabs-nav li.notification:hover { background-color: #1874CD; }
+.ui-tabs .ui-tabs-nav li.notification.achievement {
+  background: #EEAD0E url(../img/trophy.png) no-repeat 5px center;
+  min-height: 15px;
+}
+.ui-tabs .ui-tabs-nav li.notification.achievement div { margin-left: 24px; }
+.ui-tabs .ui-tabs-nav li.notification.achievement:hover { background-color: #FFB90F; }
+.ui-tabs .ui-tabs-nav li.notification.achievement div span.money { color: #0B0; }
+
+
+/* Auction List */
+table.auctions_list {
+  border-spacing: 0px;
+  width: 775px;
+}
+.auctions_list th {
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  padding: 5px 10px;
+  text-align: left;
+  vertical-align: bottom;
+}
+.auctions_list th.img {
+  border-left: 0px none;
+  width: 48px;
+}
+.auctions_list th.name { width: 70%; }
+.auctions_list th.price { width: 10%; }
+.auctions_list th.rating { width: 20%; }
+.auctions_list td {
+  border-bottom: 1px solid #C0C0C0;
+  padding: 5px 10px;
+}
+.auctions_list tr.alt td { background-color: #EDEDED; }
+.auctions_list td.price { text-align: right; }
+.auctions_list img.img {
+  background-color: #F0F0F0;
+  border: 1px solid #C0C0C0;
+  padding: 5px;
+}
+
+
+/* Transactions log */
+table#transactions {
+  border-spacing: 0px;
+  width: 775px;
+}
+#transactions th {
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  padding: 5px 10px;
+  text-align: left;
+  vertical-align: bottom;
+}
+#transactions th.description { width: 70%; }
+#transactions th.net, #transactions th.rating { width: 15%; }
+#transactions td {
+  border-bottom: 1px solid #C0C0C0;
+  padding: 5px 10px;
+}
+#transactions td.net, #transactions td.balance { text-align: right }
+.net.negative { background-color: #C33; }
+.net.nochange { background-color: #FF0; }
+.net.positive { background-color: #238E23; }
+
+
+/* Buying */
+#tab_buying #buy_item { display: none; }
+#tab_buying #buy_item img.img {
+  float: left;
+  height: 128px;
+  width: 128px;
+}
+#tab_buying #buy_item .soldby {
+  color: gray;
+  font-variant: small-caps;
+  padding-left: 5px;
+  text-transform: lowercase;
+}
+#tab_buying #buy_item .details {
+  float: left;
+  margin-left: 20px;
+}
+#tab_buying #buy_item h2, #tab_buying #buy_item h3 { margin-top: 0px; }
+#tab_buying #buy_item h2 { margin-bottom: 0px; max-width:380px }
+#tab_buying #buy_item h3 { padding-left: 5px; }
+#tab_buying #buy_item .rating { font-size: 14px; }
+#tab_buying #buy_item .confirm {
+  border: 0.3em solid #B0B0B0;
+  float: left;
+  font-size: 1.5em;
+  height: 1.5em;
+  margin: 1.25em 0 0 3em;
+  padding: 0.5em;
+  text-align: center;
+  width: 3em;
+}
+#tab_buying #buy_item .confirm:hover {
+  background-color: #F0F0F0;
+  cursor: pointer;
+  cursor: hand;
+}
+
+
+/* Inventory */
+#tab_inventory .item {
+  background-color: #F0F0F0;
+  border: 1px solid #B0B0B0;
+  float: left;
+  margin-left: 0.5em;
+  padding: 0.3em;
+  text-align: center;
+  width: 128px;
+}
+#tab_inventory .item img {
+  height: 128px;
+  width: 128px;
+}
+#tab_inventory .item:hover {
+  background-color: #C0C0C0;
+  cursor: pointer;
+  cursor: hand;
+}
+
+#create_auction img.img {
+  background-color: #F0F0F0;
+  border: 1px solid #B0B0B0;
+  float: left;
+  height: 128px;
+  padding: 0.3em;
+  width: 128px;
+}
+#create_auction  .form {
+  float: left;
+  margin-left: 2em;
+}
+#create_auction  .form input {
+  text-align: right;
+  width: 4em;
+}
+#create_auction span.value { color: #76EE00; }
+
+
+/* jConf */
+.jconfRender{
+	position:fixed;
+	top:0; left:0;
+	background:rgba(0, 0, 0, 0.2);
+	display:none;
+  z-index: 1003;
+}
+#jconfBox{
+	min-height:50px;
+	min-width:200px;
+	max-width:75%;
+	border:solid 2px #B9DDEE;
+	position:absolute;
+	z-index:99999999;
+	background:#FFFFFF;
+	padding:10px;
+	font:normal 13px Verdana, Arial, Helvetica, sans-serif;
+	
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-border-radius:5px;
+	
+	-webkit-box-shadow: 5px 5px 10px #555;
+	-moz-box-shadow: 5px 5px 10px #555;
+	-box-shadow: 5px 5px 10px #555;
+
+	background: #CCC; 
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E9EDFC', endColorstr='#FFFFFF');
+	background: -webkit-gradient(linear, left top, left bottom, from(#E9EDFC), to(#FFF));
+	background: -moz-linear-gradient(top, #E9EDFC, #FFF); 
+	
+	text-shadow:0px 1px 0px #fff;
+	text-align:right;
+}
+.jconfText{
+	text-align:left;
+}
+.jconfInput{
+	width:100%;
+	border:solid 1px #66CCFF;
+	padding:3px 0;
+}
+.jconfBtn{
+	padding:5px 10px;
+	border:1px solid #bbb;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	-khtml-border-radius:3px;
+	background: -moz-linear-gradient(100% 100% 90deg, #eee, #d5d5d5);
+  	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#d5d5d5));
+  	background: -webkit-linear-gradient(#eee, #d5d5d5);
+        background: -o-linear-gradient(#eee, #d5d5d5);
+	color:#232d3d;
+	cursor:pointer;
+}
