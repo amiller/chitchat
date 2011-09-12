@@ -1,27 +1,31 @@
-define(["/js/jquery-ui-1.8.14.min.js"], function()
+define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
 {
+    /**
+     * These are custom to the particular server configuration. Change them as needed
+     */
+    var url_regex = /\/([a-f0-9]+)\//;
+
     /**
      * This class keeps a queue of events that need to be sent to the server.
      * The queue of events gets sent when the queue reaches `max_queue` events,
      * or if `max_seconds` passes, whichever comes first. This is to cut down on
      * server load and for clients where internets is terrible.
      */
-    function EventPoster()
+    function EventManager()
     {
         this.queue = [];
         this._queue = [];
         this.urlid = null;
         
-        this.max_queue = 20;
+        this.max_queue = 1;
         this.max_seconds = 30; // Every 30 seconds
         
         /* Make sure we have a URL ID */
-        var rgx = /\/play\/([a-f0-9]+)\//;
         var uri = window.location.pathname;
         if (window.location.pathname != window.parent.location.pathname)
             uri = window.parent.location.pathname;
         
-        var match = rgx.exec(uri)
+        var match = url_regex.exec(uri)
         if (match != null)
             this.urlid = match[1];
         else
@@ -31,27 +35,73 @@ define(["/js/jquery-ui-1.8.14.min.js"], function()
         this.timer = setTimeout(function () { 
             self.sendQueue(); 
         }, this.max_seconds * 1000);
-    }
-    
-    EventPoster.prototype.sendQueue = function(redirect)
-    {
-        function do_redirect() {
-            setTimeout(function()
-                       {
-                           if (window.location.href != window.parent.location.href)
-                               window.parent.location.href = redirect;
-                           else
-                               window.location.href = redirect;
-                       }, 5*1000);
-        }
 
+        this.polltimer = null;
+        this.pollXHR = null;
+        this.since = null;
+        this.aborting = false;
+
+        this.polldone = false;
+        this.senddone= false;
+    }
+
+    EventManager.prototype.poll = function() {
+        data = {};
+        if (this.since) data.since = this.since;
+
+        var self = this;
+
+        this.pollXHR = $.ajax({
+            url: '/events/' + this.urlid + '/',
+            type: 'post',
+            data: data,
+            //timeout: 10000,  // 10 second timeout
+            success: function (events) {
+                for (var i in events) {
+                    var event = events[i];
+                    self.trigger('server:' + event.name, event.data);
+                    self.trigger('server', event);
+                    self.since = event.time;
+                }
+            },
+            error: function (xhr, status, error) {
+                if (status != 'timeout')
+                    console.error('poll: ' + status);
+            },
+            complete: function (xhr, reason) {
+                if (self.aborting) {
+                    self.polldone = true;
+                    self.finish();
+                    return;
+                }
+
+                // Go around again right away
+                clearTimeout(self.polltimer);
+                self.polltimer = setTimeout(function() {
+                    self.poll();
+                }, 2000)
+            }
+        })
+    }
+
+    EventManager.prototype.abort = function () {
+        this.aborting = true;
+        this.finish = function () {
+            if (this.senddone && this.polldone) {
+
+            }
+        }
+        clearTimeout(this.polltimer);
+        clearTimeout(this.timer);
+    }
+
+    EventManager.prototype.sendQueue = function(redirect)
+    {
         if (this.urlid == null) {
-            if (redirect) do_redirect();
             return false;
         }
         
         if (this.queue.length == 0) {
-            if (redirect) do_redirect();
             return false;
         }
         
@@ -62,12 +112,9 @@ define(["/js/jquery-ui-1.8.14.min.js"], function()
         
         var events = this;
         
-        var data = {
-            'events': JSON.stringify(this._queue),
-            'id': this.urlid
-        };
+        var data = {'events': JSON.stringify(this._queue)};
         
-        jQuery.post('/post/', data, function()
+        jQuery.post('/post/'+this.urlid+'/', data, function()
             {
                 clearTimeout(events.timer);
                 
@@ -88,7 +135,7 @@ define(["/js/jquery-ui-1.8.14.min.js"], function()
         return true;
     }
     
-    EventPoster.prototype.addEvent = function(name, data)
+    EventManager.prototype.addEvent = function(name, data)
     {
         if (this.urlid == null)
             return false;
@@ -104,7 +151,8 @@ define(["/js/jquery-ui-1.8.14.min.js"], function()
         
         return true;
     }
-    
-    var poster = new EventPoster();
-    return poster;
+
+    MicroEvent.mixin(EventManager);
+    var events = new EventManager();
+    return events;
 });

@@ -1,73 +1,40 @@
-require(["/js/jquery-1.6.2.min.js", "game", "net"], jQueryInit);
+require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 
-
-/* Finishes the game and sends the user to the end page */
-function endGame()
-{
-    game.end();
-    addNotification('Game over! Thanks for playing.');
-    window.localStorage['wallet'] = game.wallet;
-    window.localStorage['urlid'] = events.urlid;
-    
-    $('#timer').css('background-color', '#CD2626');
-    $('#timer').effect('highlightnobgchange', {}, 1000);
-    
-    events.addEvent('EndGame', {'wallet': game.wallet});
-    // Send anything left in the queue
-    events.sendQueue('/end.htm');
-}
+var status = null;
+var role = null;
+var userkey = (/\/([a-f0-9]+)\//).exec(window.location.pathname)[1];
+console.info('userkey:' + userkey)
 
 function jQueryInit()
 {
-    try {
-        window.localStorage.test = 'TEST123';
-        if (!window.localStorage.test == 'TEST123') {
-            throw("No local storage");
-        }
-    } catch (e) {
-        alert("HTML5 local storage isn't supported in your browser. This game won't work.");
-        return;
-    }
-    
+    // Bind to events from the server
     events = require('net');
-     
+
+    events.bind('server', function(event) {
+        $('#eventlog').append(JSON.stringify(event));
+    })
+
+    events.bind('server:gamestart', function (data) {
+        role = data.role;
+        $.tmpl('chatbox', {myrole:'buyer'}).appendTo('#buyerchat')
+        $.tmpl('chatbox', {role:'buyer'}).appendTo('#sellerchat')
+    })
+
+    events.poll();
+    
+    $('#approve').click(function() {
+        events.addEvent('approve');
+    })
+    
     require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
     {
-        $.get('/js/templates/transaction.htm', {}, function (data) {
-            $.template('transaction', data);
-            // Initial transaction
-            addTransaction({
-                description: 'Began game.',
-                net: 0.0,
-                balance: game.wallet
-            });
-        });
-                        
-        game.bind('AchievementUnlocked', function(m) {
-            if (m.name.substring(0,4) == 'Cash')
-            {
-                var amount = m.name.substring(4);
-                addAchievement('Reached <span class="money">$' + currency(new Number(amount)) +
-                               '</span> in your wallet!');
-            }
-        });
-        // Setup the timer
-        setTimer(_timeLeft);
-        var timer = setInterval(function() {
-            if (_timeLeft <= 0) {
-                clearInterval(timer);
-                endGame();
-            }
-            
-            setTimer(_timeLeft--);
-        }, 1000);
+        // Start polling only when we have all the templates
             
         // Send a "began game" event to the server
-        events.addEvent("Began game", {});
     });
     
     $(window).unload(function ()
     {
-        game.save();
+        confirm("Are you sure you want to quit");
     });
 }
