@@ -57,7 +57,7 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
   float: left;
   height: 400px;
   margin-top: 10px;
-  width: 200px;
+  width: 300px;
 }
 .chatmessages {
   height: 340px;
@@ -66,14 +66,14 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 .chatinput {
   height: 54px;
   resize: none;
-  width: 194px;
+  width: 294px;
 }
 
 .buyer { background-color: #B0E2FF; }
 .seller { background-color: #EE9933; }
 .insurer { background-color: #9ACD32; }
 
-#buyer_profile { margin-left: 50px; }
+#buyer_profile { margin-left: 150px; }
 #seller_profile { margin-left: 10px; }
 #insurer_profile {
   float: none;
