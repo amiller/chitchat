@@ -19,7 +19,11 @@
 
 
 /* Global */
-body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
+body {
+  -moz-transform: scale(1.2);
+  font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+  zoom: 1.2;
+}
 
 .rating .positive { color: #228B22; }
 .rating .negative { color: #CD2626; }
@@ -111,7 +115,12 @@ button.notyours {
   color: #666;
 }
 button.notyours:active { border: 2px solid #555; }
-button.button_give, button.button_take { width: 44px; } 
+button.button_give, button.button_take {
+  font-size: 9px;
+  height: 38px;
+  width: 50px;
+}
+button.button_give span, button.button_take span { font-size: 8px; }
 button.button_give.pressed, button.button_take.pressed { padding-left: 4px; }
 
 button.yours.buyer { background-color: #B0E2FF; }
