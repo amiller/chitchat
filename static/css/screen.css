@@ -57,7 +57,7 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
   float: left;
   height: 400px;
   margin-top: 10px;
-  width: 200px;
+  width: 300px;
 }
 .chatmessages {
   height: 340px;
@@ -66,19 +66,16 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 .chatinput {
   height: 54px;
   resize: none;
-  width: 194px;
+  width: 294px;
 }
 
 .buyer { background-color: #B0E2FF; }
 .seller { background-color: #EE9933; }
 .insurer { background-color: #9ACD32; }
 
-#buyer_profile { margin-left: 50px; }
+#buyer_profile { margin-left: 150px; }
 #seller_profile { margin-left: 10px; }
-#insurer_profile {
-  float: none;
-  margin-top: 220px;
-}
+#insurer_profile { float: none; }
 
 #seller_chatbox { margin-left: 10px; }
 
@@ -107,6 +104,14 @@ button.notyours {
 }
 button.notyours:active { border: 2px solid #555; }
 
+button.yours.buyer { background-color: #B0E2FF; }
+button.yours.seller { background-color: #EE9933; }
+button.yours.insurer { background-color: #9ACD32; }
+
+button.notyours.buyer { background-color: #C2D5E0; }
+button.notyours.seller { background-color: #AB9478; }
+button.notyours.insurer { background-color: #85916E; }
+
 
 #buyer_seller_arrows {
   background: transparent url(/img/buyer_seller_arrows.png) no-repeat top left;
@@ -121,7 +126,6 @@ button.notyours:active { border: 2px solid #555; }
   vertical-align: middle;
 }
 #buyer_send_seller {
-  background-color: #B0E2FF;
   float: left;
   margin: 0 30px 0 50px;
 }
@@ -135,5 +139,28 @@ button.notyours:active { border: 2px solid #555; }
   background: transparent url(/img/insurer_arrows.png) no-repeat top left;
   float: left;
   margin: 10px 0 0 10px;
+  min-height: 220px;
   width: 350px;
 }
+#insurer_buttons { height: 220px; }
+#insurer_buttons_line1 { padding-top: 30px; }
+#buyer_send_insurer { margin-left: 23px; }
+#seller_send_insurer { margin-right: 20px; }
+
+#insurer_buttons_separator  { padding-top: 10px; }
+#insurer_buttons_separator div {
+  border: 3px solid black;
+  width: 34px;
+}
+#insurer_buttons_separator div.lfloat { margin-left: 50px; }
+#insurer_buttons_separator div.rfloat { margin-right: 48px; }
+
+#insurer_buttons_line2 { padding-top: 10px; }
+#insurer_take_buyer { margin-left: 74px; }
+#insurer_take_seller { margin-right: 63px; }
+
+#insurer_buttons_line3 { padding-top: 5px; }
+#insurer_give_buyer { margin-left: 112px; }
+#insurer_give_seller { margin-right: 110px; }
+
+#eventlog { margin-top: 20px; }

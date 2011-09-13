@@ -2,8 +2,35 @@ require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 
 var status = null;
 var role = null;
-var userkey = (/\/([a-f0-9]+)\//).exec(window.location.pathname)[1];
+var matches = (/\/([a-f0-9]+)\//).exec(window.location.pathname);
+var userkey = '0';
+if (matches != null)
+  userkey = matches[1];
 console.info('userkey:' + userkey)
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+function resetProfileNames()
+{
+  var profiles = ['buyer', 'insurer', 'seller'];
+  for (i in profiles)
+    $('#' + profiles[i] + '_profile .profilename').html(profiles[i].capitalize());
+}
+
+function setCurrentProfile(person)
+{
+  var matches = $('#' + person + '_profile span.profilename');
+  if (matches.length != 1)
+    return;
+  
+  resetProfileNames();
+  matches.html('You');
+  
+  $('button').addClass('notyours');
+  $('button.' + person).removeClass('notyours').addClass('yours');
+}
 
 function jQueryInit()
 {
