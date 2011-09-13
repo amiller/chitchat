@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Trading Game</title>
-    <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
-    <script type="text/javascript" data-main="/js/main" src="/js/require.js"></script>
+    <title>CHITchat</title>
+    <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+    <script type="text/javascript" data-main="js/main" src="/js/require.js"></script>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <style type="text/css">
       .chatbox {
@@ -22,20 +22,35 @@
     </style>
   </head>
   <body>
-
-    <div id="buyerchat" class="chatbox">
-      buyerchat
+    <div class="profilebox buyer" id="buyer_profile">
+      <img class="profileimage" id="buyer_image" src="img/buyer_img.png" />
+      <span class="profilename" id="buyer_profilename">Buyer</span>
     </div>
+    <div class="profilebox seller" id="seller_profile">
+      <img class="profileimage" id="seller_image" src="img/seller_img.png" />
+      <span class="profilename" id="seller_profilename">Seller</span>
+    </div>
+    <div class="clear"> </div>
+    <div class="chatbox buyer" id="buyer_chatbox">
+      <div class="chatmessages" id="buyer_chatmessages"></div>
+      <textarea class="chatinput" id="buyer_chatinput"></textarea>
+    </div>
+    <div class="profilebox insurer" id="insurer_profile">
+      <img class="profileimage" id="insurer_image" src="img/insurer_img.png" />
+      <span class="profilename" id="insurer_profilename">Insurer</span>
+    </div>
+    <div class="chatbox seller" id="seller_chatbox">
+      <div class="chatmessages" id="seller_chatmessages"></div>
+      <textarea class="chatinput" id="seller_chatinput"></textarea>
+    </div>
+
+    <div class="clear"> </div>
 
     <div id="eventlog">
       Do you agree to the following terms and conditions?
       <label><input id="approve_check" type="checkbox"> Yes, I've read them and I agree. </label>
       <input id="approve" type="button" value="Start"/>
-    </div>
-
-    <div id="sellerchat" class="chatbox">
-      sellerchat
-    </div>
+    </div>      
 
   </body>
 </html>
