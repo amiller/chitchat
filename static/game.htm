@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>CHITchat</title>
-    <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
     <script type="text/javascript" data-main="js/main" src="/js/require.js"></script>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
   </head>
@@ -13,27 +13,28 @@
       <span class="profilename" id="buyer_profilename">Buyer</span>
     </div>
     <div id="buyer_seller_arrows">
-      <button class="button_give" id="buyer_send_seller">Give<br />25&cent;</button>
-      <div class="seller_send_buyer_box">
-        <button class="button_give" id="seller_send_buyer">Give<br />25&cent;</button>
-      </div>
+      <button class="button_give buyer" id="buyer_send_seller">Give<br />25&cent;</button>
+      <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
+      <button class="button_give seller notyours" id="seller_send_buyer">Give<br />25&cent;</button>
     </div>
     <div class="profilebox seller" id="seller_profile">
       <img class="profileimage" id="seller_image" src="img/seller_img.png" />
       <span class="profilename" id="seller_profilename">Seller</span>
     </div>
     <div class="clear"> </div>
-    <div class="chatbox buyer" id="buyer_chatbox">
+    <div class="chatbox" id="buyer_chatbox">
       <div class="chatmessages" id="buyer_chatmessages"></div>
       <textarea class="chatinput" id="buyer_chatinput"></textarea>
     </div>
     <div id="insurer_arrows" align="center">
+      <div class="insurer_buttons">
+      </div>
       <div class="profilebox insurer" id="insurer_profile">
         <img class="profileimage" id="insurer_image" src="img/insurer_img.png" />
         <span class="profilename" id="insurer_profilename">Insurer</span>
       </div>
     </div>
-    <div class="chatbox seller" id="seller_chatbox">
+    <div class="chatbox" id="seller_chatbox">
       <div class="chatmessages" id="seller_chatmessages"></div>
       <textarea class="chatinput" id="seller_chatinput"></textarea>
     </div>
