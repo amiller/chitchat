@@ -6,6 +6,7 @@
 
 .lfloat { float: left; }
 .rfloat { float: right; }
+.nofloat { float: none; }
 .clear { clear: both; }
 
 .hand {
@@ -69,11 +70,41 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 }
 
 #buyer_profile { margin-left: 50px; }
-#seller_profile { margin-left: 140px; }
+#seller_profile { margin-left: 10px; }
 #insurer_profile {
-  margin-left: 20px;
-  margin-top: 200px;
+  float: none;
+  margin-top: 220px;
 }
 
-#seller_chatbox { margin-left: 20px; }
+#seller_chatbox { margin-left: 10px; }
 
+#buyer_seller_arrows {
+  background: transparent url(../img/buyer_seller_arrows.png) no-repeat top left;
+  float: left;
+  height: 50px;
+  margin-left: 10px;
+  margin-top: 7px;
+  width: 245px;
+}
+#buyer_seller_arrows button {
+  height: 38px;
+  vertical-align: middle;
+}
+#buyer_send_seller {
+  float: left;
+  margin: 0 30px 0 50px;
+}
+#seller_send_buyer_box { 
+  border-left: 4px solid black;
+  padding-left: 50px;
+}
+#seller_send_buyer {
+  
+}
+
+#insurer_arrows {
+  background: transparent url(../img/insurer_arrows.png) no-repeat top left;
+  float: left;
+  margin: 10px 0 0 10px;
+  width: 350px;
+}
