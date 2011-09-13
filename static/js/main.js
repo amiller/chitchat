@@ -21,15 +21,30 @@ function resetProfileNames()
 
 function setCurrentProfile(person)
 {
-  var matches = $('#' + person + '_profile span.profilename');
+  var matches = $('#' + person + '_profile');
   if (matches.length != 1)
     return;
   
   resetProfileNames();
-  matches.html('You');
+  matches.find('span.profilename').html('You');
+  matches.effect('highlight', {}, 750);
   
   $('button').addClass('notyours');
   $('button.' + person).removeClass('notyours').addClass('yours');
+}
+
+function setButtonPressed(buttons)
+{
+  buttons.each(function (k, button)
+    {
+      button = $(button);
+      button.addClass('pressed');
+      
+      if (button.hasClass('button_give'))
+        button.html('25&cent;<br />Given');
+      else if (button.hasClass('button_take'))
+        button.html('25&cent;<br />Taken');
+    });
 }
 
 function jQueryInit()

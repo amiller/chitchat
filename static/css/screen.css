@@ -82,11 +82,19 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 
 /* Buttons */
 button {
-  border: 2px solid #2A2A2A;
+  border-width: 2px;
+  border-style: solid;
+  border-top-color: #4A4A4A;
+  border-left-color: #4A4A4A;
+  border-bottom-color: #6A6A6A;
+  border-right-color: #6A6A6A;
   background-color: #F0F0F0;
 }
 button:active, button.pressed {
-  border-color: #AAA;
+  border-top-color: #2A2A2A;
+  border-left-color: #2A2A2A;
+  border-bottom-color: #4A4A4A;
+  border-right-color: #4A4A4A;
   background-color: #EAEAEA;
 }
 
@@ -103,14 +111,24 @@ button.notyours {
   color: #666;
 }
 button.notyours:active { border: 2px solid #555; }
+button.button_give, button.button_take { width: 44px; } 
+button.button_give.pressed, button.button_take.pressed { padding-left: 4px; }
 
 button.yours.buyer { background-color: #B0E2FF; }
 button.yours.seller { background-color: #EE9933; }
 button.yours.insurer { background-color: #9ACD32; }
 
-button.notyours.buyer { background-color: #C2D5E0; }
-button.notyours.seller { background-color: #AB9478; }
-button.notyours.insurer { background-color: #85916E; }
+button.yours.buyer:active { background-color: #1FADFF; }
+button.yours.seller:active { background-color: #E28512; }
+button.yours.insurer:active { background-color: #83B819; }
+
+button.notyours.buyer { background-color: #C2D5E0 !important; }
+button.notyours.seller { background-color: #AB9478 !important; }
+button.notyours.insurer { background-color: #85916E !important; }
+
+button.notyours.buyer.pressed { background-color: #A7DCFB !important; }
+button.notyours.seller.pressed { background-color: #DF9943 !important; }
+button.notyours.insurer.pressed { background-color: #97CD32 !important; }
 
 
 #buyer_seller_arrows {
