@@ -59,9 +59,11 @@ def startapp(args):
 
     @app.route('/')
     def index(**kwargs):
-        with open(os.path.join(base, 'static', 'game.htm'), 'r') as fp:
-            return fp.read()
-        #return "Error message. Only access this page with a session"
+        if args.debug:
+          with open(os.path.join(base, 'static', 'game.htm'), 'r') as fp:
+              return fp.read()
+        else:
+          return "Error message. Only access this page with a session"
 
     # Main page for a session
     @app.route('/<userkey>/')
@@ -147,6 +149,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('<Trading Game>')
     parser.add_argument('--port', type=int, default=9202)
     parser.add_argument('--redis-port', type=int, default=9201)
+    parser.add_argument('--debug', type=bool, default=False)
     args = parser.parse_args()
     
     startapp(args)

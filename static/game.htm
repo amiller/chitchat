@@ -15,7 +15,7 @@
     <div id="buyer_seller_arrows">
       <button class="button_give buyer" id="buyer_send_seller">Give<br />25&cent;</button>
       <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
-      <button class="button_give seller notyours" id="seller_send_buyer">Give<br />25&cent;</button>
+      <button class="button_give seller" id="seller_send_buyer">Give<br />25&cent;</button>
     </div>
     <div class="profilebox seller" id="seller_profile">
       <img class="profileimage" id="seller_image" src="/img/seller_img.png" />
@@ -27,7 +27,26 @@
       <textarea class="chatinput" id="buyer_chatinput"></textarea>
     </div>
     <div id="insurer_arrows" align="center">
-      <div class="insurer_buttons">
+      <div id="insurer_buttons">
+        <div id="insurer_buttons_line1">
+          <button class="button_give buyer lfloat" id="buyer_send_insurer">Give<br />25&cent;</button>
+          <button class="button_give seller rfloat" id="seller_send_insurer">Give<br />25&cent;</button>
+        </div>
+        <div class="clear"> </div>
+        <div id="insurer_buttons_separator">
+          <div class="lfloat ui-corner-all"></div>
+          <div class="rfloat ui-corner-all"></div>
+        </div>
+        <div class="clear"> </div>
+        <div id="insurer_buttons_line2">
+          <button class="button_take insurer lfloat" id="insurer_take_buyer">Take<br />25&cent;</button>
+          <button class="button_take insurer rfloat" id="insurer_take_seller">Take<br />25&cent;</button>
+        </div>
+        <div class="clear"> </div>
+        <div id="insurer_buttons_line3">
+          <button class="button_give insurer lfloat" id="insurer_give_buyer">Give<br />25&cent;</button>
+          <button class="button_give insurer rfloat" id="insurer_give_seller">Give<br />25&cent;</button>
+        </div>
       </div>
       <div class="profilebox insurer" id="insurer_profile">
         <img class="profileimage" id="insurer_image" src="/img/insurer_img.png" />
@@ -38,9 +57,7 @@
       <div class="chatmessages" id="seller_chatmessages"></div>
       <textarea class="chatinput" id="seller_chatinput"></textarea>
     </div>
-
     <div class="clear"> </div>
-
     <div id="eventlog">
       Do you agree to the following terms and conditions?
       <label><input id="approve_check" type="checkbox"> Yes, I've read them and I agree. </label>
