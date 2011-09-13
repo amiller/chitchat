@@ -19,10 +19,11 @@ import os.path
 import urlparse
 from binascii import crc32
 from time import time
-
+import sys
 import argparse
 import flask
 from gevent.wsgi import WSGIServer
+import gevent
 import redis
 from werkzeug import SharedDataMiddleware
 
@@ -32,6 +33,8 @@ reload(game)
 app = None
 db = None
 base = os.path.dirname(__file__)
+
+ADMIN_KEY = 'adminueqytMXDDS'
 
 
 def all_events():
@@ -47,115 +50,75 @@ def startapp(args):
     app = flask.Flask(__name__, static_url_path='/')
 
     # Turn Debug on
-    app.debug = True
+    #app.debug = True
     app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
         '/': os.path.join(base, 'static')})
 
     db = redis.Redis(port=args.redis_port)
-    game.db = db
-
-    # Generate the secret key if it hasn't been already
-    if not db.exists('secretkey'):
-        db.set('secretkey', os.urandom(36))
-    app.secret_key = db.get('secretkey')
-    
-    # Setup the user ID counter
-    if not db.exists('id_counter'):
-        db.set('id_counter', 1)
-        
-    # Returns a URL ID based on a counter stored in the database
-    def get_next_url():
-        if not db.exists('next_url_id'):
-            db.set('next_url_id', 0)
-        url_id = db.get('next_url_id')
-        db.incr('next_url_id')
-        
-        return ('%08x' % crc32(app.secret_key + url_id)).replace('-', '')
-    
-    # Adds, or generates and adds, an ID to the list of unactivated IDs
-    def add_next_url(id=None):
-        if id is None:
-            id = get_next_url()
-        db.sadd('url_ids', id)
-    
-    # Adds a certain amount of URLs
-    def add_urls(n=100):
-        for x in xrange(n):
-            add_next_url()
-    
-    # Clear the URL IDs from the URL ID lists. If `used_only` is True, only the
-    # activated URL IDs are removed.
-    def clear_urls(used_only=True):
-        if not used_only:
-            db.sdiffstore('url_ids', 'url_ids', 'url_ids')
-        db.sdiffstore('used_url_ids', 'used_url_ids', 'used_url_ids')
-    
-    def gen_url_csv():
-        if not db.exists('url_ids'):
-            return None
-        
-        return ','.join('/play/%s/' % s for s in db.smembers('url_ids'))
-    
-    @app.route('/csv/')
-    def csv(filename='urls.csv'):
-        if app.debug is False:
-            return '',404
-
-        return gen_url_csv()
+    game.setup_redis(args.redis_port)
 
     @app.route('/')
     def index(**kwargs):
         return "Error message. Only access this page with a session"
 
     # Main page for a session
-    @app.route('/<session>')
-    def session(session=None, **kwargs):
-        if session == 'adminueqytMXDDS':
+    @app.route('/<userkey>/')
+    def default(userkey=None, **kwargs):
+        if userkey == ADMIN_KEY:
             return "Wow! You are an admin"
 
-        print 'session:' + session
-        url = get_next_url()
-        add_next_url(url)
-        return flask.redirect('/play/'+url)
+        # Return an error if they are not a valid user
+        if not db.sismember('invited_userkeys', userkey):
+            return 'This user key is not invited', 403
 
-    # Return all the chat events for a given channel (buyer or seller)
-    @app.route('/chat/<session>/<type>', methods=['POST'])
-    def get_chat_since(session, type, **kwargs):
-        pass
-    
-    @app.route('/post/<session>/', methods=['POST'])
-    def post():
-        if (not 'events' in flask.request.form or
-            not 'id' in flask.request.form):
-            return 'BAD',500
-        
-        id = flask.request.form['id']
+        # Render the main page
+        with open(os.path.join(base, 'static', 'game.htm'), 'r') as fp:
+            return fp.read()
+
+    @app.route('/post/<userkey>/', methods=['POST'])
+    def post(userkey, **kwargs):
+        status = game.user_status(userkey)
+        if status['status'] == 'uninvited':
+            flask.abort(403)
+
+        # Check if we should be considering the form
         events = json.loads(flask.request.form['events'])
         for event in events:
-            db.lpush('%s:log' % id, json.dumps(event))
-        
+            # Deal with the event
+            game.process_user_event(userkey, event)
         return 'OK'
-        
-    @app.route('/play/<id>/')
-    def play(id):
-        log = '%s:log' % id
-        if not db.sismember('url_ids', id) and not db.exists(log):
-            return '', 404
-        
-        if not db.exists(log):
-            db.srem('url_ids', id)
-            db.sadd('used_url_ids', id)
+
+    @app.route('/events/<userkey>/', methods=['POST'])
+    def events(userkey):
+        def response(events):
+            rv = flask.make_response()
+            rv.mimetype = 'text/json'
+            rv.data = json.dumps(events)
+            return rv
             
-            db.set('%s:id', db.get('id_counter'))
-            db.incr('id_counter')
-            
-            # Add activated URL event to initialize list
-            db.lpush(log,
-                     '{"name":"Activated URL","data":{"id":"%s"},"time":%s}'
-                     % (id, int(time())))
-        
-        with open(os.path.join(base, 'static', 'index.htm'), 'r') as fp:
-            return fp.read()
+        status = game.user_status(userkey)
+        if status['status'] == 'uninvited':
+            return response([status])
+
+        for i in range(60):
+            since = None
+            if 'since' in flask.request.form:
+                since = flask.request.form['since']
+            events = game.events_for_user(userkey, since)
+
+            # Return if there are some events
+            if events: return response(events)
+
+            # Otherwise wait and poll
+            gevent.sleep(1)
+
+        return response([])
+
+    @app.route('/adminueqytMXDDS/newuser')
+    def admin_newuser():
+        # Create a new random string
+        userkey = game.add_invite()
+        return flask.redirect('/' + userkey)
 
     @app.route('/adminueqytMXDDS/table')
     def admin_table():

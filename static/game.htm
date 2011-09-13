@@ -4,12 +4,26 @@
     <title>CHITchat</title>
     <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
-    <script type="text/javascript" data-main="js/main" src="/js/require.js"></script>
+    <script type="text/javascript" data-main="/js/main" src="/js/require.js"></script>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <style type="text/css">
+      .chatbox {
+         width:300px;
+         height:400px;
+      }
+      .chatbox#buyerchat {
+         background:lightblue;
+         float:left;
+      }
+      .chatbox#sellerchat {
+         background:lightpink;
+         float:right;
+      }
+    </style>
   </head>
   <body>
     <div class="profilebox buyer" id="buyer_profile">
-      <img class="profileimage" id="buyer_image" src="img/buyer_img.png" />
+      <img class="profileimage" id="buyer_image" src="/img/buyer_img.png" />
       <span class="profilename" id="buyer_profilename">Buyer</span>
     </div>
     <div id="buyer_seller_arrows">
@@ -18,7 +32,7 @@
       <button class="button_give seller notyours" id="seller_send_buyer">Give<br />25&cent;</button>
     </div>
     <div class="profilebox seller" id="seller_profile">
-      <img class="profileimage" id="seller_image" src="img/seller_img.png" />
+      <img class="profileimage" id="seller_image" src="/img/seller_img.png" />
       <span class="profilename" id="seller_profilename">Seller</span>
     </div>
     <div class="clear"> </div>
@@ -26,11 +40,14 @@
       <div class="chatmessages" id="buyer_chatmessages"></div>
       <textarea class="chatinput" id="buyer_chatinput"></textarea>
     </div>
+    <div class="profilebox insurer" id="insurer_profile">
+      <img class="profileimage" id="insurer_image" src="/img/insurer_img.png" />
+      <span class="profilename" id="insurer_profilename">Insurer</span>
     <div id="insurer_arrows" align="center">
       <div class="insurer_buttons">
       </div>
       <div class="profilebox insurer" id="insurer_profile">
-        <img class="profileimage" id="insurer_image" src="img/insurer_img.png" />
+        <img class="profileimage" id="insurer_image" src="/img/insurer_img.png" />
         <span class="profilename" id="insurer_profilename">Insurer</span>
       </div>
     </div>
@@ -38,6 +55,14 @@
       <div class="chatmessages" id="seller_chatmessages"></div>
       <textarea class="chatinput" id="seller_chatinput"></textarea>
     </div>
+
     <div class="clear"> </div>
+
+    <div id="eventlog">
+      Do you agree to the following terms and conditions?
+      <label><input id="approve_check" type="checkbox"> Yes, I've read them and I agree. </label>
+      <input id="approve" type="button" value="Start"/>
+    </div>      
+
   </body>
 </html>
