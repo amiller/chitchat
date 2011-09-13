@@ -25,7 +25,7 @@ def add_invite():
 
 
 def random_userkey():
-    # 16 character user string (8 bytes)
+    # Generate a 16 character user string (8 bytes)
     return hashlib.sha256(os.urandom(20)).hexdigest()[:16]
 
 
@@ -45,20 +45,23 @@ def events_for_user(userkey, since=None):
     since = '(' + since if since else '-inf'
     user_events = db.zrangebyscore('events_user:%s' % userkey,
                                    since, float('+inf'), withscores=True)
+    user_events = [(json.loads(k),v) for (k,v) in user_events]
 
     if status['status'] == 'playing':
         gamekey = status['gamekey']
         game_events = db.zrangebyscore('events_game:%s' % gamekey,
                                        since, float('+inf'), withscores=True)
+        game_events = [(json.loads(k),v) for (k,v) in game_events]
+        role = status['role']
+        game = Game(gamekey)
+        game_events = [_ for _ in game_events if game.filter_event(role, _[0])]
     else:
         game_events = []
 
     # Sort the combined events
     events = user_events + game_events
     events = map(lambda x: x[0], sorted(events, key=lambda k: k[1]))
-
-    # TODO filter events by user visibility
-    return [json.loads(_) for _ in events]
+    return events
 
 
 def events_for_game(gamekey, since=None):
@@ -110,6 +113,28 @@ def user_status(userkey):
     return status
 
 
+def process_user_event(userkey, event):
+    status = user_status(userkey)
+    if event['name'] == 'approve' and status['status'] == 'prequeue':
+        queue_user(userkey)
+        return
+
+    # Refresh in the queue
+    if event['name'] == 'refresh':
+        pass
+
+    if status['status'] == 'playing':
+        gamekey = status['gamekey']
+        with db.lock('lock:game:%s' % gamekey):
+            game = Game(gamekey)
+            try:
+                game.play_event(status['role'], event)
+            except AssertionError, e:
+                print 'Event error:', e
+            game.commit_state()
+            game.commit_events()
+
+
 def handle_queue():
     # Can we break three people into a group?
     # Does anyone need to be refreshed
@@ -143,10 +168,12 @@ def handle_queue():
 
 
 class Game(object):
-    def __init__(self, state=None, users=None):
-        self.state = state
+    def __init__(self, gamekey=None, users=None):
         self.events = []
-        if not state:
+
+        if gamekey:
+            self.state = json.loads(db['game:%s' % gamekey])
+        else:
             # Randomly select game condition
             condition = random.choice([1,2,3])
 
@@ -164,6 +191,7 @@ class Game(object):
                                       {'money': 0.25, 'tokens': 0}},
                           'gamekey': random_userkey(),
                           'condition': condition,
+                          'starttime': repr(time.time()),
                                       }
             # Game start event
             self.event('gamestart')
@@ -176,19 +204,38 @@ class Game(object):
             user_event(insurer, 'gamestart', {'role': 'insurer',
                                               'condition': condition})
 
+    def filter_event(self, role, event):
+        if event['name'] == 'chat':
+            return (role == 'insurer' or
+                    event['data']['chatbox'] == role)
+        return True
+
     def commit_state(self):
         gamekey = self.state['gamekey']
-        db['game:%s'%gamekey] = self.state
+        db['game:%s'%gamekey] = json.dumps(self.state)
 
     def commit_events(self):
         # Store any new events in the db, and clear the events
         for event in self.events:
             gamekey = self.state['gamekey']
             e = {json.dumps(event): repr(event['time'])}
+            db.zadd('events_game:%s'%gamekey, **e)
         self.events = []
 
     def event(self, name, data={}):
-        self.events.append({'name':name, 'data': data, 'time': time.time()})
+        self.events.append({'name':name, 'data': data,
+                            'time': time.time()})
+
+    def play_event(self, role, event):
+        if event['name'] == 'chat':
+            message = event['data']['message']
+            chatbox = event['data']['chatbox']
+            if chatbox == 'buyer':
+                assert role in ['insurer', 'buyer'], 'Wrong chat'
+            if chatbox == 'seller':
+                assert role in ['insurer', 'seller'], 'Wrong chat'
+            self.event('chat', {'from': role, 'chatbox': chatbox,
+                                'message': message})
 
 
 class Condition1(Game):

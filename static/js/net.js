@@ -59,7 +59,7 @@ define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
             success: function (events) {
                 for (var i in events) {
                     var event = events[i];
-                    self.trigger('server:' + event.name, event.data);
+                    self.trigger('server:' + event.name, event.data); 
                     self.trigger('server', event);
                     self.since = event.time;
                 }
@@ -104,6 +104,10 @@ define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
         if (this.queue.length == 0) {
             return false;
         }
+
+        if (this.xhr) {
+            return false;
+        }
         
         // Copy the queue to a temporary one, so if the request fails, we can
         // re-add them to the queue.
@@ -114,7 +118,7 @@ define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
         
         var data = {'events': JSON.stringify(this._queue)};
         
-        jQuery.post('/post/'+this.urlid+'/', data, function()
+        this.xhr = jQuery.post('/post/'+this.urlid+'/', data, function()
             {
                 clearTimeout(events.timer);
                 
@@ -130,7 +134,12 @@ define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
                 events._queue.concat(events.queue);
                 events.queue = events._queue;
                 events._queue = [];
-            });
+            })
+        .complete(function()
+            {
+                events.xhr = null;
+                events.sendQueue();
+            })
         
         return true;
     }

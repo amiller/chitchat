@@ -50,7 +50,7 @@ def startapp(args):
     app = flask.Flask(__name__, static_url_path='/')
 
     # Turn Debug on
-    app.debug = True
+    #app.debug = True
     app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
         '/': os.path.join(base, 'static')})
 
@@ -77,14 +77,15 @@ def startapp(args):
 
     @app.route('/post/<userkey>/', methods=['POST'])
     def post(userkey, **kwargs):
-        events = json.loads(flask.request.form['events'])
         status = game.user_status(userkey)
+        if status['status'] == 'uninvited':
+            flask.abort(403)
 
+        # Check if we should be considering the form
+        events = json.loads(flask.request.form['events'])
         for event in events:
             # Deal with the event
-            if event['name'] == 'approve' and status['status'] == 'prequeue':
-                game.queue_user(userkey)
-                
+            game.process_user_event(userkey, event)
         return 'OK'
 
     @app.route('/events/<userkey>/', methods=['POST'])
@@ -99,7 +100,7 @@ def startapp(args):
         if status['status'] == 'uninvited':
             return response([status])
 
-        for i in range(10):
+        for i in range(60):
             since = None
             if 'since' in flask.request.form:
                 since = flask.request.form['since']
@@ -109,7 +110,7 @@ def startapp(args):
             if events: return response(events)
 
             # Otherwise wait and poll
-            gevent.sleep(2)
+            gevent.sleep(1)
 
         return response([])
 

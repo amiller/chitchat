@@ -11,6 +11,10 @@ function jQueryInit()
     events = require('net');
 
     events.bind('server', function(event) {
+        if (event.status == 'uninvited') {
+            events.abort()
+            return;
+        }
         $('#eventlog').append(JSON.stringify(event));
     })
 
@@ -24,13 +28,36 @@ function jQueryInit()
         // Show the countdown timer
     })
 
+    events.bind('server:chat', function (data) {
+        msgs = $('#'+data.chatbox+'_chatmessages')
+        msgs.append('<div class="message '+data.from+'">' + data.message + '</div>')
+        msgs[0].scrollTop = msgs[0].scrollHeight;
+    })
+
     events.bind('server:gamestart', function (data) {
         role = data.role;
     })
 
     events.poll();
+
+    // Bind to the chat box inputs
+    function keydown(role) {
+        return function(e) {
+            var key = e.which;
+            if (key == 13) {
+                e.preventDefault();
+                events.addEvent('chat', {'message': $(this).val(),
+                                         'chatbox': role});
+                $(this).val('');
+            }
+        }
+    }
+    $('#buyer_chatinput').bind('keydown', keydown('buyer'))
+    $('#seller_chatinput').bind('keydown', keydown('seller'))
     
+    // Bind to the approve accept button
     $('#approve').click(function() {
+        // FIXME Check that the checkbox was selected
         events.addEvent('approve');
         // Hide the "Accept" message
     })
@@ -44,6 +71,6 @@ function jQueryInit()
     
     $(window).unload(function ()
     {
-        confirm("Are you sure you want to quit");
+        // Pass
     });
 }
