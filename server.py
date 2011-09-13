@@ -141,7 +141,8 @@ def startapp(args):
         return html
 
 
-if __name__ == '__main__':
+def main():
+    global args
     parser = argparse.ArgumentParser('<Trading Game>')
     parser.add_argument('--port', type=int, default=9202)
     parser.add_argument('--redis-port', type=int, default=9201)
@@ -155,3 +156,6 @@ if __name__ == '__main__':
     else:
         http_server = WSGIServer(('', args.port), app)
         http_server.serve_forever()
+        
+if __name__ == '__main__':
+    main()
