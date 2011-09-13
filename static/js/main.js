@@ -14,16 +14,25 @@ function jQueryInit()
         $('#eventlog').append(JSON.stringify(event));
     })
 
+    events.bind('server:prequeue', function (data) {
+        // Show the 'accept' message
+    })
+
+    events.bind('server:queued', function (data) {
+        // Hide the accept message if it's still shown
+        // Show the 'waiting for people' information
+        // Show the countdown timer
+    })
+
     events.bind('server:gamestart', function (data) {
         role = data.role;
-        $.tmpl('chatbox', {myrole:'buyer'}).appendTo('#buyerchat')
-        $.tmpl('chatbox', {role:'buyer'}).appendTo('#sellerchat')
     })
 
     events.poll();
     
     $('#approve').click(function() {
         events.addEvent('approve');
+        // Hide the "Accept" message
     })
     
     require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
