@@ -8,61 +8,76 @@
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
   </head>
   <body>
-    <div class="profilebox buyer" id="buyer_profile">
-      <img class="profileimage" id="buyer_image" src="/img/buyer_img.png" />
-      <span class="profilename" id="buyer_profilename">Buyer</span>
-    </div>
-    <div id="buyer_seller_arrows">
-      <button class="button_give buyer" id="buyer_send_seller">Give 25&cent; <span>to</span> Seller</button>
-      <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
-      <button class="button_give seller" id="seller_send_buyer">Give 25&cent; <span>to</span> Buyer</button>
-    </div>
-    <div class="profilebox seller" id="seller_profile">
-      <img class="profileimage" id="seller_image" src="/img/seller_img.png" />
-      <span class="profilename" id="seller_profilename">Seller</span>
-    </div>
-    <div class="clear"> </div>
-    <div class="chatbox" id="buyer_chatbox">
-      <div class="chatmessages" id="buyer_chatmessages"></div>
-      <textarea class="chatinput" id="buyer_chatinput"></textarea>
-    </div>
-    <div id="insurer_arrows" align="center">
-      <div id="insurer_buttons">
-        <div id="insurer_buttons_line1">
-          <button class="button_give buyer lfloat" id="buyer_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
-          <button class="button_give seller rfloat" id="seller_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+    <div id="body">
+      <div class="profilebox buyer" id="buyer_profile">
+        <img class="profileimage" id="buyer_image" src="/img/buyer_img.png" />
+        <span class="profilename" id="buyer_profilename">Buyer</span>
+      </div>
+      <div id="buyer_seller_arrows">
+        <button class="button_give buyer" id="buyer_send_seller">Give 25&cent; <span>to</span> Seller</button>
+        <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
+        <button class="button_give seller" id="seller_send_buyer">Give 25&cent; <span>to</span> Buyer</button>
+      </div>
+      <div class="profilebox seller" id="seller_profile">
+        <img class="profileimage" id="seller_image" src="/img/seller_img.png" />
+        <span class="profilename" id="seller_profilename">Seller</span>
+      </div>
+      <div class="clear"> </div>
+      <div class="chatbox" id="buyer_chatbox">
+        <div class="chatmessages" id="buyer_chatmessages"></div>
+        <textarea class="chatinput" id="buyer_chatinput"></textarea>
+      </div>
+      <div id="insurer_arrows" align="center">
+        <div id="insurer_buttons">
+          <div id="insurer_buttons_line1">
+            <button class="button_give buyer lfloat" id="buyer_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+            <button class="button_give seller rfloat" id="seller_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+          </div>
+          <div class="clear"> </div>
+          <div id="insurer_buttons_separator">
+            <div class="lfloat ui-corner-all"></div>
+            <div class="rfloat ui-corner-all"></div>
+          </div>
+          <div class="clear"> </div>
+          <div id="insurer_buttons_line2">
+            <button class="button_take insurer lfloat" id="insurer_take_buyer">Take 25&cent; <span>from</span> Buyer</button>
+            <button class="button_take insurer rfloat" id="insurer_take_seller">Take 25&cent; <span>from</span> Seller</button>
+          </div>
+          <div class="clear"> </div>
+          <div id="insurer_buttons_line3">
+            <button class="button_give insurer lfloat" id="insurer_give_buyer">Give 25&cent; <span>to</span> Buyer</button>
+            <button class="button_give insurer rfloat" id="insurer_give_seller">Give 25&cent; <span>to</span> Seller</button>
+          </div>
         </div>
-        <div class="clear"> </div>
-        <div id="insurer_buttons_separator">
-          <div class="lfloat ui-corner-all"></div>
-          <div class="rfloat ui-corner-all"></div>
-        </div>
-        <div class="clear"> </div>
-        <div id="insurer_buttons_line2">
-          <button class="button_take insurer lfloat" id="insurer_take_buyer">Take 25&cent; <span>from</span> Buyer</button>
-          <button class="button_take insurer rfloat" id="insurer_take_seller">Take 25&cent; <span>from</span> Seller</button>
-        </div>
-        <div class="clear"> </div>
-        <div id="insurer_buttons_line3">
-          <button class="button_give insurer lfloat" id="insurer_give_buyer">Give 25&cent; <span>to</span> Buyer</button>
-          <button class="button_give insurer rfloat" id="insurer_give_seller">Give 25&cent; <span>to</span> Seller</button>
+        <div class="profilebox insurer" id="insurer_profile">
+          <img class="profileimage" id="insurer_image" src="/img/insurer_img.png" />
+          <span class="profilename" id="insurer_profilename">Insurer</span>
         </div>
       </div>
-      <div class="profilebox insurer" id="insurer_profile">
-        <img class="profileimage" id="insurer_image" src="/img/insurer_img.png" />
-        <span class="profilename" id="insurer_profilename">Insurer</span>
+      <div class="chatbox" id="seller_chatbox">
+        <div class="chatmessages" id="seller_chatmessages"></div>
+        <textarea class="chatinput" id="seller_chatinput"></textarea>
+      </div>
+      <div class="clear"> </div>
+      <div id="notifications_list">
+        <div class="instructions ui-corner-all" id="instructions_role" style="display:none;">
+          <div class="title">Specific Role Instructions</div>
+          <div class="body"></div>
+        </div>
+        <div class="instructions ui-corner-all" id="instructions">
+          <div class="title">Instructions</div>
+          <div class="body">
+            <p>This is a game played with three people, the ‘buyer’, the ‘seller’ and the ‘insurer’. The buyer and seller start with 25 cent bonuses. Additionally, the seller starts out with a ‘gold token’, which he can sell to the buyer for 25 cents. If the buyer ends up with the gold token, he’ll earn a 50 cent bonus. So if the buyer and seller make a deal, then everyone earns 50 cents.</p>
+<p>However, the buyer has to go first. The seller has to be trusted to give the gold token on his turn. All the three parties keep whatever bonus they have at the end of the game! The buyer and seller cannot speak directly to each other, but they can both chat with the insurer. The insurer’s job is to help make a fair deal.</p>
+<p>After 5 minutes, the game will end and you will be asked to fill out a survey questionnaire. You must complete the entire survey in order to receive the $1 payment.</p>
+            Do you agree to the following terms and conditions?<br />
+            <label><input id="approve_check" type="checkbox">Yes, I've read them and I agree.</label><br />
+            <input id="approve" type="button" value="Start"/>
+          </div>
+        </div>
+      </div>
+      <div id="eventlog">
       </div>
     </div>
-    <div class="chatbox" id="seller_chatbox">
-      <div class="chatmessages" id="seller_chatmessages"></div>
-      <textarea class="chatinput" id="seller_chatinput"></textarea>
-    </div>
-    <div class="clear"> </div>
-    <div id="eventlog">
-      Do you agree to the following terms and conditions?
-      <label><input id="approve_check" type="checkbox"> Yes, I've read them and I agree. </label>
-      <input id="approve" type="button" value="Start"/>
-    </div>
-
   </body>
 </html>

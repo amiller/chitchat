@@ -24,6 +24,7 @@ body {
   font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
   zoom: 1.2;
 }
+#body { width: 980px; }
 
 .rating .positive { color: #228B22; }
 .rating .negative { color: #CD2626; }
@@ -131,13 +132,32 @@ button.yours.buyer:active { background-color: #1FADFF; }
 button.yours.seller:active { background-color: #E28512; }
 button.yours.insurer:active { background-color: #83B819; }
 
-button.notyours.buyer { background-color: #C2D5E0 !important; }
-button.notyours.seller { background-color: #AB9478 !important; }
-button.notyours.insurer { background-color: #85916E !important; }
+.notyours.buyer { background-color: #C2D5E0 !important; }
+.notyours.seller { background-color: #AB9478 !important; }
+.notyours.insurer { background-color: #85916E !important; }
 
 button.notyours.buyer.pressed { background-color: #A7DCFB !important; }
 button.notyours.seller.pressed { background-color: #DF9943 !important; }
 button.notyours.insurer.pressed { background-color: #97CD32 !important; }
+
+
+/* Instructions and notifications */
+#notifications_list { margin-top: 20px; }
+.instructions {
+  border: 2px solid #DDD569;
+  margin-bottom: 10px;
+}
+.instructions .title {
+  background-color: #DDD569;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: 4px 6px;
+}
+.instructions .body { padding: 10px; }
+.instructions .body p:first { margin-top: 0px; }
+#instructions_role.buyer { border-color: #B0E2FF; }
+#instructions_role.seller { border-color: #EE9933; }
+#instructions_role.insurer { border-color: #9ACD32; }
 
 
 #buyer_seller_arrows {

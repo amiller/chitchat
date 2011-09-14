@@ -1,6 +1,7 @@
 require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 
 var status = null;
+var condition = null;
 var role = null;
 var matches = (/\/([a-f0-9]+)\//).exec(window.location.pathname);
 var userkey = '0';
@@ -14,41 +15,44 @@ String.prototype.capitalize = function() {
 
 function resetProfileNames()
 {
-  var profiles = ['buyer', 'insurer', 'seller'];
-  for (i in profiles)
-    $('#' + profiles[i] + '_profile .profilename').html(profiles[i].capitalize());
+    var profiles = ['buyer', 'insurer', 'seller'];
+    for (i in profiles)
+        $('#' + profiles[i] + '_profile .profilename').html(profiles[i].capitalize());
 }
 
 function setCurrentProfile(person)
 {
-  var matches = $('#' + person + '_profile');
-  if (matches.length != 1)
-    return;
-  
-  resetProfileNames();
-  matches.find('span.profilename').html('You');
-  matches.effect('highlight', {}, 750);
-  
-  $('button').addClass('notyours');
-  $('button.' + person).removeClass('notyours').addClass('yours');
+    var matches = $('#' + person + '_profile');
+    if (matches.length != 1)
+        return;
+    
+    resetProfileNames();
+    matches.find('span.profilename').html('You');
+    matches.effect('highlight', {}, 750);
+    
+    $('button').addClass('notyours');
+    $('button.' + person).removeClass('notyours').addClass('yours');
+    $('#instructions_role').addClass(person);
 }
 
 function setButtonPressed(buttons)
 {
-  buttons.each(function (k, button)
-    {
-      button = $(button);
-      button.addClass('pressed');
-      
-      if (button.hasClass('button_give'))
-        button.html('25&cent;<br />Given');
-      else if (button.hasClass('button_take'))
-        button.html('25&cent;<br />Taken');
+    buttons.each(function (k, button) {
+        button = $(button);
+        button.addClass('pressed');
+        
+        if (button.hasClass('button_give'))
+            button.html('25&cent;<br />Given');
+        else if (button.hasClass('button_take'))
+            button.html('25&cent;<br />Taken');
     });
 }
 
 function jQueryInit()
 {
+    resetProfileNames();
+    $('button').addClass('notyours');
+    
     // Bind to events from the server
     events = require('net');
 
@@ -58,27 +62,49 @@ function jQueryInit()
             return;
         }
         $('#eventlog').append(JSON.stringify(event));
-    })
+    });
 
     events.bind('server:prequeue', function (data) {
         // Show the 'accept' message
-    })
+    });
 
     events.bind('server:queued', function (data) {
         // Hide the accept message if it's still shown
         // Show the 'waiting for people' information
         // Show the countdown timer
-    })
+    });
 
     events.bind('server:chat', function (data) {
         msgs = $('#'+data.chatbox+'_chatmessages')
         msgs.append('<div class="message '+data.from+'">' + data.message + '</div>')
         msgs[0].scrollTop = msgs[0].scrollHeight;
-    })
+    });
 
     events.bind('server:gamestart', function (data) {
         role = data.role;
-    })
+        condition = data.condition;
+        setCurrentProfile(role);
+    });
+    
+    events.bind('send_money_buyer_seller', function () {
+        setButtonPressed($('#buyer_send_seller'));
+    });
+    
+    events.bind('send_money_seller_insurer', function () {
+        setButtonPressed($('#seller_send_insurer'));
+    });
+    
+    events.bind('send_money_buyer_insurer', function () {
+        setButtonPressed($('#buyer_send_insurer'));
+    });
+    
+    events.bind('send_money_insurer_buyer', function () {
+        setButtonPressed($('#insurer_send_buyer'));
+    });
+    
+    events.bind('send_money_insurer_seller', function () {
+        setButtonPressed($('#insurer_send_seller'));
+    });
 
     events.poll();
 
