@@ -190,7 +190,7 @@ function jQueryInit()
 
     events.bind('server:chat', function (data) {
         msgs = $('#'+data.chatbox+'_chatmessages')
-        msgs.append('<div class="message '+data.from+'">' + data.message + '</div>')
+        msgs.append('<div class="message '+data.from+(data.from==role?' yours':'')+'">' + data.message + '</div>')
         msgs[0].scrollTop = msgs[0].scrollHeight;
     });
 

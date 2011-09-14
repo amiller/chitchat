@@ -72,6 +72,8 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
   resize: none;
   width: 294px;
 }
+.message { padding: 2px 5px; }
+.message:not(.yours) { font-style: italic; }
 
 .buyer { background-color: #B0E2FF !important; }
 .seller { background-color: #EE9933 !important; }
