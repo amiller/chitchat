@@ -197,18 +197,11 @@ class Game(object):
             self.event('gamestart')
 
             # User info events
-            user_event(buyer, 'gamestart', {'role': 'buyer',
-                                            'condition': condition})
-            user_event(seller, 'gamestart', {'role': 'seller',
-                                             'condition': condition})
-            user_event(insurer, 'gamestart', {'role': 'insurer',
-                                              'condition': condition})
-
-    def filter_event(self, role, event):
-        if event['name'] == 'chat':
-            return (role == 'insurer' or
-                    event['data']['chatbox'] == role)
-        return True
+            d = {'condition': condition,
+                 'starttime': self.state['starttime']}
+            d['role'] = 'buyer'; user_event(buyer, 'gamestart', d)
+            d['role'] = 'seller'; user_event(seller, 'gamestart', d)
+            d['role'] = 'insurer'; user_event(insurer, 'gamestart', d)
 
     def commit_state(self):
         gamekey = self.state['gamekey']
@@ -237,15 +230,93 @@ class Game(object):
             self.event('chat', {'from': role, 'chatbox': chatbox,
                                 'message': message})
 
+        elif event['name'] == 'send_money_insurer_seller':
+            # Insurer can send money to the seller anytime
+            assert role == 'insurer'
+            assert not 'insurer_sent_seller' in self.state
+            assert self.state['insurer']['items']['money'] >= 0.25
+            self.state['insurer']['items']['money'] -= 0.25
+            self.state['insurer_sent_seller'] = True
+            self.event(event['name'], event['data'])
+        elif event['name'] == 'send_money_insurer_buyer':
+            # Insurer can send money to the buyer anytime
+            assert role == 'insurer'
+            assert not 'insurer_sent_buyer' in self.state
+            assert self.state['insurer']['items']['money'] >= 0.25
+            self.state['insurer']['items']['money'] -= 0.25
+            self.state['insurer_sent_buyer'] = True
+            self.event(event['name'], event['data'])
+        else:
+            # Dispatch to the condition specific logic
+            {1:self.escrow_play,
+             2:self.guarantor_play,
+             3:self.arbitrator_play}[
+                self.state['condition']](role, event)
 
-class Condition1(Game):
-    # Dispute resolver (insurer can take Escrow agent
-    pass
+    def escrow_play(self, role, event):
+        if event['name'] == 'send_money_buyer_insurer':
+            # First the buyer has to send insurer money
+            assert role == 'buyer'
+            assert not 'buyer_sent' in self.state, 'buyer sends money once'
+            self.state['buyer_sent'] = True
+        elif event['name'] == 'send_token':
+            # Seller can send token to buyer
+            assert role == 'buyer'
+            assert 'buyer_sent' in self.state
+            assert not 'token_sent' in self.state
+            self.state['token_sent'] = True
+        else:
+            assert False, 'unexpected event: %s' % event
+        self.event(event['name'], event['data'])
 
+    def guarantor_play(self, role, event):
+        if event['name'] == 'send_money_buyer_seller':
+            # First the buyer has to send the seller money
+            assert role == 'buyer'
+            assert not 'buyer_sent' in self.state
+            self.state['buyer_sent'] = True
+        elif event['name'] == 'send_token':
+            # Seller can send token to buyer
+            assert role == 'seller'
+            assert 'buyer_sent' in self.state
+            assert not 'token_sent' in self.state
+            self.state['token_sent'] = True
+        elif event['name'] == 'send_money_seller_insurer':
+            # Seller can send money to insurer
+            assert role == 'seller'
+            assert 'buyer_sent' in self.state
+            assert not 'seller_sent' in self.state
+            self.state['insurer']['items']['money'] += 0.25
+            self.state['seller_sent'] = True
+        else:
+            assert False, 'unexpected event: %s' % event
+        self.event(event['name'], event['data'])
 
-class Condition2(Game):
-    pass
+    def arbitrator_play(self, role, event):
+        if event['name'] == 'send_money_buyer_seller':
+            # First the buyer has to send the seller money
+            assert role == 'buyer'
+            assert not 'buyer_sent' in self.state
+            self.state['buyer_sent'] = True
+        elif event['name'] == 'send_token':
+            # Seller can send token to buyer
+            assert role == 'seller'
+            assert 'buyer_sent' in self.state
+            assert not 'token_sent' in self.state
+            self.state['token_sent'] = True
+        elif event['name'] == 'send_money_seller_insurer':
+            # Seller can send money to insurer
+            assert role == 'insurer'
+            assert 'buyer_sent' in self.state
+            assert not 'seller_sent' in self.state
+            self.state['insurer']['items']['money'] += 0.25
+            self.state['seller_sent'] = True
+        else:
+            assert False, 'unexpected event: %s' % event
+        self.event(event['name'], event['data'])
 
-
-class Condition3(Game):
-    pass
+    def filter_event(self, role, event):
+        if event['name'] == 'chat':
+            return (role == 'insurer' or
+                    event['data']['chatbox'] == role)
+        return True
