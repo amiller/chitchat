@@ -74,12 +74,14 @@ def events_for_game(gamekey, since=None):
 def queue_user(userkey):
     # Add the user to the queue
     with db.lock('lock:user_status:%s' % userkey, 2):
-        db['user_status:%s' % userkey] = json.dumps({'status': 'queued'})
+        queuetime = repr(time.time())
+        db['user_status:%s' % userkey] = json.dumps({'status': 'queued',
+                                                     'time': queuetime})
         user_event(userkey, 'queued')
         print 'queued:', userkey
 
     with db.lock('lock:queue', 2):
-        db.zadd('queue', **{userkey:1})
+        db.zadd('queue', **{userkey: queuetime})
 
     # Process the queue
     handle_queue()
