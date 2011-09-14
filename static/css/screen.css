@@ -44,7 +44,7 @@ body {
   width: 200px;
 }
 .profileimage {
-  border: 2px solid #6A6A6A;
+  border: 3px solid #6A6A6A;
   float: left;
   height: 46px;
   margin: 0px;
@@ -75,9 +75,12 @@ body {
   width: 294px;
 }
 
-.buyer { background-color: #B0E2FF; }
-.seller { background-color: #EE9933; }
-.insurer { background-color: #9ACD32; }
+.buyer { background-color: #B0E2FF !important; }
+.seller { background-color: #EE9933 !important; }
+.insurer { background-color: #9ACD32 !important; }
+
+#content.disabled { opacity: 0.3; }
+#content.enabled { opacity: 1; }
 
 #buyer_profile { margin-left: 150px; }
 #seller_profile { margin-left: 10px; }
@@ -129,9 +132,9 @@ button.yours.buyer { background-color: #B0E2FF; }
 button.yours.seller { background-color: #EE9933; }
 button.yours.insurer { background-color: #9ACD32; }
 
-button.yours.buyer:active { background-color: #1FADFF; }
-button.yours.seller:active { background-color: #E28512; }
-button.yours.insurer:active { background-color: #83B819; }
+button.yours.buyer:active { background-color: #1FADFF !important; }
+button.yours.seller:active { background-color: #E28512 !important; }
+button.yours.insurer:active { background-color: #83B819 !important; }
 
 .notyours.buyer { background-color: #C2D5E0 !important; }
 .notyours.seller { background-color: #AB9478 !important; }
@@ -155,7 +158,8 @@ button.notyours.insurer.pressed { background-color: #97CD32 !important; }
   padding: 4px 6px;
 }
 .instructions .body { padding: 10px; }
-.instructions .body p:first { margin-top: 0px; }
+.instructions .body p:first-child { margin-top: 0px; }
+#instructions_role  { background-color: #EEE !important; }
 #instructions_role.buyer { border-color: #B0E2FF; }
 #instructions_role.seller { border-color: #EE9933; }
 #instructions_role.insurer { border-color: #9ACD32; }
@@ -173,15 +177,12 @@ button.notyours.insurer.pressed { background-color: #97CD32 !important; }
   height: 38px;
   vertical-align: middle;
 }
-#buyer_send_seller {
+#buyer_send_seller_box { 
   float: left;
-  margin: 0 30px 0 50px;
-}
-#seller_send_buyer_box { 
-  border-left: 4px solid black;
   padding-left: 50px;
+  width: 70px;
 }
-#seller_send_buyer { margin-left: 26px; }
+#seller_send_buyer { margin-left: 21px; }
 
 #insurer_arrows {
   background: transparent url(/img/insurer_arrows.png) no-repeat top left;

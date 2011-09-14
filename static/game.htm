@@ -5,64 +5,89 @@
     <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
     <script type="text/javascript" data-main="/js/main" src="/js/require.js"></script>
+    <script type="text/x-jquery-tmpl" id="tmpl_instructions">
+        {{if condition == 1}}
+            {{if role == 'insurer'}}You are the insurer.The buyer can send 25 cents to you, but not directly to the seller.  You can send 25 cents to the seller or the buyer at any time. The seller can send the gold token directly to the buyer. You can chat with both the buyer and seller. Chat with them to help the deal go through! Make sure that both the seller and the buyer understand the deal and are willing to trade fairly.
+            {{else role == 'buyer'}}You are the buyer. If you purchase the gold token from the seller, then you’ll earn a 50 cent bonus. Instead of paying 25 cents directly to the seller, you send it to the insurer, who will hold the payment until the seller sends you the token. Talk with the insurer to find out if the seller agrees to the trade.
+            {{else role == 'seller'}}You are the seller. You can offer to sell sell your gold token if the buyer pays you 25 cents to add to your bonus. Instead of sending you the 25 cents directly, the buyer sends his payment to the insurer, who will hold it until you send the token. Talk with the insurer to find out if the buyer agrees to the trade.{{/if}}
+        {{else condition == 2}} 
+            {{if role == 'insurer'}}You are the insurer. You can send 25 cents to the seller or the buyer at any time. The buyer has to send the seller his 25 cents before the seller can send the gold token. Your job is to offer the buyer a refund if the seller leaves without sending the token. If you give the buyer a refund, ask the seller to pay you back. You can chat with both the buyer and seller - talk with them to help the deal go through! Make sure that both the seller and the buyer understand the deal and are willing to trade fairly.
+            {{else role == 'buyer'}}You are the buyer. If you purchase the gold token from the seller, then you’ll earn a 50 cent bonus. The insurer is able to offer you a refund if the seller leaves without sending you the token. Talk with the insurer to find out if the seller agrees to the trade.
+            {{else role == 'seller'}}You are the seller. You can offer to sell sell your gold token if the buyer pays you 25 cents to add to your bonus. The insurer is able to offer the buyer a refund if you don’t send the gold token. Talk with the insurer to find out if the buyer agrees to the trade.{{/if}}
+        {{else condition == 3}} 
+            {{if role == 'insurer'}}You are the insurer. The buyer has to send the seller his 25 cents before the seller can send the gold token. You can send 25 cents to the seller or the buyer at any time. You can also seize the 25 cent payment back from the seller.  You can chat with both the buyer and seller - talk with them to help the deal go through! Make sure that both the seller and the buyer understand the deal and are willing to trade fairly. 
+            {{else role == 'buyer'}}You are the buyer. If you purchase the gold token from the seller, then you’ll earn a 50 cent bonus. The insurer is able to take your payment back from the seller and offer you a refund if the seller leaves without sending you the gold token. Talk with the insurer to find out if the seller agrees to the trade.
+            {{else role == 'seller'}}You are the seller. You can offer to sell sell your gold token if the buyer pays you 25 cents to add to your bonus. The insurer is able to seize back the payment and offer the buyer a refund if you do not send the gold token.  Talk with the insurer to find out if the buyer agrees to the trade.{{/if}}
+        {{/if}}
+    </script>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
   </head>
   <body>
     <div id="body">
-      <div class="profilebox buyer" id="buyer_profile">
-        <img class="profileimage" id="buyer_image" src="http://robohash.org/buyer.png?size=50x50&set=set3" />
-        <span class="profilename" id="buyer_profilename">Buyer</span>
-      </div>
-      <div id="buyer_seller_arrows">
-        <button class="button_give buyer" id="buyer_send_seller">Give 25&cent; <span>to</span> Seller</button>
-        <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
-        <button class="button_give seller" id="seller_send_buyer">Give 25&cent; <span>to</span> Buyer</button>
-      </div>
-      <div class="profilebox seller" id="seller_profile">
-        <img class="profileimage" id="seller_image" src="http://robohash.org/seller1.png?size=50x50&set=set3" />
-        <span class="profilename" id="seller_profilename">Seller</span>
-      </div>
-      <div class="clear"> </div>
-      <div class="chatbox" id="buyer_chatbox">
-        <div class="chatmessages" id="buyer_chatmessages"></div>
-        <textarea class="chatinput" id="buyer_chatinput"></textarea>
-      </div>
-      <div id="insurer_arrows" align="center">
-        <div id="insurer_buttons">
-          <div id="insurer_buttons_line1">
-            <button class="button_give buyer lfloat" id="buyer_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
-            <button class="button_give seller rfloat" id="seller_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+      <div id="content" class="disabled">
+        <div class="profilebox buyer" id="buyer_profile">
+          <img class="profileimage" id="buyer_image" src="http://robohash.org/buyer.png?size=50x50&set=set3" />
+          <span class="profilename" id="buyer_profilename">Buyer</span>
+        </div>
+        <div id="buyer_seller_arrows">
+          <div id="buyer_send_seller_box">
+            <button class="button_give buyer" id="buyer_send_seller">Give 25&cent; <span>to</span> Seller</button>
           </div>
-          <div class="clear"> </div>
-          <div id="insurer_buttons_separator">
-            <div class="lfloat ui-corner-all"></div>
-            <div class="rfloat ui-corner-all"></div>
-          </div>
-          <div class="clear"> </div>
-          <div id="insurer_buttons_line2">
-            <button class="button_take insurer lfloat" id="insurer_take_buyer">Take 25&cent; <span>from</span> Buyer</button>
-            <button class="button_take insurer rfloat" id="insurer_take_seller">Take 25&cent; <span>from</span> Seller</button>
-          </div>
-          <div class="clear"> </div>
-          <div id="insurer_buttons_line3">
-            <button class="button_give insurer lfloat" id="insurer_give_buyer">Give 25&cent; <span>to</span> Buyer</button>
-            <button class="button_give insurer rfloat" id="insurer_give_seller">Give 25&cent; <span>to</span> Seller</button>
+          <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
+          <div id="seller_send_buyer_box">
+            <button class="button_give seller" id="seller_send_buyer">Give 25&cent; <span>to</span> Buyer</button>
           </div>
         </div>
-        <div class="profilebox insurer" id="insurer_profile">
-          <img class="profileimage" id="insurer_image" src="http://robohash.org/insurer.png?size=50x50&set=set3" />
-          <span class="profilename" id="insurer_profilename">Insurer</span>
+        <div class="profilebox seller" id="seller_profile">
+          <img class="profileimage" id="seller_image" src="http://robohash.org/seller1.png?size=50x50&set=set3" />
+          <span class="profilename" id="seller_profilename">Seller</span>
         </div>
+        <div class="clear"> </div>
+        <div class="chatbox" id="buyer_chatbox">
+          <div class="chatmessages" id="buyer_chatmessages"></div>
+          <textarea class="chatinput" id="buyer_chatinput"></textarea>
+        </div>
+        <div id="insurer_arrows" align="center">
+          <div id="insurer_buttons">
+            <div id="insurer_buttons_line1">
+              <button class="button_give buyer lfloat" id="buyer_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+              <button class="button_give seller rfloat" id="seller_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+            </div>
+            <div class="clear"> </div>
+            <div id="insurer_buttons_separator">
+              <div class="lfloat ui-corner-all"></div>
+              <div class="rfloat ui-corner-all"></div>
+            </div>
+            <div class="clear"> </div>
+            <div id="insurer_buttons_line2">
+              <button class="button_take insurer lfloat" id="insurer_take_buyer">Take 25&cent; <span>from</span> Buyer</button>
+              <button class="button_take insurer rfloat" id="insurer_take_seller">Take 25&cent; <span>from</span> Seller</button>
+            </div>
+            <div class="clear"> </div>
+            <div id="insurer_buttons_line3">
+              <button class="button_give insurer lfloat" id="insurer_give_buyer">Give 25&cent; <span>to</span> Buyer</button>
+              <button class="button_give insurer rfloat" id="insurer_give_seller">Give 25&cent; <span>to</span> Seller</button>
+            </div>
+          </div>
+          <div class="profilebox insurer" id="insurer_profile">
+            <img class="profileimage" id="insurer_image" src="http://robohash.org/insurer.png?size=50x50&set=set3" />
+            <span class="profilename" id="insurer_profilename">Insurer</span>
+          </div>
+        </div>
+        <div class="chatbox" id="seller_chatbox">
+          <div class="chatmessages" id="seller_chatmessages"></div>
+          <textarea class="chatinput" id="seller_chatinput"></textarea>
+        </div>
+        <div class="clear"> </div>
       </div>
-      <div class="chatbox" id="seller_chatbox">
-        <div class="chatmessages" id="seller_chatmessages"></div>
-        <textarea class="chatinput" id="seller_chatinput"></textarea>
-      </div>
-      <div class="clear"> </div>
       <div id="notifications_list">
         <div class="instructions ui-corner-all" id="instructions_role" style="display:none;">
           <div class="title">Specific Role Instructions</div>
-          <div class="body"></div>
+          <div class="body">
+            <div class="buyer_instructions"></div>
+            <div class="seller_instructions"></div>
+            <div class="insurer_instructions"></div>
+          </div>
         </div>
         <div class="instructions ui-corner-all" id="instructions">
           <div class="title">Instructions</div>

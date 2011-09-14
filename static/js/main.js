@@ -9,6 +9,8 @@ if (matches != null)
   userkey = matches[1];
 console.info('userkey:' + userkey)
 
+var tmpl_instructions = null;
+
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
@@ -32,7 +34,8 @@ function setCurrentProfile(person)
     
     $('button').addClass('notyours');
     $('button.' + person).removeClass('notyours').addClass('yours');
-    $('#instructions_role').addClass(person);
+    $('#instructions_role .title').addClass(person);
+    $('#instructions_role').addClass(person).slideDown();
 }
 
 function setButtonPressed(buttons)
@@ -50,6 +53,7 @@ function setButtonPressed(buttons)
 
 function jQueryInit()
 {
+    // Set the UI to the default blanked out state
     resetProfileNames();
     $('button').addClass('notyours');
     
@@ -83,7 +87,10 @@ function jQueryInit()
     events.bind('server:gamestart', function (data) {
         role = data.role;
         condition = data.condition;
+        
         setCurrentProfile(role);
+        $('#content').removeClass('disabled').addClass('enabled');
+        $('#tmpl_instructions').tmpl(data).appendTo('#instructions_role .body');
     });
     
     events.bind('send_money_buyer_seller', function () {
@@ -105,8 +112,6 @@ function jQueryInit()
     events.bind('send_money_insurer_seller', function () {
         setButtonPressed($('#insurer_send_seller'));
     });
-
-    events.poll();
 
     // Bind to the chat box inputs
     function keydown(role) {
@@ -133,8 +138,8 @@ function jQueryInit()
     require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
     {
         // Start polling only when we have all the templates
-            
-        // Send a "began game" event to the server
+
+        events.poll();
     });
     
     $(window).unload(function ()
