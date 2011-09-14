@@ -27,6 +27,9 @@ import gevent
 import redis
 from werkzeug import SharedDataMiddleware
 
+from gevent import monkey
+monkey.patch_all()
+
 import game
 reload(game)
 
