@@ -41,9 +41,10 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 .profileimage {
   border: 2px solid #6A6A6A;
   float: left;
-  height: 32px;
-  margin: 7px;
-  width: 32px;
+  height: 46px;
+  margin: 0px;
+  width: 46px;
+  background:lightgrey;
 }
 .profilename {
   float: left;
