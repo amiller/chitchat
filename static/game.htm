@@ -31,11 +31,11 @@
         </div>
         <div id="buyer_seller_arrows">
           <div id="buyer_send_seller_box">
-            <button class="button_give buyer" id="buyer_send_seller">Give 25&cent; <span>to</span> Seller</button>
+            <button class="button_give ui-corner-all buyer" id="buyer_send_seller">Give 25&cent; <span>to</span> Seller</button>
           </div>
           <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
           <div id="seller_send_buyer_box">
-            <button class="button_give seller" id="seller_send_buyer">Give 25&cent; <span>to</span> Buyer</button>
+            <button class="button_give ui-corner-all seller" id="seller_send_buyer">Give 25&cent; <span>to</span> Buyer</button>
           </div>
         </div>
         <div class="profilebox seller" id="seller_profile">
@@ -50,8 +50,8 @@
         <div id="insurer_arrows" align="center">
           <div id="insurer_buttons">
             <div id="insurer_buttons_line1">
-              <button class="button_give buyer lfloat" id="buyer_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
-              <button class="button_give seller rfloat" id="seller_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+              <button class="button_give ui-corner-all buyer lfloat" id="buyer_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
+              <button class="button_give ui-corner-all seller rfloat" id="seller_send_insurer">Give 25&cent; <span>to</span> Insurer</button>
             </div>
             <div class="clear"> </div>
             <div id="insurer_buttons_separator">
@@ -60,13 +60,13 @@
             </div>
             <div class="clear"> </div>
             <div id="insurer_buttons_line2">
-              <button class="button_take insurer lfloat" id="insurer_take_buyer">Take 25&cent; <span>from</span> Buyer</button>
-              <button class="button_take insurer rfloat" id="insurer_take_seller">Take 25&cent; <span>from</span> Seller</button>
+              <button class="button_take ui-corner-all insurer lfloat" id="insurer_take_buyer">Take 25&cent; <span>from</span> Buyer</button>
+              <button class="button_take ui-corner-all insurer rfloat" id="insurer_take_seller">Take 25&cent; <span>from</span> Seller</button>
             </div>
             <div class="clear"> </div>
             <div id="insurer_buttons_line3">
-              <button class="button_give insurer lfloat" id="insurer_give_buyer">Give 25&cent; <span>to</span> Buyer</button>
-              <button class="button_give insurer rfloat" id="insurer_give_seller">Give 25&cent; <span>to</span> Seller</button>
+              <button class="button_give ui-corner-all insurer lfloat" id="insurer_give_buyer">Give 25&cent; <span>to</span> Buyer</button>
+              <button class="button_give ui-corner-all insurer rfloat" id="insurer_give_seller">Give 25&cent; <span>to</span> Seller</button>
             </div>
           </div>
           <div class="profilebox insurer" id="insurer_profile">
@@ -81,6 +81,9 @@
         <div class="clear"> </div>
       </div>
       <div id="notifications_list">
+        <div id="notification" style="display:none;">
+          <div id="latest_notification"><span class="title"></span>: <span class="body"></span></div>
+        </div>
         <div class="instructions ui-corner-all" id="instructions_role" style="display:none;">
           <div class="title">Specific Role Instructions</div>
           <div class="body">

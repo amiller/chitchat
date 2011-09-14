@@ -19,11 +19,7 @@
 
 
 /* Global */
-body {
-  -moz-transform: scale(1.2);
-  font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
-  zoom: 1.2;
-}
+body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 #body { width: 980px; }
 
 .rating .positive { color: #228B22; }
@@ -63,8 +59,10 @@ body {
   float: left;
   height: 400px;
   margin-top: 10px;
+  opacity: 1;
   width: 300px;
 }
+.chatbox.disabled { opacity: 0.3; }
 .chatmessages {
   height: 340px;
   width: 100%;
@@ -121,9 +119,10 @@ button.notyours {
 }
 button.notyours:active { border: 2px solid #555; }
 button.button_give, button.button_take {
+  border-width: 3px;
   font-size: 9px;
-  height: 38px;
-  width: 50px;
+  height: 42px;
+  width: 55px;
 }
 button.button_give span, button.button_take span { font-size: 8px; }
 button.button_give.pressed, button.button_take.pressed { padding-left: 4px; }

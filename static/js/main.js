@@ -32,8 +32,14 @@ function setCurrentProfile(person)
     matches.find('span.profilename').html('You');
     matches.effect('highlight', {}, 750);
     
-    $('button').addClass('notyours');
+    if (person == 'buyer')
+        $('#seller_chatbox').addClass('disabled');
+    else if (person == 'seller')
+        $('#buyer_chatbox').addClass('disabled');
+    
+    $('button').addClass('notyours').unbind('click');
     $('button.' + person).removeClass('notyours').addClass('yours');
+    
     $('#instructions_role .title').addClass(person);
     $('#instructions_role').addClass(person).slideDown();
 }
