@@ -18,7 +18,7 @@ daemonize no
 
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
-pidfile D:/Programming/isuelab/chitchat/redis/redis.pid
+pidfile /home/amiller/chitchat/redis/redis.pid
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
@@ -103,7 +103,7 @@ dbfilename dump.rdb
 # Also the Append Only File will be created inside this directory.
 # 
 # Note that you must specify a directory here, not a file name.
-dir D:/Programming/isuelab/chitchat/redis/
+dir /home/amiller/projects/chitchat/redis/
 
 ################################# REPLICATION #################################
 
@@ -317,7 +317,7 @@ no-appendfsync-on-rewrite no
 # *** WARNING *** if you are using a shared hosting the default of putting
 # the swap file under /tmp is not secure. Create a dir with access granted
 # only to Redis user and configure Redis to create the swap file there.
-vm-swap-file D:/Programming/isuelab/chitchat/redis/redis.swap
+vm-swap-file /home/amiller/projects/chitchat/redis/redis.swap
 
 # vm-max-memory configures the VM to use at max the specified amount of
 # RAM. Everything that deos not fit will be swapped on disk *if* possible, that
@@ -327,7 +327,7 @@ vm-swap-file D:/Programming/isuelab/chitchat/redis/redis.swap
 # default, just specify the max amount of RAM you can in bytes, but it's
 # better to leave some margin. For instance specify an amount of RAM
 # that's more or less between 60 and 80% of your free RAM.
-vm-max-memory 256mb
+vm-max-memory 64mb
 
 # Redis swap files is split into pages. An object can be saved using multiple
 # contiguous pages, but pages can't be shared between different objects.
