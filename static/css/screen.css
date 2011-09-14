@@ -19,11 +19,7 @@
 
 
 /* Global */
-body {
-  -moz-transform: scale(1.2);
-  font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
-  zoom: 1.2;
-}
+body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 #body { width: 980px; }
 
 .rating .positive { color: #228B22; }
@@ -46,9 +42,9 @@ body {
 .profileimage {
   border: 3px solid #6A6A6A;
   float: left;
-  height: 46px;
+  height: 45px;
   margin: 0px;
-  width: 46px;
+  width: 45px;
   background:lightgrey;
 }
 .profilename {
@@ -63,8 +59,10 @@ body {
   float: left;
   height: 400px;
   margin-top: 10px;
+  opacity: 1;
   width: 300px;
 }
+.chatbox.disabled { opacity: 0.3; }
 .chatmessages {
   height: 340px;
   width: 100%;
@@ -74,6 +72,8 @@ body {
   resize: none;
   width: 294px;
 }
+.message { padding: 2px 5px; }
+.message:not(.yours) { font-style: italic; }
 
 .buyer { background-color: #B0E2FF !important; }
 .seller { background-color: #EE9933 !important; }
@@ -85,6 +85,13 @@ body {
 #buyer_profile { margin-left: 150px; }
 #seller_profile { margin-left: 10px; }
 #insurer_profile { float: none; }
+
+.profiletoken {
+  float: right;
+  height: 48px;
+  margin-right: 5px;
+  width: 48px;
+}
 
 #seller_chatbox { margin-left: 10px; }
 
@@ -116,25 +123,29 @@ button.yours {
 }
 button.notyours {
   background-color: #888;
-  border: 2px solid #555;
+  border: 3px solid #555;
   color: #666;
 }
-button.notyours:active { border: 2px solid #555; }
+button.notyours:active { border: 3px solid #555; }
 button.button_give, button.button_take {
+  border-width: 3px;
   font-size: 9px;
-  height: 38px;
-  width: 50px;
+  height: 42px;
+  width: 55px;
 }
-button.button_give span, button.button_take span { font-size: 8px; }
-button.button_give.pressed, button.button_take.pressed { padding-left: 4px; }
+button.button_give span.transitive, button.button_take span.transitive { font-size: 8px; }
+button.button_give.pressed { padding-left: 4px; }
+button.button_take.pressed { padding-left: 1px; }
 
 button.yours.buyer { background-color: #B0E2FF; }
 button.yours.seller { background-color: #EE9933; }
 button.yours.insurer { background-color: #9ACD32; }
 
-button.yours.buyer:active { background-color: #1FADFF !important; }
-button.yours.seller:active { background-color: #E28512 !important; }
-button.yours.insurer:active { background-color: #83B819 !important; }
+button.yours.buyer:active, button.yours.buyer.pressed { background-color: #1FADFF !important; }
+button.yours.seller:active, button.yours.seller.pressed { background-color: #E28512 !important; }
+button.yours.insurer:active, button.yours.insurer.pressed { background-color: #83B819 !important; }
+
+button.yours.pressed  { border-color: #25F722; }
 
 .notyours.buyer { background-color: #C2D5E0 !important; }
 .notyours.seller { background-color: #AB9478 !important; }
@@ -172,10 +183,6 @@ button.notyours.insurer.pressed { background-color: #97CD32 !important; }
   margin-left: 10px;
   margin-top: 7px;
   width: 245px;
-}
-#buyer_seller_arrows button {
-  height: 38px;
-  vertical-align: middle;
 }
 #buyer_send_seller_box { 
   float: left;
