@@ -7,9 +7,17 @@ import sha
 import base64
 import urllib
 import xml.dom.minidom
+import game
 
 # Define constants
+REDIS_PORT = 9201
+game.setup_redis(REDIS_PORT)
+
 SANDBOX = True
+if SANDBOX:
+    HITTYPEID = "2XLNTL0XULRGRMCPCTDD05FP7PLO2I"
+else:
+    HITTYPEID = "none"
 
 from aws_credentials import AWS_ACCESS_KEY_ID
 from aws_credentials import AWS_SECRET_ACCESS_KEY
@@ -73,15 +81,6 @@ def get_balance():
     if availbalance_nodes:
         print "Available balance: " + availbalance_nodes[0].getElementsByTagName('FormattedPrice')[0].childNodes[0].data
 
-
-def get_assignments(hit):
-    results_xml = request('GetAssignmentsForHIT',
-                          HITId=hit,
-                          AssignmentStatus='Submitted',
-                          PageSize=100)
-    return results_xml.toxml()
-
-
 def extend_time(hit, time=3600):
     request('ExtendHIT', HITId=hit, ExpirationIncrementInSeconds=time)
 
@@ -100,17 +99,60 @@ def get_first_hit_id():
     print results_xml.toxml()
     return results_xml.getElementsByTagName('HITId')[0].childNodes[0].data
 
-#print get_balance()
-print get_assignments(get_first_hit_id())
+
+def get_all_hitids():
+    results_xml = request('SearchHITs', SortDirection='Descending')
+    hitids = []
+    for hit in results_xml.getElementsByTagName('HIT'):
+        hitid = hit.getElementsByTagName('HITId')[0].childNodes[0].data
+        hittypeid = hit.getElementsByTagName('HITTypeId')[0].childNodes[0].data
+        if hittypeid == HITTYPEID:
+            hitids.append(hitid)
+    return hitids
+
+def notify_worker(workerid, invite):
+    url = 'http://studyvj9ht.vps.soc1024.com/%s/' % invite
+    results_xml = request('NotifyWorkers',
+                          Subject='[Research Study] Peer-to-Peer Trading Game URL invitation',
+                          MessageText="""You are receiving this notification because you have completed the pre-questionnaire for the Peer-to-Peer Trading Game assignment on Mechanical Turk.
+
+In order to finish the assignment, please visit the following URL and play the game: %s
+
+The game will take exactly 5 minutes, but you may have to wait for (no longer than) 15 minutes for other players to join.
+
+This game is part of research conducted by the University of Central Florida. For more information about this study, go here: https://s3.amazonaws.com/ucfuserstudy/tradeconsentform.doc""" % url,
+                          WorkerId=workerid)
+    print results_xml.toxml()
+
+
+def get_all_assignments():
+    # Grab a list of all completed assignments with turkid
+    # Grab a list of all the already-sent turkid tokens
+    # For each assignment, if it's not in the turkid list:
+    #   then send them a worker notification including the url
+    #   update the redis so that we know they're available
+    for hitid in get_all_hitids():
+        results_xml = request('GetAssignmentsForHIT',
+                          HITId=hitid,
+                          AssignmentStatus='Submitted',
+                          PageSize=100)
+        assignments = results_xml.getElementsByTagName('Assignment')
+        for ass in assignments:
+            # TODO Check that the assignment is legit?
+            workerid = ass.getElementsByTagName('WorkerId')[0].childNodes[0].data
+            if not game.db.hexists('notified_workers', workerid):
+                print 'workerid:', workerid, ' has not yet been notified'
+                invite = game.add_invite()
+                notify_worker(workerid, invite)
+                game.db.hset('notified_workers', workerid, invite)
 
 
 def main():
     # Every so often, poll
     while 1:
-        time.sleep(10000)  # Ten seconds
+        print 'polling:', time.time()
+        get_all_assignments()
+        time.sleep(10)  # Ten seconds
 
-        # Grab a list of all completed assignments with turkid
-        # Grab a list of all the already-sent turkid tokens
-        # For each assignment, if it's not in the turkid list:
-        #   then send them a worker notification including the url
-        #   update the redis so that we know they're available
+if __name__ == '__main__':
+    main()
