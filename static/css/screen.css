@@ -133,16 +133,19 @@ button.button_give, button.button_take {
   height: 42px;
   width: 55px;
 }
-button.button_give span, button.button_take span { font-size: 8px; }
-button.button_give.pressed, button.button_take.pressed { padding-left: 4px; }
+button.button_give span.transitive, button.button_take span.transitive { font-size: 8px; }
+button.button_give.pressed { padding-left: 4px; }
+button.button_take.pressed { padding-left: 1px; }
 
 button.yours.buyer { background-color: #B0E2FF; }
 button.yours.seller { background-color: #EE9933; }
 button.yours.insurer { background-color: #9ACD32; }
 
-button.yours.buyer:active { background-color: #1FADFF !important; }
-button.yours.seller:active { background-color: #E28512 !important; }
-button.yours.insurer:active { background-color: #83B819 !important; }
+button.yours.buyer:active, button.yours.buyer.pressed { background-color: #1FADFF !important; }
+button.yours.seller:active, button.yours.seller.pressed { background-color: #E28512 !important; }
+button.yours.insurer:active, button.yours.insurer.pressed { background-color: #83B819 !important; }
+
+button.yours.pressed  { border-color: #25F722; }
 
 .notyours.buyer { background-color: #C2D5E0 !important; }
 .notyours.seller { background-color: #AB9478 !important; }

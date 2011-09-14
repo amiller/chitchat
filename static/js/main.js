@@ -23,9 +23,20 @@ function resetProfileNames()
         $('#' + profiles[i] + '_profile .profilename').html(profiles[i].capitalize());
 }
 
-function setCurrentProfile(person)
+function handleButton(evtname)
 {
-    var matches = $('#' + person + '_profile');
+    return function(evt) {
+        if ($(this).hasClass('pressed'))
+            return false;
+        
+        events.addEvent(evtname, {});
+        setButtonPressed($(this))
+    }
+}
+
+function setCurrentProfile(role)
+{
+    var matches = $('#' + role + '_profile');
     if (matches.length != 1)
         return;
     
@@ -33,19 +44,42 @@ function setCurrentProfile(person)
     matches.find('span.profilename').html('You');
     matches.effect('highlight', {}, 750);
     
-    if (person == 'buyer')
+    if (role == 'buyer')
         $('#seller_chatbox').addClass('disabled');
-    else if (person == 'seller')
+    else if (role == 'seller')
         $('#buyer_chatbox').addClass('disabled');
     
     $('#buyer_token').attr('src', '/img/no_token.png');
     $('#seller_token').attr('src', '/img/token.png');
     
     $('button').addClass('notyours').unbind('click');
-    $('button.' + person).removeClass('notyours').addClass('yours');
+    $('button.' + role).removeClass('notyours').addClass('yours');
     
-    $('#instructions_role .title').addClass(person);
-    $('#instructions_role').addClass(person).slideDown();
+    $('#instructions_role .title').addClass(role);
+    $('#instructions_role').addClass(role).slideDown();
+        
+    switch (role)
+    {
+    case 'buyer':
+        $('#buyer_chatinput').removeAttr('disabled');
+        $('#buyer_send_seller').bind('click', handleButton('send_money_buyer_seller'));
+        $('#buyer_send_insurer').bind('click', handleButton('send_money_buyer_insurer'));
+        break;
+    
+    case 'seller':
+        $('#seller_chatinput').removeAttr('disabled');
+        $('#seller_send_buyer').bind('click', handleButton('send_money_seller_buyer'));
+        $('#seller_send_insurer').bind('click', handleButton('send_money_seller_insurer'));
+        break;
+    
+    case 'insurer':
+        $('.chatinput').removeAttr('disabled');
+        $('#insurer_send_buyer').bind('click', handleButton('send_money_insurer_buyer'));
+        $('#insurer_take_buyer').bind('click', handleButton('take_money_insurer_buyer'));
+        $('#insurer_send_seller').bind('click', handleButton('send_money_insurer_seller'));
+        $('#insurer_take_seller').bind('click', handleButton('take_money_insurer_seller'));
+        break;
+    }
 }
 
 function setButtonPressed(buttons)
@@ -55,9 +89,9 @@ function setButtonPressed(buttons)
         button.addClass('pressed');
         
         if (button.hasClass('button_give'))
-            button.html('25&cent;<br />Given');
+            button.find('span.action').html('25&cent; Given');
         else if (button.hasClass('button_take'))
-            button.html('25&cent;<br />Taken');
+            button.find('span.action').html('25&cent; Taken');
     });
 }
 
@@ -217,40 +251,25 @@ function jQueryInit()
         
         $('.chatinput[placeholder]').placeholder();
         
-        switch (role)
-        {
-        case 'buyer':
-            $('#buyer_chatinput').removeAttr('disabled');
-            break;
-        
-        case 'seller':
-            $('#seller_chatinput').removeAttr('disabled');
-            break;
-        
-        case 'insurer':
-            $('.chatinput').removeAttr('disabled');
-            break;
-        }
-        
     });
     
-    events.bind('send_money_buyer_seller', function () {
+    events.bind('server:send_money_buyer_seller', function () {
         setButtonPressed($('#buyer_send_seller'));
     });
     
-    events.bind('send_money_seller_insurer', function () {
+    events.bind('server:send_money_seller_insurer', function () {
         setButtonPressed($('#seller_send_insurer'));
     });
     
-    events.bind('send_money_buyer_insurer', function () {
+    events.bind('server:send_money_buyer_insurer', function () {
         setButtonPressed($('#buyer_send_insurer'));
     });
     
-    events.bind('send_money_insurer_buyer', function () {
+    events.bind('server:send_money_insurer_buyer', function () {
         setButtonPressed($('#insurer_send_buyer'));
     });
     
-    events.bind('send_money_insurer_seller', function () {
+    events.bind('server:send_money_insurer_seller', function () {
         setButtonPressed($('#insurer_send_seller'));
     });
 
