@@ -42,9 +42,9 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 .profileimage {
   border: 3px solid #6A6A6A;
   float: left;
-  height: 46px;
+  height: 45px;
   margin: 0px;
-  width: 46px;
+  width: 45px;
   background:lightgrey;
 }
 .profilename {
@@ -121,10 +121,10 @@ button.yours {
 }
 button.notyours {
   background-color: #888;
-  border: 2px solid #555;
+  border: 3px solid #555;
   color: #666;
 }
-button.notyours:active { border: 2px solid #555; }
+button.notyours:active { border: 3px solid #555; }
 button.button_give, button.button_take {
   border-width: 3px;
   font-size: 9px;
@@ -178,10 +178,6 @@ button.notyours.insurer.pressed { background-color: #97CD32 !important; }
   margin-left: 10px;
   margin-top: 7px;
   width: 245px;
-}
-#buyer_seller_arrows button {
-  height: 38px;
-  vertical-align: middle;
 }
 #buyer_send_seller_box { 
   float: left;
