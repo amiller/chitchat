@@ -37,6 +37,9 @@ function setCurrentProfile(person)
     else if (person == 'seller')
         $('#buyer_chatbox').addClass('disabled');
     
+    $('#buyer_token').attr('src', '/img/no_token.png');
+    $('#seller_token').attr('src', '/img/token.png');
+    
     $('button').addClass('notyours').unbind('click');
     $('button.' + person).removeClass('notyours').addClass('yours');
     

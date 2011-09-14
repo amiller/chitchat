@@ -84,6 +84,13 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 #seller_profile { margin-left: 10px; }
 #insurer_profile { float: none; }
 
+.profiletoken {
+  float: right;
+  height: 48px;
+  margin-right: 5px;
+  width: 48px;
+}
+
 #seller_chatbox { margin-left: 10px; }
 
 
