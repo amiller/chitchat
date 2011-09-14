@@ -38,7 +38,7 @@ function jQueryInit()
     events = require('net');
 
     events.bind('server', function(event) {
-        if (event.status == 'uninvited') {
+        if (event.name == 'uninvited' || event.name == 'gameover') {
             events.abort()
             return;
         }

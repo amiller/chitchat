@@ -111,6 +111,10 @@ def user_status(userkey):
 
             # Add 'prequeue' to the event
             user_event(userkey, 'prequeue')
+        elif json.loads(status)['status'] == 'playing':
+            if time.time() - float(json.loads(status)['starttime']) > 5*60.0:
+                status = json.dumps({'status': 'gameover'})
+                db['user_status:%s' % userkey] = status
         status = json.loads(status)
     return status
 
@@ -158,15 +162,13 @@ def handle_queue():
         seller = state.seller.userkey
         insurer = state.insurer.userkey
 
-        db['user_status:%s'%buyer] = json.dumps({'status': 'playing',
-                                                 'gamekey': state.gamekey,
-                                                 'role': 'buyer'})
-        db['user_status:%s'%seller] = json.dumps({'status': 'playing',
-                                                  'gamekey': state.gamekey,
-                                                  'role': 'seller'})
-        db['user_status:%s'%insurer] = json.dumps({'status': 'playing',
-                                                   'gamekey': state.gamekey,
-                                                   'role': 'insurer'})
+        d = {'status': 'playing',
+             'gamekey': state.gamekey,
+             'starttime': state.starttime}
+
+        d['role'] = 'buyer'; db['user_status:%s'%buyer] = json.dumps(d)
+        d['role'] = 'seller'; db['user_status:%s'%seller] = json.dumps(d)
+        d['role'] = 'insurer'; db['user_status:%s'%insurer] = json.dumps(d)
 
 
 class Game(object):

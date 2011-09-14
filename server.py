@@ -50,7 +50,7 @@ def startapp(args):
     app = flask.Flask(__name__, static_url_path='/')
 
     # Turn Debug on
-    #app.debug = True
+    app.debug = True
     app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
         '/': os.path.join(base, 'static')})
 
@@ -60,10 +60,10 @@ def startapp(args):
     @app.route('/')
     def index(**kwargs):
         if args.debug:
-          with open(os.path.join(base, 'static', 'game.htm'), 'r') as fp:
-              return fp.read()
+            with open(os.path.join(base, 'static', 'game.htm'), 'r') as fp:
+                return fp.read()
         else:
-          return "Error message. Only access this page with a session"
+            return "Error message. Only access this page with a session"
 
     # Main page for a session
     @app.route('/<userkey>/')
