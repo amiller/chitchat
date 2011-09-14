@@ -316,7 +316,17 @@ class Game(object):
         self.event(event['name'], event['data'])
 
     def filter_event(self, role, event):
+        # Only show the events that each role should see
         if event['name'] == 'chat':
             return (role == 'insurer' or
                     event['data']['chatbox'] == role)
+
+        # Buyer and insurer never see the token sent
+        if event['name'] == 'send_token':
+            if role in ['insurer', 'buyer']: return False
+
+        # Insurer can't see buyer to seller transactions
+        if event['name'] == 'send_money_buyer_seller':
+            if role == 'insurer': return False
+
         return True
