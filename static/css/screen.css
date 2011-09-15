@@ -228,6 +228,7 @@ button.yours.insurer:hover { background-color: #A0F000 !important; }
   font-style: italic;
   text-align: center;
 }
+#waiting_note span.body { font-size: 13px; }
 
 
 /* Instructions and notifications */

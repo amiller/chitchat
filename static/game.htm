@@ -21,11 +21,11 @@
         {{/if}}
     </script>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
   </head>
   <body>
     <div id="body">
       <div id="content" class="disabled">
-        <div class="info seller" id="seller_token_info" style="display:none;">The <span class="seller">seller</span> starts with one gold token.</div>
         <div class="profilebox buyer" id="buyer_profile">
           <img class="profileimage" id="buyer_image" src="http://robohash.org/buyer.png?size=50x50&set=set3" />
           <div class="lfloat profilenamewallet">
@@ -182,7 +182,11 @@
         <div class="clear"> </div>
       </div>
       <div id="timer">0:00</div>
-      <div id="waiting_note" style="display:none;">Waiting for players.</div>
+      <div id="waiting_note" style="display:none;">
+        <span class="title">Waiting for players.</span>
+        <br />
+        <span class="body">If it takes longer than 15 minutes for the other players to join,<br />your assignment will be complete and you will receive the full $1.</span>
+      </div>
       <div id="notifications_list">
         <div class="ui-corner-all" id="notification" style="display:none;">
           <div id="latest_notification"><span class="title"></span>: <span class="body"></span></div>
