@@ -154,7 +154,7 @@ function setTimer(seconds)
 wallets = {
     buyer: 0.25,
     seller: 0.25,
-    insurer: 0.50,
+    insurer: 0.25,
 };
 function setWallet(role, amount)
 {
@@ -340,9 +340,9 @@ function jQueryInit()
         $('#instructions_role .title span').html(role.capitalize());
         
         var buy_info = 'Chat between ' + (role == 'buyer' ? 'you' : 'buyer') +
-            ' and ' + (role == 'insurer' ? 'you' : 'insurer') + '.';
+            ' and ' + (role == 'insurer' ? 'you' : 'mediator') + '.';
         var sell_info = 'Chat between ' + (role == 'seller' ? 'you' : 'seller') +
-            ' and ' + (role == 'insurer' ? 'you' : 'insurer') + '.';
+            ' and ' + (role == 'insurer' ? 'you' : 'mediator') + '.';
         
         $('#buyer_chatinput').attr('placeholder', buy_info);
         $('#seller_chatinput').attr('placeholder', sell_info);
