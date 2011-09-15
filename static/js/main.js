@@ -1,6 +1,8 @@
 require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 
 var game_started = false;
+var start_time = 0;
+
 var status = null;
 var condition = null;
 var role = null;
@@ -86,10 +88,8 @@ function setCurrentProfile(role)
             if ($(this).children().first().hasClass('has_token'))
             {
                 events.addEvent('send_token', {});
-                $(this).children().first().removeClass('has_token token_missing')
-                    .addClass('no_token').attr('src', '/img/no_token.png');
-                $('.profilebox.buyer.profiletoken').removeClass('no_token token_missing')
-                    .addClass('has_token');
+                setToken('seller', 'no');
+                setToken('buyer', 'yes');
             }
         })
     
@@ -255,8 +255,10 @@ function jQueryInit()
     }(jQuery));
 
     // Set the UI to the default blanked out state
-    resetProfileNames();
-    $('button').addClass('notyours');
+    $(function() {
+        resetProfileNames();
+        $('button').addClass('notyours');
+    });
     
     // Bind to events from the server
     events = require('net');
@@ -264,12 +266,14 @@ function jQueryInit()
     events.bind('server', function(event) {
         if (event.name == 'uninvited' || event.name == 'gameover') {
             events.abort()
+            location.href = '/quest/' + userkey + '/';
             return;
         }
         $('#eventlog').append(JSON.stringify(event));
         
         if (event.name == 'gamestart' && event.data.starttime != undefined)
         {
+            start_time = parseInt(event.data.starttime);
             window.timeleft = 5*60 - (parseInt(event.time) - parseInt(event.data.starttime));
             setTimer(window.timeleft);
             
@@ -286,10 +290,11 @@ function jQueryInit()
             
             window.timer = window.setTimeout(timerFunc, 1000);
         }
-    });
-    
-    events.bind('gameover', function() {
-        location.href = '/quest/' + userkey + '/';
+        else if (event.name != 'prequeue' && event.name != 'queued')
+        {
+            window.timeleft = parseInt(event.data.time) - start_time;
+            setTimer(window.timeleft);
+        }
     });
 
     events.bind('server:prequeue', function (data) {
@@ -401,24 +406,27 @@ function jQueryInit()
             }
         }
     }
-    $('#buyer_chatinput').bind('keydown', keydown('buyer'))
-    $('#seller_chatinput').bind('keydown', keydown('seller'))
     
-    $('.chatinput').focus(function() {
-        if (this.value === this.defaultValue)
-            this.value = '';
-    })
-    .blur(function() {
-        if (this.value === '')
-            this.value = this.defaultValue;
+    $(function() {
+        $('#buyer_chatinput').bind('keydown', keydown('buyer'))
+        $('#seller_chatinput').bind('keydown', keydown('seller'))
+        
+        $('.chatinput').focus(function() {
+            if (this.value === this.defaultValue)
+                this.value = '';
+        })
+        .blur(function() {
+            if (this.value === '')
+                this.value = this.defaultValue;
+        });
+        
+        // Bind to the approve accept button
+        $('#approve').click(function() {
+            // FIXME Check that the checkbox was selected
+            events.addEvent('approve');
+            // Hide the "Accept" message
+        })
     });
-    
-    // Bind to the approve accept button
-    $('#approve').click(function() {
-        // FIXME Check that the checkbox was selected
-        events.addEvent('approve');
-        // Hide the "Accept" message
-    })
     
     require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
     {
