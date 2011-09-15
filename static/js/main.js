@@ -412,6 +412,7 @@ function jQueryInit()
             break;
         
         case 2:
+            $('#buyer_send_insurer').addClass('disabled');
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             break;
