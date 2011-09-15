@@ -139,12 +139,12 @@ function setCurrentProfile(role)
 function setButtonPressed(buttons)
 {
     buttons.each(function (k, button) {
-        button = $(button);
-        button.addClass('pressed');
-        
         var what = '25&cent;';
         if (button.id == 'seller_send_buyer')
             what = 'Token';
+        
+        button = $(button);
+        button.addClass('pressed');
         
         if (button.hasClass('button_give'))
             button.find('span.action').html(what + ' Given');
@@ -475,7 +475,6 @@ function jQueryInit()
     });
     
     events.bind('server:send_token', function () {
-        setButtonPressed($('#seller_send_buyer'))
         if (role == 'insurer')
         {
             setToken('buyer', 'missing');
@@ -486,6 +485,9 @@ function jQueryInit()
             setToken('buyer', 'has');
             setToken('seller', 'no');
         }
+        
+        if (role == 'seller')
+            setButtonPressed($('#seller_send_buyer'))
     });
 
     // Bind to the chat box inputs
@@ -522,7 +524,7 @@ function jQueryInit()
         })
     });
     
-    require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
+    require(["/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js", "/js/jquery-ui-1.8.14.min.js"], function ()
     {
         // Start polling only when we have all the templates
         events.poll();
