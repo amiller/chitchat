@@ -77,6 +77,9 @@ function setCurrentProfile(role)
     
     $('#instructions_role .title').addClass(role);
     $('#instructions_role').addClass(role).slideDown();
+    
+    setToken('buyer', 'no');
+    setToken('seller', 'has');
         
     switch (role)
     {
@@ -85,9 +88,6 @@ function setCurrentProfile(role)
         $('#buyer_send_seller').bind('click', handleButton('send_money_buyer_seller'));
         $('#buyer_send_insurer').bind('click', handleButton('send_money_buyer_insurer'));
         $('.profilebox .profiletokenlink').addClass('pointer');
-    
-        setToken('buyer', 'no');
-        setToken('seller', 'has');
         
         $('#chat_info_buyer_insurer').css('display', 'block');
         break;
@@ -98,16 +98,24 @@ function setCurrentProfile(role)
         $('#seller_send_insurer').bind('click', handleButton('send_money_seller_insurer'));
         $('.profilebox.buyer .profiletokenlink').addClass('pointer');
         $('.profilebox.seller .profiletokenlink').bind('click', function (evt) {
-            if ($(this).children().first().hasClass('has_token'))
+            if ($(this).find('.profiletoken').hasClass('has_token'))
             {
-                events.addEvent('send_token', {});
-                setToken('seller', 'no');
-                setToken('buyer', 'yes');
+                var t = $(this);
+                $(this).jConf({
+                    sText: t.find('.button_explanation').html(),
+                    okBtn: 'Okay',
+                    noBtn: 'Cancel',
+                    evt: evt,
+                    callResult: function(data) {
+                        if (data.btnVal == 'Okay')
+                        {
+                            events.addEvent('send_token', {});
+                            t.addClass('pointer');
+                        }
+                    }
+                });
             }
         })
-    
-        setToken('buyer', 'no');
-        setToken('seller', 'has');
         $('#chat_info_seller_insurer').css('display', 'block');
         break;
     
@@ -370,7 +378,7 @@ function jQueryInit()
         $('#content').show();
         $('#content').removeClass('disabled').addClass('enabled');
         $('#tmpl_instructions').tmpl(data).appendTo('#instructions_role .body');
-        $('#instructions_role .title span').html(role.capitalize());
+        $('#instructions_role .title span').html(role == 'insurer' ? 'Mediator' : role.capitalize());
         
         var buy_info = 'Chat between ' + (role == 'buyer' ? 'you' : 'buyer') +
             ' and ' + (role == 'insurer' ? 'you' : 'mediator') + '.';
@@ -436,9 +444,16 @@ function jQueryInit()
     });
     
     events.bind('server:send_token', function () {
-        setButtonPressed($('#insurer_send_seller'));
-        setToken('buyer', 'has');
-        setToken('seller', 'no');
+        if (role == 'insurer')
+        {
+            setToken('buyer', 'missing');
+            setToken('seller', 'missing');
+        }
+        else
+        {
+            setToken('buyer', 'has');
+            setToken('seller', 'no');
+        }
     });
 
     // Bind to the chat box inputs

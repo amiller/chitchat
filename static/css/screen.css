@@ -93,18 +93,14 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 }
 
 
-span.buyer { 
+span.buyer, span.seller, span.insurer, span.gold {
   background-color: white !important; 
-  color: #66d; font-weight: bolder }
-span.seller { 
-  background-color: white !important; 
-  color: #A62; font-weight: bolder; }
-span.insurer { 
-  background-color: white !important; 
-  color: #9C3; font-weight: bolder }
-span.gold {
-  background-color: white !important; 
-  color: #992; font-weight: bolder }
+  font-weight: bolder;
+}
+span.buyer { color: #66d; }
+span.seller { color: #A62; }
+span.insurer { color: #9C3; }
+span.gold { color: #992; }
 
 
 .buyer { background-color: #B0E2FF !important; }
@@ -127,14 +123,21 @@ span.gold {
 #insurer_profile { float: none; }
 
 .profiletoken {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 48px;
   float: right;
   height: 48px;
   margin-right: 5px;
   width: 48px;
 }
-.has_token { background-image: url(../img/has_token.png); }
-.no_token { background-image: url(../img/no_token.png); }
-.token_missing { background-image: url(../img/token_missing.png); }
+.has_token { background-image: url(/img/has_token.png); }
+.no_token { background-image: url(/img/no_token.png); }
+.token_missing {
+  background-image: url(/img/404.jpg);
+  background-position: 0px 5px;
+  background-size: 20px;
+}
 
 #seller_chatbox { margin-left: 10px; }
 

@@ -328,8 +328,8 @@ class Game(object):
                     event['data']['chatbox'] == role)
 
         # Buyer and insurer never see the token sent
-        if event['name'] == 'send_token':
-            if role in ['insurer', 'buyer']: return False
+        #if event['name'] == 'send_token':
+        #    if role in ['insurer', 'buyer']: return False
 
         # Insurer can't see buyer to seller transactions
         #if event['name'] == 'send_money_buyer_seller':

@@ -32,7 +32,7 @@
               <span class="profilename" id="buyer_profilename">Buyer</span>
               <span class="profilewallet money">$0.25</span>
             </div>
-          <a href="javascript:void(0);" class="profiletokenlink"><img class="profiletoken token_missing" id="buyer_token" src="/img/token_missing.png" /></a>
+          <a href="javascript:void(0);" class="profiletokenlink"><div class="profiletoken token_missing" id="buyer_token"> </div></a>
         </div>
         <div id="buyer_seller_arrows">
           <div id="buyer_send_seller_box">
@@ -63,7 +63,16 @@
               <span class="profilename" id="seller_profilename">Seller</span>
               <span class="profilewallet money">$0.25</span>
             </div>
-          <a href="javascript:void(0);" class="profiletokenlink"><img class="profiletoken token_missing" id="seller_token" src="/img/token_missing.png" /></a>
+          <a href="javascript:void(0);" class="profiletokenlink">
+            <div class="button_explanation" style="display:none;">
+              <h2>Confirm sending the gold token token to buyer.</h2>
+              <ul>
+                <li>The buyer will get the gold token.</li>
+                <li>You will lose the gold token.</li>
+              </ul>
+            </div>
+            <div class="profiletoken token_missing" id="seller_token"> </div>
+          </a>
         </div>
         <div class="clear"> </div>
         <div class="chatbox" id="buyer_chatbox">
