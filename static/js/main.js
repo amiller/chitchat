@@ -402,13 +402,11 @@ function jQueryInit()
         {
         case 1:
             $('#buyer_send_seller').addClass('disabled');
-            $('#seller_send_buyer').addClass('disabled');
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             break;
         
         case 2:
-            $('#seller_send_buyer').addClass('disabled');
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             break;
@@ -430,8 +428,8 @@ function jQueryInit()
         
         seller_got_money = true;
         
-        if (condition == 3)
-            $('#insurer_take_seller').addClass('yours');
+        if (condition == 3 && role == 'insurer')
+            $('#insurer_take_seller').addClass('yours').removeClass('notyours');
     });
     
     events.bind('server:send_money_seller_insurer', function () {

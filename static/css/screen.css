@@ -72,7 +72,9 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 .chatmessages {
   height: 340px;
   overflow: auto;
+  overflow-x: hidden;
   width: 100%;
+  word-wrap: break-word;
 }
 .chatinput {
   height: 54px;
