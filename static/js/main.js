@@ -402,6 +402,7 @@ function jQueryInit()
         {
         case 1:
             $('#buyer_send_seller').addClass('disabled');
+            $('#seller_send_insurer').addClass('disabled');
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             break;
@@ -442,6 +443,9 @@ function jQueryInit()
         setButtonPressed($('#buyer_send_insurer'));
         setWallet('buyer', -0.25);
         setWallet('insurer', 0.25);
+        
+        if (condition == 1)
+            seller_got_money = true;
     });
     
     events.bind('server:send_money_insurer_buyer', function () {
