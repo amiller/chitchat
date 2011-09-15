@@ -416,7 +416,7 @@ function jQueryInit()
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             
-            $('#seller_send_insurer').addClass('notyours');
+            $('#seller_send_insurer').addClass('notyours').removeClass('yours');
             break;
         
         case 3:
@@ -424,7 +424,7 @@ function jQueryInit()
             $('#buyer_send_insurer').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             
-            $('#insurer_take_seller').addClass('notyours');
+            $('#insurer_take_seller').addClass('notyours').removeClass('yours');
             break;
         }
     });
