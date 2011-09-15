@@ -330,7 +330,7 @@ class Game(object):
             if role in ['insurer', 'buyer']: return False
 
         # Insurer can't see buyer to seller transactions
-        if event['name'] == 'send_money_buyer_seller':
-            if role == 'insurer': return False
+        #if event['name'] == 'send_money_buyer_seller':
+            #if role == 'insurer': return False
 
         return True
