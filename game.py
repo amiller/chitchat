@@ -309,7 +309,7 @@ class Game(object):
             assert not 'token_sent' in self.state
             self.state['token_sent'] = True
         elif event['name'] == 'send_money_seller_insurer':
-            # Seller can send money to insurer
+            # Insurer can seize money from seller
             assert role == 'insurer'
             assert 'buyer_sent' in self.state
             assert not 'seller_sent' in self.state
