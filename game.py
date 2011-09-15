@@ -276,7 +276,7 @@ class Game(object):
             self.state['buyer_sent'] = True
         elif event['name'] == 'send_token':
             # Seller can send token to buyer
-            assert role == 'buyer'
+            assert role == 'seller'
             assert 'buyer_sent' in self.state
             assert not 'token_sent' in self.state
             self.state['token_sent'] = True

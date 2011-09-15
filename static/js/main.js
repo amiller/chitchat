@@ -142,10 +142,14 @@ function setButtonPressed(buttons)
         button = $(button);
         button.addClass('pressed');
         
+        var what = '25&cent;';
+        if (button.id == 'seller_send_buyer')
+            what = 'Token';
+        
         if (button.hasClass('button_give'))
-            button.find('span.action').html('25&cent; Given');
+            button.find('span.action').html(what + ' Given');
         else if (button.hasClass('button_take'))
-            button.find('span.action').html('25&cent; Taken');
+            button.find('span.action').html(what + ' Taken');
     });
 }
 
@@ -461,6 +465,7 @@ function jQueryInit()
     });
     
     events.bind('server:send_token', function () {
+        setButtonPressed($('#seller_send_buyer'))
         if (role == 'insurer')
         {
             setToken('buyer', 'missing');
