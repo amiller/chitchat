@@ -289,20 +289,25 @@ function jQueryInit()
             start_time = parseInt(event.data.starttime);
         }
         if (event.name == 'time') {
-            window.timeleft = 5*60 - (parseInt(event.time) - start_time);
+            var newtime = window.timeleft = 5*60 - (parseInt(event.time) - start_time);
+            if (Math.abs(newtime - window.timeleft) < 2)
+                return;
+
             setTimer(window.timeleft);
             
             function timerFunc() {
                 if (--window.timeleft <= 0)
                     window.clearInterval(window.timer);
-                else
-                    window.setTimeout(timerFunc, 1000);
+                else {
+                    window.timer = window.setTimeout(timerFunc, 1000);
+                }
                 
                 setTimer(window.timeleft);
                 if (window.timeleft % 60 == 0)
                     $('#timer').effect('highlight', 750);
             }
             
+            clearTimeout(window.timer);
             window.timer = window.setTimeout(timerFunc, 1000);
         }
         else if (event.name != 'prequeue' && event.name != 'queued')
