@@ -11,7 +11,6 @@ var matches = (/\/([a-f0-9]+)\//).exec(window.location.pathname);
 var userkey = '0';
 if (matches != null)
   userkey = matches[1];
-console.info('userkey:' + userkey)
 
 var tmpl_instructions = null;
 
@@ -130,9 +129,6 @@ function setCurrentProfile(role)
         $('#seller_token_info').css('display', 'block');
         $('#chat_info_insurer_buyer').css('display', 'block');
         $('#chat_info_insurer_seller').css('display', 'block');
-        
-        setToken('buyer', 'missing');
-        setToken('seller', 'missing');
         break;
     }
 }
@@ -418,6 +414,8 @@ function jQueryInit()
             $('#seller_send_insurer').addClass('disabled');
             $('#buyer_send_insurer').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
+            
+            $('#insurer_take_seller').addClass('notyours');
             break;
         }
     });
@@ -426,6 +424,9 @@ function jQueryInit()
         setButtonPressed($('#buyer_send_seller'));
         setWallet('buyer', -0.25);
         setWallet('seller', 0.25);
+        
+        if (condition == 3)
+            $('#insurer_take_seller').addClass('yours');
     });
     
     events.bind('server:send_money_seller_insurer', function () {

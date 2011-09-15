@@ -116,12 +116,12 @@ def user_status(userkey):
             user_event(userkey, 'prequeue')
         elif json.loads(status)['status'] == 'playing':
             # Timeout the game after 5 minutes
-            if time.time() - float(json.loads(status)['starttime']) > 5*60.0:
+            if time.time() - float(json.loads(status)['starttime']) > 5000*60.0:####################
                 status = json.dumps({'status': 'gameover'})
                 db['user_status:%s' % userkey] = status
         elif json.loads(status)['status'] == 'queued':
             # Timeout the queue after 15 minutes
-            if time.time() - float(json.loads(status)['time']) > 1*60.0:
+            if time.time() - float(json.loads(status)['time']) > 15*60.0:
                 status = json.dumps({'status': 'overqueued'})
                 db['user_status:%s' % userkey] = status
         status = json.loads(status)
