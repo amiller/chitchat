@@ -28,11 +28,11 @@
         <div class="info seller" id="seller_token_info" style="display:none;">The <span class="seller">seller</span> starts with one gold token.</div>
         <div class="profilebox buyer" id="buyer_profile">
           <img class="profileimage" id="buyer_image" src="http://robohash.org/buyer.png?size=50x50&set=set3" />
-            <div class="lfloat profilenamewallet">
-              <span class="profilename" id="buyer_profilename">Buyer</span>
-              <span class="profilewallet money">$0.25</span>
-            </div>
-          <a href="javascript:void(0);" class="profiletokenlink"><div class="profiletoken token_missing" id="buyer_token"> </div></a>
+          <div class="lfloat profilenamewallet">
+            <span class="profilename" id="buyer_profilename">Buyer</span>
+            <span class="profilewallet money">$0.25</span>
+          </div>
+          <div class="profiletoken token_missing" id="buyer_token"> </div>
         </div>
         <div id="buyer_seller_arrows">
           <div id="buyer_send_seller_box">
@@ -48,10 +48,10 @@
           <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
           <div id="seller_send_buyer_box">
             <div class="button_explanation" style="display:none;">
-              <h2>Confirm sending 25 cents to buyer.</h2>
+              <h2>Confirm sending the gold token token to buyer.</h2>
               <ul>
-                <li>The buyer will gain 25 cents.</li>
-                <li>You will lose 25 cents.</li>
+                <li>The buyer will get the gold token.</li>
+                <li>You will lose the gold token.</li>
               </ul>
             </div>
             <button class="button_give ui-corner-all seller" id="seller_send_buyer"><span class="action">Give token</span> <span class="transitive">to</span> Buyer</button>
@@ -59,20 +59,11 @@
         </div>
         <div class="profilebox seller" id="seller_profile">
           <img class="profileimage" id="seller_image" src="http://robohash.org/seller1.png?size=50x50&set=set3" />
-            <div class="lfloat profilenamewallet">
-              <span class="profilename" id="seller_profilename">Seller</span>
-              <span class="profilewallet money">$0.25</span>
-            </div>
-          <a href="javascript:void(0);" class="profiletokenlink">
-            <div class="button_explanation" style="display:none;">
-              <h2>Confirm sending the gold token token to buyer.</h2>
-              <ul>
-                <li>The buyer will get the gold token.</li>
-                <li>You will lose the gold token.</li>
-              </ul>
-            </div>
-            <div class="profiletoken token_missing" id="seller_token"> </div>
-          </a>
+          <div class="lfloat profilenamewallet">
+            <span class="profilename" id="seller_profilename">Seller</span>
+            <span class="profilewallet money">$0.25</span>
+          </div>
+          <div class="profiletoken token_missing" id="seller_token"> </div>
         </div>
         <div class="clear"> </div>
         <div class="chatbox" id="buyer_chatbox">

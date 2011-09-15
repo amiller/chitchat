@@ -72,7 +72,9 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 .chatmessages {
   height: 340px;
   overflow: auto;
+  overflow-x: hidden;
   width: 100%;
+  word-wrap: break-word;
 }
 .chatinput {
   height: 54px;
@@ -212,9 +214,15 @@ button.yours.insurer:hover { background-color: #A0F000 !important; }
 #timer {
   font-size: 50px;
   height: 80px;
+  margin: 0 auto;
   text-align: center;
+  width: 200px;
 }
-#timer.gamestart { margin-top: -80px; }
+#timer.gamestart {
+  margin-bottom: -70px;
+  position: relative;
+  top: -80px;
+}
 #waiting_note {
   font-size: 16px;
   font-style: italic;

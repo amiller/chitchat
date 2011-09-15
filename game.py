@@ -121,7 +121,7 @@ def user_status(userkey):
                 db['user_status:%s' % userkey] = status
         elif json.loads(status)['status'] == 'queued':
             # Timeout the queue after 15 minutes
-            if time.time() - float(json.loads(status)['time']) > 1*60.0:
+            if time.time() - float(json.loads(status)['time']) > 15*60.0:
                 status = json.dumps({'status': 'overqueued'})
                 db['user_status:%s' % userkey] = status
         status = json.loads(status)
@@ -337,8 +337,8 @@ class Game(object):
                     event['data']['chatbox'] == role)
 
         # Buyer and insurer never see the token sent
-        #if event['name'] == 'send_token':
-        #    if role in ['insurer', 'buyer']: return False
+        if event['name'] == 'send_token':
+            if role == 'buyer': return False
 
         # Insurer can't see buyer to seller transactions
         #if event['name'] == 'send_money_buyer_seller':

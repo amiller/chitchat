@@ -3,6 +3,7 @@ require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 var game_started = false;
 var start_time = 0;
 var queued = false;
+var seller_got_money = false;
 
 var status = null;
 var condition = null;
@@ -11,7 +12,6 @@ var matches = (/\/([a-f0-9]+)\//).exec(window.location.pathname);
 var userkey = '0';
 if (matches != null)
   userkey = matches[1];
-console.info('userkey:' + userkey)
 
 var tmpl_instructions = null;
 
@@ -94,24 +94,26 @@ function setCurrentProfile(role)
     
     case 'seller':
         $('#seller_chatinput').removeAttr('disabled');
-        $('#seller_send_buyer').bind('click', handleButton('send_money_seller_buyer'));
         $('#seller_send_insurer').bind('click', handleButton('send_money_seller_insurer'));
         $('.profilebox.buyer .profiletokenlink').addClass('pointer');
-        $('.profilebox.seller .profiletokenlink').bind('click', function (evt) {
-            if ($(this).find('.profiletoken').hasClass('has_token'))
+        $('#seller_send_buyer').bind('click', function (evt) {
+            if ($('#seller_token').hasClass('has_token'))
             {
-                var t = $(this);
+                if (!seller_got_money)
+                    $(this).jConf({
+                        sText: 'You must wait until the buyer sends you money.',
+                        okBtn: 'Okay',
+                        evt: evt
+                    });
+                
                 $(this).jConf({
-                    sText: t.find('.button_explanation').html(),
+                    sText: $(this).prev('.button_explanation').html(),
                     okBtn: 'Okay',
                     noBtn: 'Cancel',
                     evt: evt,
                     callResult: function(data) {
                         if (data.btnVal == 'Okay')
-                        {
                             events.addEvent('send_token', {});
-                            t.addClass('pointer');
-                        }
                     }
                 });
             }
@@ -130,9 +132,6 @@ function setCurrentProfile(role)
         $('#seller_token_info').css('display', 'block');
         $('#chat_info_insurer_buyer').css('display', 'block');
         $('#chat_info_insurer_seller').css('display', 'block');
-        
-        setToken('buyer', 'missing');
-        setToken('seller', 'missing');
         break;
     }
 }
@@ -403,13 +402,11 @@ function jQueryInit()
         {
         case 1:
             $('#buyer_send_seller').addClass('disabled');
-            $('#seller_send_buyer').addClass('disabled');
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             break;
         
         case 2:
-            $('#seller_send_buyer').addClass('disabled');
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             break;
@@ -418,6 +415,8 @@ function jQueryInit()
             $('#seller_send_insurer').addClass('disabled');
             $('#buyer_send_insurer').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
+            
+            $('#insurer_take_seller').addClass('notyours');
             break;
         }
     });
@@ -426,6 +425,11 @@ function jQueryInit()
         setButtonPressed($('#buyer_send_seller'));
         setWallet('buyer', -0.25);
         setWallet('seller', 0.25);
+        
+        seller_got_money = true;
+        
+        if (condition == 3 && role == 'insurer')
+            $('#insurer_take_seller').addClass('yours').removeClass('notyours');
     });
     
     events.bind('server:send_money_seller_insurer', function () {
