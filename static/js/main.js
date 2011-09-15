@@ -10,7 +10,6 @@ var matches = (/\/([a-f0-9]+)\//).exec(window.location.pathname);
 var userkey = '0';
 if (matches != null)
   userkey = matches[1];
-console.info('userkey:' + userkey)
 
 var tmpl_instructions = null;
 
