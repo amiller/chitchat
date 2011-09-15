@@ -114,7 +114,11 @@ def startapp(args):
             events = game.events_for_user(userkey, since)
 
             # Return if there are some events
-            if events: return response(events)
+            if events:
+                # Add a time event to help sync the alarms
+                events.append({'name': 'time',
+                               'time': repr(time()), 'data': {}})
+                return response(events)
 
             # Otherwise wait and poll
             gevent.sleep(1)
@@ -129,6 +133,10 @@ def startapp(args):
         # Return an error if they are not a valid user
         if not db.sismember('invited_userkeys', userkey):
             return 'This user key is not invited', 403
+
+        # Go immediately to questover if we already have their survey 
+        if db.exists('survey_user:%s' % userkey):
+            return flask.redirect('/questover/%s/' % userkey)
 
         # Render the main page
         with open(os.path.join(base, 'static', 'quest.htm'), 'r') as fp:

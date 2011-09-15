@@ -86,7 +86,26 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
   font-size: 14px;
   font-style: italic;
 }
-.message.info.ul { margin-bottom: 0px; }
+.message.info.ul {
+  list-style-type: square;
+  margin-bottom: 0px;
+  margin-left: 5px;
+}
+
+
+span.buyer { 
+  background-color: white !important; 
+  color: #66d; font-weight: bolder }
+span.seller { 
+  background-color: white !important; 
+  color: #A62; font-weight: bolder; }
+span.insurer { 
+  background-color: white !important; 
+  color: #9C3; font-weight: bolder }
+span.gold {
+  background-color: white !important; 
+  color: #992; font-weight: bolder }
+
 
 .buyer { background-color: #B0E2FF !important; }
 .seller { background-color: #EE9933 !important; }
@@ -94,6 +113,7 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 
 #content.disabled { opacity: 0.3; }
 #content.enabled { opacity: 1; }
+#content { display: none;  }
 
 #seller_token_info {
   font-size: 14px;
@@ -128,6 +148,7 @@ button {
   border-bottom-color: #6A6A6A;
   border-right-color: #6A6A6A;
   background-color: #F0F0F0;
+  font-weight: bolder;
 }
 button:active, button.pressed {
   border-top-color: #2A2A2A;
@@ -168,10 +189,6 @@ button.yours.buyer:active, button.yours.buyer.pressed { background-color: #1FADF
 button.yours.seller:active, button.yours.seller.pressed { background-color: #E28512 !important; }
 button.yours.insurer:active, button.yours.insurer.pressed { background-color: #83B819 !important; }
 
-button.yours.buyer:hover { background-color: #42BAFF !important; }
-button.yours.seller:hover { background-color: #FF8C00 !important; }
-button.yours.insurer:hover { background-color: #A0F000 !important; }
-
 button.yours.pressed  { border-color: #25F722; }
 
 .notyours.buyer { background-color: #7293A7 !important; }
@@ -182,18 +199,29 @@ button.notyours.buyer.pressed { background-color: #A7DCFB !important; }
 button.notyours.seller.pressed { background-color: #DF9943 !important; }
 button.notyours.insurer.pressed { background-color: #97CD32 !important; }
 
+button.yours.buyer:hover { background-color: #42BAFF !important; }
+button.yours.seller:hover { background-color: #FF8C00 !important; }
+button.yours.insurer:hover { background-color: #A0F000 !important; }
+
+
 
 /* Timer */
 #timer {
   font-size: 50px;
   height: 80px;
-  margin-top: -80px;
   text-align: center;
 }
+#timer.gamestart { margin-top: -80px; }
 
 
 /* Instructions and notifications */
 #notifications_list { margin-top: 20px; }
+#notification {
+  background-color: #5987F3;
+  color: white;
+  margin-bottom: 10px;
+  min-height: 20px;
+}
 .instructions {
   border: 2px solid #DDD569;
   margin-bottom: 10px;

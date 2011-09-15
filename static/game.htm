@@ -7,17 +7,17 @@
     <script type="text/javascript" data-main="/js/main" src="/js/require.js"></script>
     <script type="text/x-jquery-tmpl" id="tmpl_instructions">
         {{if condition == 1}}
-            {{if role == 'insurer'}}You are the insurer.The buyer can send 25 cents to you, but not directly to the seller.  You can send 25 cents to the seller or the buyer at any time. The seller can send the gold token directly to the buyer. You can chat with both the buyer and seller. Chat with them to help the deal go through! Make sure that both the seller and the buyer understand the deal and are willing to trade fairly.
-            {{else role == 'buyer'}}You are the buyer. If you purchase the gold token from the seller, then you’ll earn a 50 cent bonus. Instead of paying 25 cents directly to the seller, you send it to the insurer, who will hold the payment until the seller sends you the token. Talk with the insurer to find out if the seller agrees to the trade.
-            {{else role == 'seller'}}You are the seller. You can offer to sell sell your gold token if the buyer pays you 25 cents to add to your bonus. Instead of sending you the 25 cents directly, the buyer sends his payment to the insurer, who will hold it until you send the token. Talk with the insurer to find out if the buyer agrees to the trade.{{/if}}
+            {{if role == 'insurer'}}You are the <span class="insurer">mediator</span>.The <span class="buyer">buyer</span> can send 25 cents to you, but not directly to the <span class="seller">seller</span>.  You can send 25 cents to the <span class="seller">seller</span> or the <span class="buyer">buyer</span> at any time. The <span class="seller">seller</span> can send the gold token directly to the <span class="buyer">buyer</span>. You can chat with both the <span class="buyer">buyer</span> and <span class="seller">seller</span>. Chat with them to help the deal go through! Make sure that both the <span class="seller">seller</span> and the <span class="buyer">buyer</span> understand the deal and are willing to trade fairly.
+            {{else role == 'buyer'}}You are the <span class="buyer">buyer</span>. If you purchase the <span class="gold">gold token</span> from the <span class="seller">seller</span>, then you’ll earn a 50 cent bonus. Instead of paying 25 cents directly to the <span class="seller">seller</span>, you send it to the <span class="insurer">mediator</span>, who will hold the payment until the <span class="seller">seller</span> sends you the <span class="gold">token</span>. Talk with the <span class="insurer">mediator</span>to find out if the <span class="seller">seller</span> agrees to the trade.
+            {{else role == 'seller'}}You are the seller. You can offer to sell your <span class="gold">gold token</span> if the <span class="buyer">buyer</span> pays you 25 cents to add to your bonus. Instead of sending you the 25 cents directly, the <span class="buyer">buyer</span> sends his payment to the <span class="insurer">mediator</span>, who will hold it until you send the <span class="gold">token</span>. Talk with the <span class="insurer">mediator</span>to find out if the <span class="buyer">buyer</span> agrees to the trade.{{/if}}
         {{else condition == 2}} 
-            {{if role == 'insurer'}}You are the insurer. You can send 25 cents to the seller or the buyer at any time. The buyer has to send the seller his 25 cents before the seller can send the gold token. Your job is to offer the buyer a refund if the seller leaves without sending the token. If you give the buyer a refund, ask the seller to pay you back. You can chat with both the buyer and seller - talk with them to help the deal go through! Make sure that both the seller and the buyer understand the deal and are willing to trade fairly.
-            {{else role == 'buyer'}}You are the buyer. If you purchase the gold token from the seller, then you’ll earn a 50 cent bonus. The insurer is able to offer you a refund if the seller leaves without sending you the token. Talk with the insurer to find out if the seller agrees to the trade.
-            {{else role == 'seller'}}You are the seller. You can offer to sell sell your gold token if the buyer pays you 25 cents to add to your bonus. The insurer is able to offer the buyer a refund if you don’t send the gold token. Talk with the insurer to find out if the buyer agrees to the trade.{{/if}}
+            {{if role == 'insurer'}}You are the <span class="insurer">mediator</span>. You can send 25 cents to the <span class="seller">seller</span> or the <span class="buyer">buyer</span> at any time. The <span class="buyer">buyer</span> has to send the <span class="seller">seller</span> his 25 cents before the <span class="seller">seller</span> can send the <span class="gold">gold token</span>. Your job is to offer the <span class="buyer">buyer</span> a refund if the <span class="seller">seller</span> leaves without sending the token. If you give the <span class="buyer">buyer</span> a refund, ask the <span class="seller">seller</span> to pay you back. You can chat with both the <span class="buyer">buyer</span> and <span class="seller">seller</span> - talk with them to help the deal go through! Make sure that both the <span class="seller">seller</span> and the <span class="buyer">buyer</span> understand the deal and are willing to trade fairly.
+            {{else role == 'buyer'}}You are the <span class="buyer">buyer</span>. If you purchase the <span class="gold">gold token</span> from the <span class="seller">seller</span>, then you’ll earn a 50 cent bonus. The <span class="insurer">mediator</span>is able to offer you a refund if the <span class="seller">seller</span> leaves without sending you the <span class="gold">token</span>. Talk with the <span class="insurer">mediator</span>to find out if the <span class="seller">seller</span> agrees to the trade.
+            {{else role == 'seller'}}You are the <span class="seller">seller</span>. You can offer to sell your <span class="gold">gold token</span> if the <span class="buyer">buyer</span> pays you 25 cents. The <span class="insurer">mediator</span>is able to offer the <span class="buyer">buyer</span> a refund in case you don’t send the <span class="gold">gold token</span>. Talk with the <span class="insurer">mediator</span>to find out if the <span class="buyer">buyer</span> agrees to the trade.{{/if}}
         {{else condition == 3}} 
-            {{if role == 'insurer'}}You are the insurer. The buyer has to send the seller his 25 cents before the seller can send the gold token. You can send 25 cents to the seller or the buyer at any time. You can also seize the 25 cent payment back from the seller.  You can chat with both the buyer and seller - talk with them to help the deal go through! Make sure that both the seller and the buyer understand the deal and are willing to trade fairly. 
-            {{else role == 'buyer'}}You are the buyer. If you purchase the gold token from the seller, then you’ll earn a 50 cent bonus. The insurer is able to take your payment back from the seller and offer you a refund if the seller leaves without sending you the gold token. Talk with the insurer to find out if the seller agrees to the trade.
-            {{else role == 'seller'}}You are the seller. You can offer to sell sell your gold token if the buyer pays you 25 cents to add to your bonus. The insurer is able to seize back the payment and offer the buyer a refund if you do not send the gold token.  Talk with the insurer to find out if the buyer agrees to the trade.{{/if}}
+            {{if role == 'insurer'}}You are the <span class="insurer">mediator</span>. The <span class="buyer">buyer</span> has to send the <span class="seller">seller</span> his 25 cents before the <span class="seller">seller</span> can send the <span class="gold">gold token</span>. You can send 25 cents to the <span class="seller">seller</span> or the <span class="buyer">buyer</span> at any time. You can also seize the 25 cent payment back from the <span class="seller">seller</span>.  You can chat with both the <span class="buyer">buyer</span> and <span class="seller">seller</span> - talk with them to help the deal go through! Make sure that both the <span class="seller">seller</span> and the <span class="buyer">buyer</span> understand the deal and are willing to trade fairly. 
+            {{else role == 'buyer'}}You are the <span class="buyer">buyer</span>. If you purchase the <span class="gold">gold token</span> from the seller, then you’ll earn a 50 cent bonus. The <span class="insurer">mediator</span>is able to take your payment back from the <span class="seller">seller</span> and offer you a refund in case the <span class="seller">seller</span> leaves without sending you the <span class="gold">gold token</span>. Talk with the <span class="insurer">mediator</span>to find out if the <span class="seller">seller</span> agrees to the trade.
+            {{else role == 'seller'}}You are the <span class="seller">seller</span>. You can offer to sell your <span class="gold">gold token</span> if the <span class="buyer">buyer</span> pays you 25 cents. The <span class="insurer">mediator</span>is able to seize back the payment and offer the <span class="buyer">buyer</span> a refund if you do not send the <span class="gold">gold token</span>.  Talk with the <span class="insurer">mediator</span>to find out if the <span class="buyer">buyer</span> agrees to the trade.{{/if}}
         {{/if}}
     </script>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
@@ -25,7 +25,7 @@
   <body>
     <div id="body">
       <div id="content" class="disabled">
-        <div class="info seller" id="seller_token_info" style="display:none;">The seller starts with one gold token.</div>
+        <div class="info seller" id="seller_token_info" style="display:none;">The <span class="seller">seller</span> starts with one gold token.</div>
         <div class="profilebox buyer" id="buyer_profile">
           <img class="profileimage" id="buyer_image" src="http://robohash.org/buyer.png?size=50x50&set=set3" />
             <div class="lfloat profilenamewallet">
@@ -54,7 +54,7 @@
                 <li>You will lose 25 cents.</li>
               </ul>
             </div>
-            <button class="button_give ui-corner-all seller" id="seller_send_buyer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Buyer</button>
+            <button class="button_give ui-corner-all seller" id="seller_send_buyer"><span class="action">Give token</span> <span class="transitive">to</span> Buyer</button>
           </div>
         </div>
         <div class="profilebox seller" id="seller_profile">
@@ -69,11 +69,11 @@
         <div class="chatbox" id="buyer_chatbox">
           <div class="chatmessages" id="buyer_chatmessages">
             <div class="info message" id="chat_info_buyer_insurer" style="display:none;">
-              <span>Use this chatbox to speak with the insurer. Tips:</span>
+              <span>Use this chatbox to speak with the mediator. Tips:</span>
               <ul>
-                <li>Promise the insurer you’ll be honest</li>
-                <li>Ask the insurer to promise you a refund, just in case</li>
-                <li>Find out if the seller has agreed to the deal before sending money</li>
+                <li>Promise the mediator you’ll be honest</li>
+                <li>Ask the mediator to promise you a refund, just in case</li>
+                <li>Find out if the <span class="seller">seller</span> has agreed to the deal before sending money</li>
               </ul>
             </div>
             <div class="info message" id="chat_info_insurer_buyer" style="display:none;">
@@ -81,7 +81,7 @@
               <ul>
                 <li>Find out if the buyer will be honest.</li>
                 <li>Offer the buyer a refund in case he doesn’t get the token.</li>
-                <li>Let the buyer know if the seller agrees to the deal</li>
+                <li>Let the buyer know if the <span class="seller">seller</span> agrees to the deal</li>
                 <li>Find out when the buyer receives the token</li>
               </ul></div>
           </div>
@@ -91,21 +91,21 @@
           <div id="insurer_buttons">
             <div id="insurer_buttons_line1">
             <div class="button_explanation" style="display:none;">
-              <h2>Confirm sending 25 cents to insurer.</h2>
+              <h2>Confirm sending 25 cents to mediator.</h2>
               <ul>
-                <li>The insurer will gain 25 cents.</li>
+                <li>The mediator will gain 25 cents.</li>
                 <li>You will lose 25 cents.</li>
               </ul>
             </div>
               <button class="button_give ui-corner-all buyer lfloat" id="buyer_send_insurer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Insurer</button>
               <div class="button_explanation" style="display:none;">
-                <h2>Confirm sending 25 cents to insurer.</h2>
+                <h2>Confirm sending 25 cents to mediator.</h2>
                 <ul>
-                  <li>The insurer will gain 25 cents.</li>
+                  <li>The mediator will gain 25 cents.</li>
                   <li>You will lose 25 cents.</li>
                 </ul>
               </div>
-              <button class="button_give ui-corner-all seller rfloat" id="seller_send_insurer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Insurer</button>
+              <button class="button_give ui-corner-all seller rfloat" id="seller_send_insurer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Mediator</button>
             </div>
             <div class="clear"> </div>
             <div id="insurer_buttons_separator">
@@ -154,18 +154,18 @@
           <div class="profilebox insurer" id="insurer_profile">
             <img class="profileimage" id="insurer_image" src="http://robohash.org/insurer.png?size=50x50&set=set3" />
             <div class="lfloat profilenamewallet">
-              <span class="profilename" id="insurer_profilename">Insurer</span>
-              <span class="profilewallet money">$0.50</span>
+              <span class="profilename" id="insurer_profilename">Mediator</span>
+              <span class="profilewallet money">$0.25</span>
             </div>
           </div>
         </div>
         <div class="chatbox" id="seller_chatbox">
           <div class="chatmessages" id="seller_chatmessages">
             <div class="info message" id="chat_info_seller_insurer" style="display:none;">
-              <span>Use this chatbox to speak with the insurer. Tips:</span>
+              <span>Use this chatbox to speak with the mediator. Tips:</span>
               <ul>
-                <li>Promise the insurer you’ll be honest</li>
-                <li>Tell the insurer you agree to send the token after the buyer sends payment</li>
+                <li>Promise the mediator you’ll be honest</li>
+                <li>Tell the mediator you agree to send the token after the buyer sends payment</li>
               </ul>
             </div>
             <div class="info message" id="chat_info_insurer_seller" style="display:none;">
@@ -183,7 +183,7 @@
       </div>
       <div id="timer">0:00</div>
       <div id="notifications_list">
-        <div id="notification" style="display:none;">
+        <div class="ui-corner-all" id="notification" style="display:none;">
           <div id="latest_notification"><span class="title"></span>: <span class="body"></span></div>
         </div>
         <div class="instructions ui-corner-all" id="instructions_role" style="display:none;">
@@ -197,11 +197,12 @@
         <div class="instructions ui-corner-all" id="instructions">
           <div class="title">Instructions</div>
           <div class="body">
-            <p>This is a game played with three people, the ‘buyer’, the ‘seller’ and the ‘insurer’. The buyer and seller start with 25 cent bonuses. Additionally, the seller starts out with a ‘gold token’, which he can sell to the buyer for 25 cents. If the buyer ends up with the gold token, he’ll earn a 50 cent bonus. So if the buyer and seller make a deal, then everyone earns 50 cents.</p>
-<p>However, the buyer has to go first. The seller has to be trusted to give the gold token on his turn. All the three parties keep whatever bonus they have at the end of the game! The buyer and seller cannot speak directly to each other, but they can both chat with the insurer. The insurer’s job is to help make a fair deal.</p>
-<p>After 5 minutes, the game will end and you will be asked to fill out a survey questionnaire. You must complete the entire survey in order to receive the $1 payment.</p>
-            Do you agree to the following terms and conditions?<br />
-            <label><input id="approve_check" type="checkbox">Yes, I've read them and I agree.</label><br />
+            <p>This is a game played with three people, the <span class="buyer">buyer</span>, the <span class="seller">seller</span> and the <span class="insurer">mediator</span>. You will randomly be assigned one of these roles.</p>
+<p><i>All the three parties keep whatever bonus they have at the end of the game!</i></p>
+            <p>Everyone starts out with 25 cents. The <span class="seller">seller</span> also starts out with a <span class="gold">gold token</span> <img height="30" width="30" src="/img/has_token.png" />, which he can sell to the <span class="buyer">buyer</span> for 25 cents. If the <span class="buyer">buyer</span> ends up with the <span class="gold">gold token</span>, then both he and the <span class="insurer">mediator</span> earn 50 cents in bonus. So if the <span class="buyer">buyer</span> and <span class="seller">seller</span> make a deal, then everyone gets 50 cents. However, the <span class="buyer">buyer</span> has to go first. The <span class="seller">seller</span> has to be trusted to give the <span class="gold">gold token</span> on his turn. The <span class="buyer">buyer</span> and <span class="seller">seller</span> cannot speak directly to each other, but they can both chat with the <span class="insurer">mediator</span>. The <span class="insurer">mediator’s</span> job is to help make a fair deal.</p>
+<p>After 5 minutes, the game will end and you will be asked to fill out a survey questionnaire. You must wait for the end of the game and complete the survey to receive the $1 payment and bonuses earned.</p>
+
+            <label><input id="approve_check" type="checkbox">I've read the instructions and I'm ready to play</label><br />
             <input id="approve" type="button" value="Start"/>
           </div>
         </div>

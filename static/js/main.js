@@ -22,8 +22,9 @@ String.prototype.capitalize = function() {
 function resetProfileNames()
 {
     var profiles = ['buyer', 'insurer', 'seller'];
+    var names = ['Buyer', 'Mediator', 'Seller'];
     for (i in profiles)
-        $('#' + profiles[i] + '_profile .profilename').html(profiles[i].capitalize());
+        $('#' + profiles[i] + '_profile .profilename').html(names[i]);
 }
 
 function handleButton(evtname)
@@ -153,9 +154,8 @@ function setTimer(seconds)
 function setCurrentWait(sec_diff)
 {
     if (!queued)
-        return;
-    
-    if (game_started)
+        window.timeleft = 0;
+    else if (game_started)
         window.timeleft = 5*60 - sec_diff;
     else
         window.timeleft = 15*60 - sec_diff;
@@ -165,7 +165,7 @@ function setCurrentWait(sec_diff)
 wallets = {
     buyer: 0.25,
     seller: 0.25,
-    insurer: 0.50,
+    insurer: 0.25,
 };
 function setWallet(role, amount)
 {
@@ -299,35 +299,40 @@ function jQueryInit()
         if (event.name == 'gamestart' && event.data.starttime != undefined)
         {
             start_time = parseInt(event.data.starttime);
-            window.timeleft = 5*60;
-            setTimer(window.timeleft);
+            game_started = true;
+            setCurrentWait(0);
             
-            function timerFunc() {
+            $('#timer').addClass('gamestart');
+            
+            function gameTimer()
+            {
                 if (--window.timeleft <= 0)
                     return;
                 else
-                    window.setTimeout(timerFunc, 1000);
+                    window.timer = window.setTimeout(gameTimer, 1000);
                 
                 setTimer(window.timeleft);
                 if (window.timeleft % 60 == 0)
                     $('#timer').effect('highlight', 750);
             }
             
-            window.timer = window.setTimeout(timerFunc, 1000);
+            clearTimeout(window.timer);
+            window.timer = window.setTimeout(gameTimer, 1000);
         }
+        else if (event.name == 'time')
+            setCurrentWait(parseInt(event.time) - start_time);
         else if (event.name == 'queued')
         {
-            start_time = parseInt(event.data.starttime);
+            start_time = parseInt(event.time);
             queued = true;
+            setCurrentWait(0);
             
-            window.timeleft = 15*60;
-            setTimer(window.timeleft);
-            
-            function timerFunc() {
+            function timerFunc()
+            {
                 if (--window.timeleft <= 0 || game_started)
                     return;
                 else
-                    window.setTimeout(timerFunc, 1000);
+                    window.timer = window.setTimeout(timerFunc, 1000);
                 
                 setTimer(window.timeleft);
                 if (window.timeleft % 60 == 0)
@@ -336,8 +341,6 @@ function jQueryInit()
             
             window.timer = window.setTimeout(timerFunc, 1000);
         }
-        else if (event.name == 'currenttime')
-            setCurrentWait(parseInt(event.time) - start_time);
     });
 
     events.bind('server:prequeue', function (data) {
@@ -357,22 +360,22 @@ function jQueryInit()
     });
 
     events.bind('server:gamestart', function (data) {
-        if (game_started || data.role == undefined)
+        if (data.role == undefined)
             return;
-        game_started = true;
         
         role = data.role;
         condition = data.condition;
         
         setCurrentProfile(role);
+        $('#content').show();
         $('#content').removeClass('disabled').addClass('enabled');
         $('#tmpl_instructions').tmpl(data).appendTo('#instructions_role .body');
         $('#instructions_role .title span').html(role.capitalize());
         
         var buy_info = 'Chat between ' + (role == 'buyer' ? 'you' : 'buyer') +
-            ' and ' + (role == 'insurer' ? 'you' : 'insurer') + '.';
+            ' and ' + (role == 'insurer' ? 'you' : 'mediator') + '.';
         var sell_info = 'Chat between ' + (role == 'seller' ? 'you' : 'seller') +
-            ' and ' + (role == 'insurer' ? 'you' : 'insurer') + '.';
+            ' and ' + (role == 'insurer' ? 'you' : 'mediator') + '.';
         
         $('#buyer_chatinput').attr('placeholder', buy_info);
         $('#seller_chatinput').attr('placeholder', sell_info);
@@ -397,6 +400,7 @@ function jQueryInit()
         case 3:
             $('#seller_send_insurer').addClass('disabled');
             $('#buyer_send_insurer').addClass('disabled');
+            $('#insurer_take_buyer').addClass('disabled');
             break;
         }
     });
@@ -474,7 +478,6 @@ function jQueryInit()
     require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
     {
         // Start polling only when we have all the templates
-
         events.poll();
     });
     
