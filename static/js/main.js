@@ -186,6 +186,11 @@ function setWallet(role, amount)
     wallets[role] += amount;
     $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2))
         .effect('highlight', 1000);
+    
+    if (wallets[role] == 0)
+        $('button.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
+    else
+        $('button.' + role + ':not(.pressed):not(.disabled)').removeClass('notyours').addClass('yours');
 }
 
 function jQueryInit()
@@ -438,7 +443,7 @@ function jQueryInit()
         
         if (condition == 3 && role == 'insurer')
             $('#insurer_take_seller').addClass('yours').removeClass('notyours');
-        else if (condition == 2)
+        else if (condition == 2 && role == 'seller')
             $('#seller_send_insurer').addClass('yours').removeClass('notyours');
     });
     
