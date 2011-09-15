@@ -283,6 +283,12 @@ function jQueryInit()
             location.href = '/quest/' + userkey + '/';
             return;
         }
+        if (event.name == 'overqueued') {
+            events.abort()
+            location.href = '/overqueued/' + userkey + '/';
+            return;
+        }
+
         $('#eventlog').append(JSON.stringify(event));
         
         if (event.name == 'gamestart' && event.data.starttime != undefined)
