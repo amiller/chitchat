@@ -88,6 +88,21 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 }
 .message.info.ul { margin-bottom: 0px; }
 
+
+span.buyer { 
+  background-color: white !important; 
+  color: #66d; font-weight: bolder }
+span.seller { 
+  background-color: white !important; 
+  color: #A62; font-weight: bolder; }
+span.insurer { 
+  background-color: white !important; 
+  color: #9C3; font-weight: bolder }
+span.gold {
+  background-color: white !important; 
+  color: #992; font-weight: bolder }
+
+
 .buyer { background-color: #B0E2FF !important; }
 .seller { background-color: #EE9933 !important; }
 .insurer { background-color: #9ACD32 !important; }
