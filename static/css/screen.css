@@ -86,7 +86,11 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
   font-size: 14px;
   font-style: italic;
 }
-.message.info.ul { margin-bottom: 0px; }
+.message.info.ul {
+  list-style-type: square;
+  margin-bottom: 0px;
+  margin-left: 5px;
+}
 
 
 span.buyer { 
@@ -128,6 +132,9 @@ span.gold {
   margin-right: 5px;
   width: 48px;
 }
+.has_token { background-image: url(../img/has_token.png); }
+.no_token { background-image: url(../img/no_token.png); }
+.token_missing { background-image: url(../img/token_missing.png); }
 
 #seller_chatbox { margin-left: 10px; }
 
@@ -202,13 +209,19 @@ button.yours.insurer:hover { background-color: #A0F000 !important; }
 #timer {
   font-size: 50px;
   height: 80px;
-  margin-top: 40px;
   text-align: center;
 }
+#timer.gamestart { margin-top: -80px; }
 
 
 /* Instructions and notifications */
 #notifications_list { margin-top: 20px; }
+#notification {
+  background-color: #5987F3;
+  color: white;
+  margin-bottom: 10px;
+  min-height: 20px;
+}
 .instructions {
   border: 2px solid #DDD569;
   margin-bottom: 10px;

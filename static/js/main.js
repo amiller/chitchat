@@ -2,6 +2,7 @@ require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 
 var game_started = false;
 var start_time = 0;
+var queued = false;
 
 var status = null;
 var condition = null;
@@ -53,9 +54,7 @@ function handleButton(evtname)
 function setToken(role, state)
 {
     var name = {'no': 'no_token', 'has': 'has_token', 'missing': 'token_missing'}[state];
-    
-    $('#' + role + '_token').attr('src', '/img/' + name + '.png')
-        .removeClass('no_token has_token token_missing').addClass(name);
+    $('#' + role + '_token').removeClass('no_token has_token token_missing').addClass(name);
 }
 
 function setCurrentProfile(role)
@@ -152,6 +151,17 @@ function setTimer(seconds)
     $('#timer').html(parseInt(seconds / 60) + ':' + str_sec);
 }
 
+function setCurrentWait(sec_diff)
+{
+    if (!queued)
+        window.timeleft = 0;
+    else if (game_started)
+        window.timeleft = 5*60 - sec_diff;
+    else
+        window.timeleft = 15*60 - sec_diff;
+    setTimer(window.timeleft);
+}
+
 wallets = {
     buyer: 0.25,
     seller: 0.25,
@@ -163,7 +173,8 @@ function setWallet(role, amount)
         wallets[role] = 0.0;
     
     wallets[role] += amount;
-    $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2));
+    $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2))
+        .effect('highlight', 1000);
 }
 
 function jQueryInit()
@@ -294,22 +305,17 @@ function jQueryInit()
         if (event.name == 'gamestart' && event.data.starttime != undefined)
         {
             start_time = parseInt(event.data.starttime);
-        }
-        if (event.name == 'time') {
-            var newtime = 5*60 - (parseInt(event.time) - start_time);
-            if (isNaN(window.timeleft) || Math.abs(newtime - window.timeleft) > 2)
-                window.timeleft = newtime;
-            else
-                return;
-
-            setTimer(window.timeleft);
+            game_started = true;
+            setCurrentWait(0);
             
-            function timerFunc() {
+            $('#timer').addClass('gamestart');
+            
+            function gameTimer()
+            {
                 if (--window.timeleft <= 0)
-                    window.clearInterval(window.timer);
-                else {
-                    window.timer = window.setTimeout(timerFunc, 1000);
-                }
+                    return;
+                else
+                    window.timer = window.setTimeout(gameTimer, 1000);
                 
                 setTimer(window.timeleft);
                 if (window.timeleft % 60 == 0)
@@ -317,12 +323,29 @@ function jQueryInit()
             }
             
             clearTimeout(window.timer);
-            window.timer = window.setTimeout(timerFunc, 1000);
+            window.timer = window.setTimeout(gameTimer, 1000);
         }
-        else if (event.name != 'prequeue' && event.name != 'queued')
+        else if (event.name == 'time')
+            setCurrentWait(parseInt(event.time) - start_time);
+        else if (event.name == 'queued')
         {
-            window.timeleft = parseInt(event.data.time) - start_time;
-            setTimer(window.timeleft);
+            start_time = parseInt(event.time);
+            queued = true;
+            setCurrentWait(0);
+            
+            function timerFunc()
+            {
+                if (--window.timeleft <= 0 || game_started)
+                    return;
+                else
+                    window.timer = window.setTimeout(timerFunc, 1000);
+                
+                setTimer(window.timeleft);
+                if (window.timeleft % 60 == 0)
+                    $('#timer').effect('highlight', 750);
+            }
+            
+            window.timer = window.setTimeout(timerFunc, 1000);
         }
     });
 
@@ -343,9 +366,8 @@ function jQueryInit()
     });
 
     events.bind('server:gamestart', function (data) {
-        if (game_started || data.role == undefined)
+        if (data.role == undefined)
             return;
-        game_started = true;
         
         role = data.role;
         condition = data.condition;
@@ -355,7 +377,6 @@ function jQueryInit()
         $('#content').removeClass('disabled').addClass('enabled');
         $('#tmpl_instructions').tmpl(data).appendTo('#instructions_role .body');
         $('#instructions_role .title span').html(role.capitalize());
-
         
         var buy_info = 'Chat between ' + (role == 'buyer' ? 'you' : 'buyer') +
             ' and ' + (role == 'insurer' ? 'you' : 'mediator') + '.';
