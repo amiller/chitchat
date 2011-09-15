@@ -13,11 +13,11 @@ import game
 REDIS_PORT = 9201
 game.setup_redis(REDIS_PORT)
 
-SANDBOX = True
+SANDBOX = False
 if SANDBOX:
     HITTYPEID = "2XLNTL0XULRGRMCPCTDD05FP7PLO2I"
 else:
-    HITTYPEID = "none"
+    HITTYPEID = "22TXULRGNTBJ7FNJ6C6PBN62KR1S6S"
 
 from aws_credentials import AWS_ACCESS_KEY_ID
 from aws_credentials import AWS_SECRET_ACCESS_KEY
