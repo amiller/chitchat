@@ -81,6 +81,7 @@ def get_balance():
     if availbalance_nodes:
         print "Available balance: " + availbalance_nodes[0].getElementsByTagName('FormattedPrice')[0].childNodes[0].data
 
+
 def extend_time(hit, time=3600):
     request('ExtendHIT', HITId=hit, ExpirationIncrementInSeconds=time)
 
@@ -109,6 +110,7 @@ def get_all_hitids():
         if hittypeid == HITTYPEID:
             hitids.append(hitid)
     return hitids
+
 
 def notify_worker(workerid, invite):
     url = 'http://studyvj9ht.vps.soc1024.com/%s/' % invite
