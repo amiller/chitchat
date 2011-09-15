@@ -76,16 +76,29 @@ def events_for_game(gamekey, since=None):
 
 def queue_user(userkey):
     # Add the user to the queue
-    with db.lock('lock:user_status:%s' % userkey, 2):
-        queuetime = repr(time.time())
-        db['user_status:%s' % userkey] = json.dumps({'status': 'queued',
-                                                     'time': queuetime})
-        user_event(userkey, 'queued')
-        print 'queued:', userkey
+    while 1:
+        with db.pipeline() as pipe:
+            try:
+                pipe.watch('user_status:%s' % userkey)
+                pipe.watch('queue')
 
-    with db.lock('lock:queue', 2):
-        db.zadd('queue', **{userkey: queuetime})
+                status = json.loads(pipe['user_status:%s' % userkey])
+                if status['status'] != 'prequeue':
+                    return
 
+                pipe.multi()
+                queuetime = repr(time.time())
+                pipe['user_status:%s' % userkey] = \
+                                      json.dumps({'status': 'queued',
+                                                  'time': queuetime})
+                pipe.zadd('queue', **{userkey: queuetime})
+                pipe.execute()
+                print 'queued:', userkey
+            except redis.WatchError:
+                continue
+            break
+
+    user_event(userkey, 'queued')
     # Process the queue
     handle_queue()
 
@@ -105,27 +118,45 @@ def user_status(userkey):
         return {'status':'uninvited'}
 
     # Preapprove them if they have no status yet
-    with db.lock('lock:user_status:%s' % userkey, 2):
-        status = db.get('user_status:%s' % userkey)
-        if not status:
-            # Set the status to 'prequeue'
-            status = json.dumps({'status': 'prequeue'})
-            db['user_status:%s' % userkey] = status
+    while 1:
+        with db.pipeline() as pipe:
+            try:
+                pipe.watch('user_status:%s' % userkey)
+                status = pipe.get('user_status:%s' % userkey)
+                if not status:
+                    pipe.multi()
+                    # Set the status to 'prequeue'
+                    status = json.dumps({'status': 'prequeue'})
+                    pipe['user_status:%s' % userkey] = status
 
-            # Add 'prequeue' to the event
-            user_event(userkey, 'prequeue')
-        elif json.loads(status)['status'] == 'playing':
-            # Timeout the game after 5 minutes
-            if time.time() - float(json.loads(status)['starttime']) > 5*60.0:
-                status = json.dumps({'status': 'gameover'})
-                db['user_status:%s' % userkey] = status
-        elif json.loads(status)['status'] == 'queued':
-            # Timeout the queue after 15 minutes
-            if time.time() - float(json.loads(status)['time']) > 15*60.0:
-                status = json.dumps({'status': 'overqueued'})
-                db['user_status:%s' % userkey] = status
-        status = json.loads(status)
-    return status
+                    # Add 'prequeue' to the event
+                    timestamp = repr(time.time())
+                    event = {'name': 'prequeue', 'data': {}, 'time': timestamp}
+                    pipe.zadd('events_user:%s' % userkey,
+                              **{json.dumps(event): timestamp})
+
+                elif json.loads(status)['status'] == 'playing':
+                    pipe.multi()
+                    # Timeout the game after 5 minutes
+                    if time.time() - float(json.loads(status)['starttime']) > \
+                           5*60.0:
+                        status = json.dumps({'status': 'gameover'})
+                        pipe['user_status:%s' % userkey] = status
+                elif json.loads(status)['status'] == 'queued':
+                    # Timeout the queue after 15 minutes
+                    if time.time() - float(json.loads(status)['time']) > \
+                           15*60.0:
+                        pipe.watch('queue')
+                        pipe.multi()
+                        status = json.dumps({'status': 'overqueued'})
+                        pipe['user_status:%s' % userkey] = status
+                        pipe.zrem('queue', userkey)
+
+                status = json.loads(status)
+                pipe.execute()
+                return status
+            except redis.WatchError:
+                continue
 
 
 def process_user_event(userkey, event):
@@ -154,31 +185,46 @@ def handle_queue():
     # Can we break three people into a group?
     # Does anyone need to be refreshed
     while 1:
-        with db.lock('lock:queue', 2):
-            if db.zcard('queue') < 3:
-                return
-            users = db.zrange('queue', 0, 2)
-            db.zremrangebyrank('queue', 0, 2)
+        with db.pipeline() as pipe:
+            pipe.watch('queue')
+            try:
+                if pipe.zcard('queue') < 3:
+                    return
+                users = pipe.zrange('queue', 0, 2)
 
-        # Create a fresh game
-        next_condition = None
-        game = Game(users=users, condition=next_condition)
-        game.commit_events()
-        game.commit_state()
-        state = bunch.bunchify(game.state)
+                # Create a fresh game
+                next_condition = None
+                game = Game(users=users, condition=next_condition)
+                state = bunch.bunchify(game.state)
+                gamekey = state['gamekey']
+                pipe.watch('game:%s' % gamekey)
 
-        # Update user status with their role and gamekey
-        buyer = state.buyer.userkey
-        seller = state.seller.userkey
-        insurer = state.insurer.userkey
+                # Update user status with their role and gamekey
+                buyer = state.buyer.userkey
+                seller = state.seller.userkey
+                insurer = state.insurer.userkey
+                pipe.watch('user_status:%s' % buyer)
+                pipe.watch('user_status:%s' % seller)
+                pipe.watch('user_status:%s' % insurer)
 
-        d = {'status': 'playing',
-             'gamekey': state.gamekey,
-             'starttime': state.starttime}
+                pipe.multi()
+                pipe.zremrangebyrank('queue', 0, 2)
+                pipe['game:%s'%gamekey] = json.dumps(state)
 
-        d['role'] = 'buyer'; db['user_status:%s'%buyer] = json.dumps(d)
-        d['role'] = 'seller'; db['user_status:%s'%seller] = json.dumps(d)
-        d['role'] = 'insurer'; db['user_status:%s'%insurer] = json.dumps(d)
+                d = {'status': 'playing',
+                     'gamekey': state.gamekey,
+                     'starttime': state.starttime}
+
+                d['role'] = 'buyer'
+                pipe['user_status:%s'%buyer] = json.dumps(d)
+                d['role'] = 'seller'
+                pipe['user_status:%s'%seller] = json.dumps(d)
+                d['role'] = 'insurer'
+                pipe['user_status:%s'%insurer] = json.dumps(d)
+
+                pipe.execute()
+            except:
+                game.commit_events()
 
 
 class Game(object):
