@@ -10,6 +10,7 @@ var matches = (/\/([a-f0-9]+)\//).exec(window.location.pathname);
 var userkey = '0';
 if (matches != null)
   userkey = matches[1];
+console.info('userkey:' + userkey)
 
 var tmpl_instructions = null;
 
@@ -19,9 +20,10 @@ String.prototype.capitalize = function() {
 
 function resetProfileNames()
 {
-    var profiles = ['buyer', 'mediator', 'seller'];
+    var profiles = ['buyer', 'insurer', 'seller'];
+    var names = ['Buyer', 'Mediator', 'Seller'];
     for (i in profiles)
-        $('#' + profiles[i] + '_profile .profilename').html(profiles[i].capitalize());
+        $('#' + profiles[i] + '_profile .profilename').html(names[i]);
 }
 
 function handleButton(evtname)
