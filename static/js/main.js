@@ -3,6 +3,7 @@ require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 var game_started = false;
 var start_time = 0;
 var queued = false;
+var seller_got_money = false;
 
 var status = null;
 var condition = null;
@@ -93,24 +94,26 @@ function setCurrentProfile(role)
     
     case 'seller':
         $('#seller_chatinput').removeAttr('disabled');
-        $('#seller_send_buyer').bind('click', handleButton('send_money_seller_buyer'));
         $('#seller_send_insurer').bind('click', handleButton('send_money_seller_insurer'));
         $('.profilebox.buyer .profiletokenlink').addClass('pointer');
-        $('.profilebox.seller .profiletokenlink').bind('click', function (evt) {
-            if ($(this).find('.profiletoken').hasClass('has_token'))
+        $('#seller_send_buyer').bind('click', function (evt) {
+            if ($('#seller_token').hasClass('has_token'))
             {
-                var t = $(this);
+                if (!seller_got_money)
+                    $(this).jConf({
+                        sText: 'You must wait until the buyer sends you money.',
+                        okBtn: 'Okay',
+                        evt: evt
+                    });
+                
                 $(this).jConf({
-                    sText: t.find('.button_explanation').html(),
+                    sText: $(this).prev('.button_explanation').html(),
                     okBtn: 'Okay',
                     noBtn: 'Cancel',
                     evt: evt,
                     callResult: function(data) {
                         if (data.btnVal == 'Okay')
-                        {
                             events.addEvent('send_token', {});
-                            t.addClass('pointer');
-                        }
                     }
                 });
             }
@@ -424,6 +427,8 @@ function jQueryInit()
         setButtonPressed($('#buyer_send_seller'));
         setWallet('buyer', -0.25);
         setWallet('seller', 0.25);
+        
+        seller_got_money = true;
         
         if (condition == 3)
             $('#insurer_take_seller').addClass('yours');
