@@ -140,7 +140,9 @@ def user_status(userkey):
                     # Timeout the game after 5 minutes
                     if time.time() - float(json.loads(status)['starttime']) > \
                            5*60.0:
-                        status = json.dumps({'status': 'gameover'})
+                        role = json.loads(status)['role']
+                        status = json.dumps({'status': 'gameover',
+                                             'role': role})
                         pipe['user_status:%s' % userkey] = status
                 elif json.loads(status)['status'] == 'queued':
                     # Timeout the queue after 15 minutes

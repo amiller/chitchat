@@ -139,8 +139,10 @@ def startapp(args):
             return flask.redirect('/questover/%s/' % userkey)
 
         # Render the main page
+        status = json.loads(game.user_status(userkey))        
         with open(os.path.join(base, 'static', 'quest.htm'), 'r') as fp:
-            return fp.read().replace('{{userkey}}', userkey)
+            return fp.read().replace('{{userkey}}', userkey)\
+                   .replace('{{role}}', status['role'])
 
     @app.route('/overqueued/<userkey>/', methods=['GET'])
     def overqueued(userkey):
