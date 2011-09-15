@@ -178,19 +178,22 @@ wallets = {
     seller: 0.25,
     insurer: 0.25,
 };
-function setWallet(role, amount)
+function setWallet(person, amount)
 {
-    if (wallets[role] == undefined)
-        wallets[role] = 0.0;
+    if (wallets[person] == undefined)
+        wallets[person] = 0.0;
     
-    wallets[role] += amount;
-    $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2))
+    wallets[person] += amount;
+    $('#' + person + '_profile .profilewallet').html('$' + wallets[person].toFixed(2))
         .effect('highlight', 1000);
     
-    if (wallets[role] == 0)
-        $('button.' + role + '.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
-    else
-        $('button.' + role + ':not(.pressed):not(.disabled)').removeClass('notyours').addClass('yours');
+    if (person == role)
+    {
+        if (wallets[person] == 0)
+            $('button.' + person + '.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
+        else
+            $('button.' + person + ':not(.pressed):not(.disabled)').removeClass('notyours').addClass('yours');
+    }
 }
 
 function jQueryInit()
