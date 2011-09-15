@@ -290,8 +290,10 @@ function jQueryInit()
             start_time = parseInt(event.data.starttime);
         }
         if (event.name == 'time') {
-            var newtime = window.timeleft = 5*60 - (parseInt(event.time) - start_time);
-            if (Math.abs(newtime - window.timeleft) < 2)
+            var newtime = 5*60 - (parseInt(event.time) - start_time);
+            if (isNaN(window.timeleft) || Math.abs(newtime - window.timeleft) > 2)
+                window.timeleft = newtime;
+            else
                 return;
 
             setTimer(window.timeleft);
