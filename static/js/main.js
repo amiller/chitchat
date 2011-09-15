@@ -20,7 +20,7 @@ String.prototype.capitalize = function() {
 
 function resetProfileNames()
 {
-    var profiles = ['buyer', 'insurer', 'seller'];
+    var profiles = ['buyer', 'mediator', 'seller'];
     for (i in profiles)
         $('#' + profiles[i] + '_profile .profilename').html(profiles[i].capitalize());
 }
