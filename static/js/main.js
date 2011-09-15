@@ -2,6 +2,7 @@ require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
 
 var game_started = false;
 var start_time = 0;
+var queued = false;
 
 var status = null;
 var condition = null;
@@ -52,9 +53,7 @@ function handleButton(evtname)
 function setToken(role, state)
 {
     var name = {'no': 'no_token', 'has': 'has_token', 'missing': 'token_missing'}[state];
-    
-    $('#' + role + '_token').attr('src', '/img/' + name + '.png')
-        .removeClass('no_token has_token token_missing').addClass(name);
+    $('#' + role + '_token').removeClass('no_token has_token token_missing').addClass(name);
 }
 
 function setCurrentProfile(role)
@@ -149,6 +148,18 @@ function setTimer(seconds)
         str_sec = '0' + str_sec;
     
     $('#timer').html(parseInt(seconds / 60) + ':' + str_sec);
+}
+
+function setCurrentWait(sec_diff)
+{
+    if (!queued)
+        return;
+    
+    if (game_started)
+        window.timeleft = 5*60 - sec_diff;
+    else
+        window.timeleft = 15*60 - sec_diff;
+    setTimer(window.timeleft);
 }
 
 wallets = {
@@ -288,12 +299,12 @@ function jQueryInit()
         if (event.name == 'gamestart' && event.data.starttime != undefined)
         {
             start_time = parseInt(event.data.starttime);
-            window.timeleft = 5*60 - (parseInt(event.time) - parseInt(event.data.starttime));
+            window.timeleft = 5*60;
             setTimer(window.timeleft);
             
             function timerFunc() {
                 if (--window.timeleft <= 0)
-                    window.clearInterval(window.timer);
+                    return;
                 else
                     window.setTimeout(timerFunc, 1000);
                 
@@ -304,13 +315,29 @@ function jQueryInit()
             
             window.timer = window.setTimeout(timerFunc, 1000);
         }
-        else if (event.name != 'prequeue' && event.name != 'queued')
+        else if (event.name == 'queued')
         {
-            window.timeleft = parseInt(event.data.time) - start_time;
+            start_time = parseInt(event.data.starttime);
+            queued = true;
             
-            if (!isNaN(window.timeleft))
+            window.timeleft = 15*60;
+            setTimer(window.timeleft);
+            
+            function timerFunc() {
+                if (--window.timeleft <= 0 || game_started)
+                    return;
+                else
+                    window.setTimeout(timerFunc, 1000);
+                
                 setTimer(window.timeleft);
+                if (window.timeleft % 60 == 0)
+                    $('#timer').effect('highlight', 750);
+            }
+            
+            window.timer = window.setTimeout(timerFunc, 1000);
         }
+        else if (event.name == 'currenttime')
+            setCurrentWait(parseInt(event.time) - start_time);
     });
 
     events.bind('server:prequeue', function (data) {

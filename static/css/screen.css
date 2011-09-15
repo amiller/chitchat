@@ -112,6 +112,9 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
   margin-right: 5px;
   width: 48px;
 }
+.has_token { background-image: url(../img/has_token.png); }
+.no_token { background-image: url(../img/no_token.png); }
+.token_missing { background-image: url(../img/token_missing.png); }
 
 #seller_chatbox { margin-left: 10px; }
 
@@ -184,7 +187,7 @@ button.notyours.insurer.pressed { background-color: #97CD32 !important; }
 #timer {
   font-size: 50px;
   height: 80px;
-  margin-top: 40px;
+  margin-top: -80px;
   text-align: center;
 }
 
