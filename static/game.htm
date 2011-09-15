@@ -36,10 +36,24 @@
         </div>
         <div id="buyer_seller_arrows">
           <div id="buyer_send_seller_box">
+            <div class="button_explanation" style="display:none;">
+              <h2>Confirm sending 25 cents to seller.</h2>
+              <ul>
+                <li>The Seller will gain 25 cents.</li>
+                <li>You will lose 25 cents.</li>
+              </ul>
+            </div>
             <button class="button_give ui-corner-all buyer" id="buyer_send_seller"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Seller</button>
           </div>
           <div class="lfloat ui-corner-all" style="height: 34px; border: 3px solid black;"></div>
           <div id="seller_send_buyer_box">
+            <div class="button_explanation" style="display:none;">
+              <h2>Confirm sending 25 cents to buyer.</h2>
+              <ul>
+                <li>The buyer will gain 25 cents.</li>
+                <li>You will lose 25 cents.</li>
+              </ul>
+            </div>
             <button class="button_give ui-corner-all seller" id="seller_send_buyer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Buyer</button>
           </div>
         </div>
@@ -76,7 +90,21 @@
         <div id="insurer_arrows" align="center">
           <div id="insurer_buttons">
             <div id="insurer_buttons_line1">
+            <div class="button_explanation" style="display:none;">
+              <h2>Confirm sending 25 cents to insurer.</h2>
+              <ul>
+                <li>The insurer will gain 25 cents.</li>
+                <li>You will lose 25 cents.</li>
+              </ul>
+            </div>
               <button class="button_give ui-corner-all buyer lfloat" id="buyer_send_insurer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Insurer</button>
+              <div class="button_explanation" style="display:none;">
+                <h2>Confirm sending 25 cents to insurer.</h2>
+                <ul>
+                  <li>The insurer will gain 25 cents.</li>
+                  <li>You will lose 25 cents.</li>
+                </ul>
+              </div>
               <button class="button_give ui-corner-all seller rfloat" id="seller_send_insurer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Insurer</button>
             </div>
             <div class="clear"> </div>
@@ -86,12 +114,40 @@
             </div>
             <div class="clear"> </div>
             <div id="insurer_buttons_line2">
+              <div class="button_explanation" style="display:none;">
+                <h2>Confirm taking 25 cents from buyer.</h2>
+                <ul>
+                  <li>The buyer will lose 25 cents.</li>
+                  <li>You will gain 25 cents.</li>
+                </ul>
+              </div>
               <button class="button_take ui-corner-all insurer lfloat" id="insurer_take_buyer"><span class="action">Take 25&cent;</span> <span class="transitive">from</span> Buyer</button>
+              <div class="button_explanation" style="display:none;">
+                <h2>Confirm taking 25 cents from seller.</h2>
+                <ul>
+                  <li>The seller will lose 25 cents.</li>
+                  <li>You will gain 25 cents.</li>
+                </ul>
+              </div>
               <button class="button_take ui-corner-all insurer rfloat" id="insurer_take_seller"><span class="action">Take 25&cent;</span> <span class="transitive">from</span> Seller</button>
             </div>
             <div class="clear"> </div>
             <div id="insurer_buttons_line3">
+              <div class="button_explanation" style="display:none;">
+                <h2>Confirm sending 25 cents to buyer.</h2>
+                <ul>
+                  <li>The buyer will gain 25 cents.</li>
+                  <li>You will lose 25 cents.</li>
+                </ul>
+              </div>
               <button class="button_give ui-corner-all insurer lfloat" id="insurer_send_buyer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Buyer</button>
+              <div class="button_explanation" style="display:none;">
+                <h2>Confirm sending 25 cents to seller.</h2>
+                <ul>
+                  <li>The seller will gain 25 cents.</li>
+                  <li>You will lose 25 cents.</li>
+                </ul>
+              </div>
               <button class="button_give ui-corner-all insurer rfloat" id="insurer_send_seller"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Seller</button>
             </div>
           </div>
