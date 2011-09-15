@@ -162,7 +162,8 @@ function setWallet(role, amount)
         wallets[role] = 0.0;
     
     wallets[role] += amount;
-    $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2));
+    $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2))
+        .effect('highlight', 1000);
 }
 
 function jQueryInit()
@@ -306,7 +307,9 @@ function jQueryInit()
         else if (event.name != 'prequeue' && event.name != 'queued')
         {
             window.timeleft = parseInt(event.data.time) - start_time;
-            setTimer(window.timeleft);
+            
+            if (!isNaN(window.timeleft))
+                setTimer(window.timeleft);
         }
     });
 

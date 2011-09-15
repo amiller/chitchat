@@ -154,6 +154,11 @@ def startapp(args):
         # Render the main page
         with open(os.path.join(base, 'static', 'questover.htm'), 'r') as fp:
             return fp.read()
+    
+    @app.route('/queueover/')
+    def queueover():
+        with open(os.path.join(base, 'static', 'queueover.htm'), 'r') as fp:
+            return fp.read()
 
     @app.route('/adminueqytMXDDS/newuser')
     def admin_newuser():
