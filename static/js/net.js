@@ -4,14 +4,6 @@ define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
      * These are custom to the particular server configuration. Change them as needed
      */
     var url_regex = /\/([a-f0-9]+)\//;
-    
-    if (typeof console == undefined)
-    {
-        var console = function() {};
-        console.prototype.error = function() {};
-        console.prototype.log = function() {};
-        console.prototype.info = function() {};
-    }
 
     /**
      * This class keeps a queue of events that need to be sent to the server.
@@ -75,7 +67,8 @@ define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
             },
             error: function (xhr, status, error) {
                 if (status != 'timeout')
-                    console.error('poll: ' + status);
+                    if (typeof console != undefined)
+                        console.error('poll: ' + status);
             },
             complete: function (xhr, reason) {
                 if (self.aborting) {

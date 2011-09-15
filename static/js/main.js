@@ -188,7 +188,7 @@ function setWallet(role, amount)
         .effect('highlight', 1000);
     
     if (wallets[role] == 0)
-        $('button.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
+        $('button.' + role + '.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
     else
         $('button.' + role + ':not(.pressed):not(.disabled)').removeClass('notyours').addClass('yours');
 }
