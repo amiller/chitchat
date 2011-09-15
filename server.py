@@ -130,6 +130,10 @@ def startapp(args):
         if not db.sismember('invited_userkeys', userkey):
             return 'This user key is not invited', 403
 
+        # Go immediately to questover if we already have their survey 
+        if db.exists('survey_user:%s' % userkey):
+            return flask.redirect('/questover/%s/' % userkey)
+
         # Render the main page
         with open(os.path.join(base, 'static', 'quest.htm'), 'r') as fp:
             return fp.read().replace('{{userkey}}', userkey)

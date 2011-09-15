@@ -152,8 +152,8 @@ def handle_queue():
             db.zremrangebyrank('queue', 0, 2)
 
         # Create a fresh game
-        game = Game(users=users, condition=next_condition)
         next_condition = None
+        game = Game(users=users, condition=next_condition)
         game.commit_events()
         game.commit_state()
         state = bunch.bunchify(game.state)

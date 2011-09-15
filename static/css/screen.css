@@ -109,6 +109,7 @@ span.gold {
 
 #content.disabled { opacity: 0.3; }
 #content.enabled { opacity: 1; }
+#content { display: none;  }
 
 #seller_token_info {
   font-size: 14px;
@@ -140,6 +141,7 @@ button {
   border-bottom-color: #6A6A6A;
   border-right-color: #6A6A6A;
   background-color: #F0F0F0;
+  font-weight: bolder;
 }
 button:active, button.pressed {
   border-top-color: #2A2A2A;
@@ -180,10 +182,6 @@ button.yours.buyer:active, button.yours.buyer.pressed { background-color: #1FADF
 button.yours.seller:active, button.yours.seller.pressed { background-color: #E28512 !important; }
 button.yours.insurer:active, button.yours.insurer.pressed { background-color: #83B819 !important; }
 
-button.yours.buyer:hover { background-color: #42BAFF !important; }
-button.yours.seller:hover { background-color: #FF8C00 !important; }
-button.yours.insurer:hover { background-color: #A0F000 !important; }
-
 button.yours.pressed  { border-color: #25F722; }
 
 .notyours.buyer { background-color: #7293A7 !important; }
@@ -193,6 +191,11 @@ button.yours.pressed  { border-color: #25F722; }
 button.notyours.buyer.pressed { background-color: #A7DCFB !important; }
 button.notyours.seller.pressed { background-color: #DF9943 !important; }
 button.notyours.insurer.pressed { background-color: #97CD32 !important; }
+
+button.yours.buyer:hover { background-color: #42BAFF !important; }
+button.yours.seller:hover { background-color: #FF8C00 !important; }
+button.yours.insurer:hover { background-color: #A0F000 !important; }
+
 
 
 /* Timer */

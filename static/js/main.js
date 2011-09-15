@@ -335,9 +335,11 @@ function jQueryInit()
         condition = data.condition;
         
         setCurrentProfile(role);
+        $('#content').show();
         $('#content').removeClass('disabled').addClass('enabled');
         $('#tmpl_instructions').tmpl(data).appendTo('#instructions_role .body');
         $('#instructions_role .title span').html(role.capitalize());
+
         
         var buy_info = 'Chat between ' + (role == 'buyer' ? 'you' : 'buyer') +
             ' and ' + (role == 'insurer' ? 'you' : 'mediator') + '.';
@@ -367,6 +369,7 @@ function jQueryInit()
         case 3:
             $('#seller_send_insurer').addClass('disabled');
             $('#buyer_send_insurer').addClass('disabled');
+            $('#insurer_take_buyer').addClass('disabled');
             break;
         }
     });
@@ -444,7 +447,6 @@ function jQueryInit()
     require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
     {
         // Start polling only when we have all the templates
-
         events.poll();
     });
     
