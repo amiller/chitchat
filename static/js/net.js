@@ -61,6 +61,7 @@ define(["/js/jquery-ui-1.8.14.min.js", "/js/microevent.js"], function()
                     var event = events[i];
                     self.trigger('server:' + event.name, event.data); 
                     self.trigger('server', event);
+                    if (event.name == 'time') return;
                     self.since = event.time;
                 }
             },

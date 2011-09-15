@@ -287,7 +287,9 @@ function jQueryInit()
         if (event.name == 'gamestart' && event.data.starttime != undefined)
         {
             start_time = parseInt(event.data.starttime);
-            window.timeleft = 5*60 - (parseInt(event.time) - parseInt(event.data.starttime));
+        }
+        if (event.name == 'time') {
+            window.timeleft = 5*60 - (parseInt(event.time) - start_time);
             setTimer(window.timeleft);
             
             function timerFunc() {

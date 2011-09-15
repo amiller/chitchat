@@ -114,7 +114,11 @@ def startapp(args):
             events = game.events_for_user(userkey, since)
 
             # Return if there are some events
-            if events: return response(events)
+            if events:
+                # Add a time event to help sync the alarms
+                events.append({'name': 'time',
+                               'time': repr(time()), 'data': {}})
+                return response(events)
 
             # Otherwise wait and poll
             gevent.sleep(1)
