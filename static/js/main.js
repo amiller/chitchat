@@ -1,4 +1,4 @@
-require(["/js/jquery-1.6.2.min.js", "net"], jQueryInit);
+require(["net"], jQueryInit);
 
 var game_started = false;
 var start_time = 0;
@@ -54,7 +54,8 @@ function handleButton(evtname)
 function setToken(role, state)
 {
     var name = {'no': 'no_token', 'has': 'has_token', 'missing': 'token_missing'}[state];
-    $('#' + role + '_token').removeClass('no_token has_token token_missing').addClass(name);
+    $('#' + role + '_token').removeClass('no_token has_token token_missing').addClass(name)
+        .attr('src', '/img/' + (state == 'missing' ? '404.jpg' : name + '.png'));
 }
 
 function setCurrentProfile(role)
@@ -527,7 +528,7 @@ function jQueryInit()
         })
     });
     
-    require(["/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js", "/js/jquery-ui-1.8.14.min.js"], function ()
+    require(["/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
     {
         // Start polling only when we have all the templates
         events.poll();
