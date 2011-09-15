@@ -215,6 +215,11 @@ button.yours.insurer:hover { background-color: #A0F000 !important; }
   text-align: center;
 }
 #timer.gamestart { margin-top: -80px; }
+#waiting_note {
+  font-size: 16px;
+  font-style: italic;
+  text-align: center;
+}
 
 
 /* Instructions and notifications */

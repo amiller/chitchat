@@ -358,13 +358,14 @@ function jQueryInit()
     });
 
     events.bind('server:prequeue', function (data) {
-        // Show the 'accept' message
+        // Show the accept message
     });
 
     events.bind('server:queued', function (data) {
         // Hide the accept message if it's still shown
-        // Show the 'waiting for people' information
-        // Show the countdown timer
+        
+        $('#waiting_note').css('display', 'block');
+        $('#approve_check').attr('checked', 'checked');
     });
 
     events.bind('server:chat', function (data) {
@@ -376,6 +377,8 @@ function jQueryInit()
     events.bind('server:gamestart', function (data) {
         if (data.role == undefined)
             return;
+        
+        $('#waiting_note').css('display', 'none');
         
         role = data.role;
         condition = data.condition;
