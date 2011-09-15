@@ -139,12 +139,12 @@ function setCurrentProfile(role)
 function setButtonPressed(buttons)
 {
     buttons.each(function (k, button) {
-        button = $(button);
-        button.addClass('pressed');
-        
         var what = '25&cent;';
         if (button.id == 'seller_send_buyer')
             what = 'Token';
+        
+        button = $(button);
+        button.addClass('pressed');
         
         if (button.hasClass('button_give'))
             button.find('span.action').html(what + ' Given');
@@ -178,19 +178,22 @@ wallets = {
     seller: 0.25,
     insurer: 0.25,
 };
-function setWallet(role, amount)
+function setWallet(person, amount)
 {
-    if (wallets[role] == undefined)
-        wallets[role] = 0.0;
+    if (wallets[person] == undefined)
+        wallets[person] = 0.0;
     
-    wallets[role] += amount;
-    $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2))
+    wallets[person] += amount;
+    $('#' + person + '_profile .profilewallet').html('$' + wallets[person].toFixed(2))
         .effect('highlight', 1000);
     
-    if (wallets[role] == 0)
-        $('button.' + role + '.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
-    else
-        $('button.' + role + ':not(.pressed):not(.disabled)').removeClass('notyours').addClass('yours');
+    if (person == role)
+    {
+        if (wallets[person] == 0)
+            $('button.' + person + '.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
+        else
+            $('button.' + person + ':not(.pressed):not(.disabled)').removeClass('notyours').addClass('yours');
+    }
 }
 
 function jQueryInit()
@@ -475,7 +478,6 @@ function jQueryInit()
     });
     
     events.bind('server:send_token', function () {
-        setButtonPressed($('#seller_send_buyer'))
         if (role == 'insurer')
         {
             setToken('buyer', 'missing');
@@ -486,6 +488,9 @@ function jQueryInit()
             setToken('buyer', 'has');
             setToken('seller', 'no');
         }
+        
+        if (role == 'seller')
+            setButtonPressed($('#seller_send_buyer'))
     });
 
     // Bind to the chat box inputs
@@ -522,7 +527,7 @@ function jQueryInit()
         })
     });
     
-    require(["/js/jquery-ui-1.8.14.min.js", "/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js"], function ()
+    require(["/js/jquery.tmpl.min.js", "/js/jConf-1.2.0.js", "/js/jquery-ui-1.8.14.min.js"], function ()
     {
         // Start polling only when we have all the templates
         events.poll();
