@@ -141,6 +141,17 @@ def startapp(args):
         # Render the main page
         with open(os.path.join(base, 'static', 'quest.htm'), 'r') as fp:
             return fp.read().replace('{{userkey}}', userkey)
+
+    @app.route('/overqueued/<userkey>/', methods=['GET'])
+    def overqueued(userkey):
+
+        # Return an error if they are not a valid user
+        if not db.sismember('invited_userkeys', userkey):
+            return 'This user key is not invited', 403
+
+        # Render the main page
+        with open(os.path.join(base, 'static', 'overqueued.htm'), 'r') as fp:
+            return fp.read()
     
     @app.route('/questover/<userkey>/', methods=['GET', 'POST'])
     def questover(userkey):

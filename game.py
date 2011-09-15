@@ -37,9 +37,12 @@ def events_for_user(userkey, since=None):
     if status['status'] == 'uninvited':
         return [{'name': 'uninvited', 'timestamp': repr(time.time())}]
 
-    # Bounce if game is already over
+    # Bounce if game is already over or they're queued
     if status['status'] == 'gameover':
         return [{'name': 'gameover', 'timestamp': repr(time.time())}]
+
+    if status['status'] == 'overqueued':
+        return [{'name': 'overqueued', 'timestamp': repr(time.time())}]
 
     # Get all the user events
     since = '(' + since if since else '-inf'
@@ -112,8 +115,14 @@ def user_status(userkey):
             # Add 'prequeue' to the event
             user_event(userkey, 'prequeue')
         elif json.loads(status)['status'] == 'playing':
+            # Timeout the game after 5 minutes
             if time.time() - float(json.loads(status)['starttime']) > 5*60.0:
                 status = json.dumps({'status': 'gameover'})
+                db['user_status:%s' % userkey] = status
+        elif json.loads(status)['status'] == 'queued':
+            # Timeout the queue after 15 minutes
+            if time.time() - float(json.loads(status)['time']) > 1*60.0:
+                status = json.dumps({'status': 'overqueued'})
                 db['user_status:%s' % userkey] = status
         status = json.loads(status)
     return status
