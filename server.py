@@ -120,6 +120,40 @@ def startapp(args):
             gevent.sleep(1)
 
         return response([])
+    
+    @app.route('/quest/<userkey>/', methods=['GET'])
+    def quest(userkey):
+        if userkey == ADMIN_KEY:
+            return "Wow! You are an admin"
+
+        # Return an error if they are not a valid user
+        if not db.sismember('invited_userkeys', userkey):
+            return 'This user key is not invited', 403
+
+        # Render the main page
+        with open(os.path.join(base, 'static', 'quest.htm'), 'r') as fp:
+            return fp.read().replace('{{userkey}}', userkey)
+    
+    @app.route('/questover/<userkey>/', methods=['GET', 'POST'])
+    def questover(userkey):
+        if userkey == ADMIN_KEY:
+            return "Wow! You are an admin"
+        
+        if flask.request.method == 'POST':
+            db['survey_user:%s' % userkey] = json.dumps({
+                'situation_fair': flask.request.form['situation_fair'],
+                'seller_truth': flask.request.form['seller_truth'],
+                'buyer_truth': flask.request.form['buyer_truth'],
+                'comments': flask.request.form['comments'],
+            });
+
+        # Return an error if they are not a valid user
+        if not db.sismember('invited_userkeys', userkey):
+            return 'This user key is not invited', 403
+
+        # Render the main page
+        with open(os.path.join(base, 'static', 'questover.htm'), 'r') as fp:
+            return fp.read()
 
     @app.route('/adminueqytMXDDS/newuser')
     def admin_newuser():

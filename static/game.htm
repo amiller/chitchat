@@ -25,10 +25,14 @@
   <body>
     <div id="body">
       <div id="content" class="disabled">
+        <div class="info seller" id="seller_token_info" style="display:none;">The seller starts with one gold token.</div>
         <div class="profilebox buyer" id="buyer_profile">
           <img class="profileimage" id="buyer_image" src="http://robohash.org/buyer.png?size=50x50&set=set3" />
-          <span class="profilename" id="buyer_profilename">Buyer</span>
-          <img class="profiletoken" id="buyer_token" src="/img/token_missing.png" />
+            <div class="lfloat profilenamewallet">
+              <span class="profilename" id="buyer_profilename">Buyer</span>
+              <span class="profilewallet money">$0.25</span>
+            </div>
+          <a href="javascript:void(0);" class="profiletokenlink"><img class="profiletoken token_missing" id="buyer_token" src="/img/token_missing.png" /></a>
         </div>
         <div id="buyer_seller_arrows">
           <div id="buyer_send_seller_box">
@@ -41,12 +45,32 @@
         </div>
         <div class="profilebox seller" id="seller_profile">
           <img class="profileimage" id="seller_image" src="http://robohash.org/seller1.png?size=50x50&set=set3" />
-          <span class="profilename" id="seller_profilename">Seller</span>
-          <img class="profiletoken" id="seller_token" src="/img/token_missing.png" />
+            <div class="lfloat profilenamewallet">
+              <span class="profilename" id="seller_profilename">Seller</span>
+              <span class="profilewallet money">$0.25</span>
+            </div>
+          <a href="javascript:void(0);" class="profiletokenlink"><img class="profiletoken token_missing" id="seller_token" src="/img/token_missing.png" /></a>
         </div>
         <div class="clear"> </div>
         <div class="chatbox" id="buyer_chatbox">
-          <div class="chatmessages" id="buyer_chatmessages"></div>
+          <div class="chatmessages" id="buyer_chatmessages">
+            <div class="info message" id="chat_info_buyer_insurer" style="display:none;">
+              <span>Use this chatbox to speak with the insurer. Tips:</span>
+              <ul>
+                <li>Promise the insurer you’ll be honest</li>
+                <li>Ask the insurer to promise you a refund, just in case</li>
+                <li>Find out if the seller has agreed to the deal before sending money</li>
+              </ul>
+            </div>
+            <div class="info message" id="chat_info_insurer_buyer" style="display:none;">
+              <span>Use this chatbox to speak with the buyer. Tips:</span>
+              <ul>
+                <li>Find out if the buyer will be honest.</li>
+                <li>Offer the buyer a refund in case he doesn’t get the token.</li>
+                <li>Let the buyer know if the seller agrees to the deal</li>
+                <li>Find out when the buyer receives the token</li>
+              </ul></div>
+          </div>
           <textarea class="chatinput" id="buyer_chatinput" disabled="disabled"></textarea>
         </div>
         <div id="insurer_arrows" align="center">
@@ -67,17 +91,37 @@
             </div>
             <div class="clear"> </div>
             <div id="insurer_buttons_line3">
-              <button class="button_give ui-corner-all insurer lfloat" id="insurer_give_buyer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Buyer</button>
-              <button class="button_give ui-corner-all insurer rfloat" id="insurer_give_seller"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Seller</button>
+              <button class="button_give ui-corner-all insurer lfloat" id="insurer_send_buyer"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Buyer</button>
+              <button class="button_give ui-corner-all insurer rfloat" id="insurer_send_seller"><span class="action">Give 25&cent;</span> <span class="transitive">to</span> Seller</button>
             </div>
           </div>
           <div class="profilebox insurer" id="insurer_profile">
             <img class="profileimage" id="insurer_image" src="http://robohash.org/insurer.png?size=50x50&set=set3" />
-            <span class="profilename" id="insurer_profilename">Insurer</span>
+            <div class="lfloat profilenamewallet">
+              <span class="profilename" id="insurer_profilename">Insurer</span>
+              <span class="profilewallet money">$0.50</span>
+            </div>
           </div>
+          <div id="timer">0:00</div>
         </div>
         <div class="chatbox" id="seller_chatbox">
-          <div class="chatmessages" id="seller_chatmessages"></div>
+          <div class="chatmessages" id="seller_chatmessages">
+            <div class="info message" id="chat_info_seller_insurer" style="display:none;">
+              <span>Use this chatbox to speak with the insurer. Tips:</span>
+              <ul>
+                <li>Promise the insurer you’ll be honest</li>
+                <li>Tell the insurer you agree to send the token after the buyer sends payment</li>
+              </ul>
+            </div>
+            <div class="info message" id="chat_info_insurer_seller" style="display:none;">
+              <span>Use this chatbox to speak with the seller. Tips:</span>
+              <ul>
+                <li>Find out if the seller will be honest.</li>
+                <li>Find out if the seller has the token and agrees to the trade.</li>
+                <li>Find out when the seller sends the token</li>
+              </ul>
+            </div>
+          </div>
           <textarea class="chatinput" id="seller_chatinput" disabled="disabled"></textarea>
         </div>
         <div class="clear"> </div>

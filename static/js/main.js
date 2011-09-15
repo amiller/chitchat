@@ -34,6 +34,14 @@ function handleButton(evtname)
     }
 }
 
+function setToken(role, state)
+{
+    var name = {'no': 'no_token', 'has': 'has_token', 'missing': 'token_missing'}[state];
+    
+    $('#' + role + '_token').attr('src', '/img/' + name + '.png')
+        .removeClass('no_token has_token token_missing').addClass(name);
+}
+
 function setCurrentProfile(role)
 {
     var matches = $('#' + role + '_profile');
@@ -49,9 +57,6 @@ function setCurrentProfile(role)
     else if (role == 'seller')
         $('#buyer_chatbox').addClass('disabled');
     
-    $('#buyer_token').attr('src', '/img/no_token.png');
-    $('#seller_token').attr('src', '/img/token.png');
-    
     $('button').addClass('notyours').unbind('click');
     $('button.' + role).removeClass('notyours').addClass('yours');
     
@@ -64,20 +69,49 @@ function setCurrentProfile(role)
         $('#buyer_chatinput').removeAttr('disabled');
         $('#buyer_send_seller').bind('click', handleButton('send_money_buyer_seller'));
         $('#buyer_send_insurer').bind('click', handleButton('send_money_buyer_insurer'));
+        $('.profilebox .profiletokenlink').addClass('pointer');
+    
+        setToken('buyer', 'no');
+        setToken('seller', 'has');
+        
+        $('#chat_info_buyer_insurer').css('display', 'block');
         break;
     
     case 'seller':
         $('#seller_chatinput').removeAttr('disabled');
         $('#seller_send_buyer').bind('click', handleButton('send_money_seller_buyer'));
         $('#seller_send_insurer').bind('click', handleButton('send_money_seller_insurer'));
+        $('.profilebox.buyer .profiletokenlink').addClass('pointer');
+        $('.profilebox.seller .profiletokenlink').bind('click', function (evt) {
+            if ($(this).children().first().hasClass('has_token'))
+            {
+                events.addEvent('send_token', {});
+                $(this).children().first().removeClass('has_token token_missing')
+                    .addClass('no_token').attr('src', '/img/no_token.png');
+                $('.profilebox.buyer.profiletoken').removeClass('no_token token_missing')
+                    .addClass('has_token');
+            }
+        })
+    
+        setToken('buyer', 'no');
+        setToken('seller', 'has');
+        $('#chat_info_seller_insurer').css('display', 'block');
         break;
     
     case 'insurer':
         $('.chatinput').removeAttr('disabled');
         $('#insurer_send_buyer').bind('click', handleButton('send_money_insurer_buyer'));
-        $('#insurer_take_buyer').bind('click', handleButton('take_money_insurer_buyer'));
+        $('#insurer_take_buyer').bind('click', handleButton('send_money_buyer_insurer'));
         $('#insurer_send_seller').bind('click', handleButton('send_money_insurer_seller'));
-        $('#insurer_take_seller').bind('click', handleButton('take_money_insurer_seller'));
+        $('#insurer_take_seller').bind('click', handleButton('send_money_seller_insurer'));
+        $('.profilebox .profiletokenlink').addClass('pointer');
+        
+        $('#seller_token_info').css('display', 'block');
+        $('#chat_info_insurer_buyer').css('display', 'block');
+        $('#chat_info_insurer_seller').css('display', 'block');
+        
+        setToken('buyer', 'missing');
+        setToken('seller', 'missing');
         break;
     }
 }
@@ -93,6 +127,29 @@ function setButtonPressed(buttons)
         else if (button.hasClass('button_take'))
             button.find('span.action').html('25&cent; Taken');
     });
+}
+
+function setTimer(seconds)
+{
+    var str_sec = '' + (seconds % 60);
+    if (str_sec.length == 1)
+        str_sec = '0' + str_sec;
+    
+    $('#timer').html(parseInt(seconds / 60) + ':' + str_sec);
+}
+
+wallets = {
+    buyer: 0.25,
+    seller: 0.25,
+    insurer: 0.50,
+};
+function setWallet(role, amount)
+{
+    if (wallets[role] == undefined)
+        wallets[role] = 0.0;
+    
+    wallets[role] += amount;
+    $('#' + role + '_profile .profilewallet').html('$' + wallets[role].toFixed(2));
 }
 
 function jQueryInit()
@@ -210,6 +267,29 @@ function jQueryInit()
             return;
         }
         $('#eventlog').append(JSON.stringify(event));
+        
+        if (event.name == 'gamestart' && event.data.starttime != undefined)
+        {
+            window.timeleft = 5*60 - (parseInt(event.time) - parseInt(event.data.starttime));
+            setTimer(window.timeleft);
+            
+            function timerFunc() {
+                if (--window.timeleft <= 0)
+                    window.clearInterval(window.timer);
+                else
+                    window.setTimeout(timerFunc, 1000);
+                
+                setTimer(window.timeleft);
+                if (window.timeleft % 60 == 0)
+                    $('#timer').effect('highlight', 750);
+            }
+            
+            window.timer = window.setTimeout(timerFunc, 1000);
+        }
+    });
+    
+    events.bind('gameover', function() {
+        location.href = '/quest/' + userkey + '/';
     });
 
     events.bind('server:prequeue', function (data) {
@@ -225,7 +305,7 @@ function jQueryInit()
     events.bind('server:chat', function (data) {
         msgs = $('#'+data.chatbox+'_chatmessages')
         msgs.append('<div class="message '+data.from+(data.from==role?' yours':'')+'">' + data.message + '</div>')
-        msgs[0].scrollTop = msgs[0].scrollHeight;
+        msgs.scrollTop(msgs[0].scrollHeight - msgs.height());
     });
 
     events.bind('server:gamestart', function (data) {
@@ -251,26 +331,62 @@ function jQueryInit()
         
         $('.chatinput[placeholder]').placeholder();
         
+        switch (condition)
+        {
+        case 1:
+            $('#buyer_send_seller').addClass('disabled');
+            $('#seller_send_buyer').addClass('disabled');
+            $('#insurer_take_seller').addClass('disabled');
+            $('#insurer_take_buyer').addClass('disabled');
+            break;
+        
+        case 2:
+            $('#seller_send_buyer').addClass('disabled');
+            $('#insurer_take_seller').addClass('disabled');
+            $('#insurer_take_buyer').addClass('disabled');
+            break;
+        
+        case 3:
+            $('#seller_send_insurer').addClass('disabled');
+            $('#buyer_send_insurer').addClass('disabled');
+            break;
+        }
     });
     
     events.bind('server:send_money_buyer_seller', function () {
         setButtonPressed($('#buyer_send_seller'));
+        setWallet('buyer', -0.25);
+        setWallet('seller', 0.25);
     });
     
     events.bind('server:send_money_seller_insurer', function () {
         setButtonPressed($('#seller_send_insurer'));
+        setWallet('seller', -0.25);
+        setWallet('insurer', 0.25);
     });
     
     events.bind('server:send_money_buyer_insurer', function () {
         setButtonPressed($('#buyer_send_insurer'));
+        setWallet('buyer', -0.25);
+        setWallet('insurer', 0.25);
     });
     
     events.bind('server:send_money_insurer_buyer', function () {
         setButtonPressed($('#insurer_send_buyer'));
+        setWallet('insurer', -0.25);
+        setWallet('buyer', 0.25);
     });
     
     events.bind('server:send_money_insurer_seller', function () {
         setButtonPressed($('#insurer_send_seller'));
+        setWallet('insurer', -0.25);
+        setWallet('seller', 0.25);
+    });
+    
+    events.bind('server:send_token', function () {
+        setButtonPressed($('#insurer_send_seller'));
+        setToken('buyer', 'has');
+        setToken('seller', 'no');
     });
 
     // Bind to the chat box inputs

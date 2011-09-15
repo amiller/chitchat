@@ -13,8 +13,10 @@
   cursor: pointer;
   cursor: hand;
 }
+.pointer { cursor: default; }
 
-.money { color: #76EE00; }
+.old_money { color: #76EE00; }
+.money { color: #2A2A2A; }
 .item_display { color: #D2691E; }
 
 
@@ -47,11 +49,15 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
   width: 45px;
   background:lightgrey;
 }
+.profilenamewallet { margin-left: 10px; }
 .profilename {
-  float: left;
+  display: block;
   font-size: 25px;
-  margin-left: 10px;
-  margin-top: 8px;
+  height: 26px;
+}
+.profilewallet {
+  font-size: 16px;
+  font-style: italic;
 }
 .chatbox {
   background-color: #F6F6F6;
@@ -65,6 +71,7 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 .chatbox.disabled { opacity: 0.3; }
 .chatmessages {
   height: 340px;
+  overflow: auto;
   width: 100%;
 }
 .chatinput {
@@ -74,6 +81,12 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 }
 .message { padding: 2px 5px; }
 .message:not(.yours) { font-style: italic; }
+.message.info {
+  background-color: #E6E6E6;
+  font-size: 14px;
+  font-style: italic;
+}
+.message.info.ul { margin-bottom: 0px; }
 
 .buyer { background-color: #B0E2FF !important; }
 .seller { background-color: #EE9933 !important; }
@@ -81,6 +94,13 @@ body { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; }
 
 #content.disabled { opacity: 0.3; }
 #content.enabled { opacity: 1; }
+
+#seller_token_info {
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-left: 610px;
+  padding: 4px 0 4px 6px;
+}
 
 #buyer_profile { margin-left: 150px; }
 #seller_profile { margin-left: 10px; }
@@ -147,13 +167,22 @@ button.yours.insurer:active, button.yours.insurer.pressed { background-color: #8
 
 button.yours.pressed  { border-color: #25F722; }
 
-.notyours.buyer { background-color: #C2D5E0 !important; }
+.notyours.buyer { background-color: #7293A7 !important; }
 .notyours.seller { background-color: #AB9478 !important; }
 .notyours.insurer { background-color: #85916E !important; }
 
 button.notyours.buyer.pressed { background-color: #A7DCFB !important; }
 button.notyours.seller.pressed { background-color: #DF9943 !important; }
 button.notyours.insurer.pressed { background-color: #97CD32 !important; }
+
+
+/* Timer */
+#timer {
+  font-size: 50px;
+  height: 80px;
+  margin-top: 40px;
+  text-align: center;
+}
 
 
 /* Instructions and notifications */
@@ -216,7 +245,16 @@ button.notyours.insurer.pressed { background-color: #97CD32 !important; }
 #insurer_take_seller { margin-right: 63px; }
 
 #insurer_buttons_line3 { padding-top: 5px; }
-#insurer_give_buyer { margin-left: 112px; }
-#insurer_give_seller { margin-right: 110px; }
+#insurer_send_buyer { margin-left: 112px; }
+#insurer_send_seller { margin-right: 110px; }
 
 #eventlog { margin-top: 20px; }
+
+
+/* Survey */
+.survey label { display: block; }
+.survey textarea {
+  height: 85px;
+  width: 500px;
+}
+.survey li { margin-top: 15px; }
