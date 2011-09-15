@@ -30,7 +30,7 @@ function resetProfileNames()
 function handleButton(evtname)
 {
     return function(evt) {
-        if ($(this).hasClass('pressed'))
+        if ($(this).hasClass('pressed') || $(this).hasClass('notyours'))
             return false;
         
         var buttons = $(this);
