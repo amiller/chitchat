@@ -31,8 +31,21 @@ function handleButton(evtname)
         if ($(this).hasClass('pressed'))
             return false;
         
-        events.addEvent(evtname, {});
-        setButtonPressed($(this))
+        var buttons = $(this);
+        $(this).jConf({
+            sText: $(this).prev('.button_explanation').html(),
+            okBtn: 'Okay',
+            noBtn: 'Cancel',
+            evt: evt,
+            callResult: function(data) {
+                if (data.btnVal == 'Okay')
+                {
+                    events.addEvent(evtname, {});
+                    setButtonPressed(buttons)
+                }
+            }
+        });
+        
     }
 }
 

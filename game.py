@@ -152,7 +152,8 @@ def handle_queue():
             db.zremrangebyrank('queue', 0, 2)
 
         # Create a fresh game
-        game = Game(users=users)
+        game = Game(users=users, condition=next_condition)
+        next_condition = None
         game.commit_events()
         game.commit_state()
         state = bunch.bunchify(game.state)
@@ -172,14 +173,15 @@ def handle_queue():
 
 
 class Game(object):
-    def __init__(self, gamekey=None, users=None):
+    def __init__(self, gamekey=None, users=None, condition=None):
         self.events = []
 
         if gamekey:
             self.state = json.loads(db['game:%s' % gamekey])
         else:
             # Randomly select game condition
-            condition = random.choice([1,2,3])
+            if condition is None:
+                condition = random.choice([1,2,3])
 
             # Initialize the game
             random.shuffle(users)
