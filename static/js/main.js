@@ -415,6 +415,8 @@ function jQueryInit()
             $('#buyer_send_insurer').addClass('disabled');
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
+            
+            $('#seller_send_insurer').addClass('notyours');
             break;
         
         case 3:
@@ -436,6 +438,8 @@ function jQueryInit()
         
         if (condition == 3 && role == 'insurer')
             $('#insurer_take_seller').addClass('yours').removeClass('notyours');
+        else if (condition == 2)
+            $('#seller_send_insurer').addClass('yours').removeClass('notyours');
     });
     
     events.bind('server:send_money_seller_insurer', function () {
