@@ -201,9 +201,9 @@ button.yours.insurer:active, button.yours.insurer.pressed { background-color: #8
 
 button.pressed  { border-color: #25F722; }
 
-button.notyours.buyer { background-color: #4E626E !important; }
-button.notyours.seller { background-color: #64533F !important; }
-button.notyours.insurer { background-color: #404635 !important; }
+button.notyours.buyer, button.unpushable.buyer { background-color: #4E626E !important; }
+button.notyours.seller, button.unpushable.seller { background-color: #64533F !important; }
+button.notyours.insurer, button.unpushable.insurer { background-color: #404635 !important; }
 
 button.notyours.buyer, button.notyours.seller, button.notyours.insurer { color: #888; }
 
@@ -215,6 +215,10 @@ button.yours.buyer:hover { background-color: #42BAFF !important; }
 button.yours.seller:hover { background-color: #FF8C00 !important; }
 button.yours.insurer:hover { background-color: #A0F000 !important; }
 
+
+button.yours.unpushable.buyer:hover { background-color: #4E626E !important; }
+button.yours.unpushable.seller:hover { background-color: #64533F !important; }
+button.yours.unpushable.insurer:hover { background-color: #404635 !important; }
 
 
 /* Timer */
