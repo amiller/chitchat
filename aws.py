@@ -17,7 +17,7 @@ SANDBOX = False
 if SANDBOX:
     HITTYPEID = "2XLNTL0XULRGRMCPCTDD05FP7PLO2I"
 else:
-    HITTYPEID = "2E7RSQV66RLPLBU9Q2NAZKI62XAC4Y"
+    HITTYPEID = "2R59KSSZVXX2UX603RHO2GNIWBF4M9"
 
 from aws_credentials import AWS_ACCESS_KEY_ID
 from aws_credentials import AWS_SECRET_ACCESS_KEY
@@ -106,8 +106,9 @@ def get_all_hitids():
     hitids = []
     for hit in results_xml.getElementsByTagName('HIT'):
         hitid = hit.getElementsByTagName('HITId')[0].childNodes[0].data
-        hittypeid = hit.getElementsByTagName('HITTypeId')[0].childNodes[0].data
-        if hittypeid == HITTYPEID:
+        #hittypeid = hit.getElementsByTagName('HITTypeId')[0].childNodes[0].data
+        title = hit.getElementsByTagName('Title')[0].childNodes[0].data
+        if title == 'Peer-to-Peer Trading Game':
             hitids.append(hitid)
     return hitids
 
