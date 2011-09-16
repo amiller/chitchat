@@ -133,12 +133,17 @@ span.gold { color: #992; }
   margin-right: 5px;
   width: 48px;
 }
-.has_token { background-image: url(/img/has_token.png); }
+/*.has_token { background-image: url(/img/has_token.png); }
 .no_token { background-image: url(/img/no_token.png); }
 .token_missing {
   background-image: url(/img/404.jpg);
   background-position: 0px 5px;
   background-size: 20px;
+}*/
+.token_missing {
+  margin: 10px 10px 0 0;
+  height: 25px;
+  width: 20px;
 }
 
 #seller_chatbox { margin-left: 10px; }

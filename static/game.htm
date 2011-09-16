@@ -4,7 +4,6 @@
     <title>CHITchat</title>
     <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
-    <script type="text/javascript" data-main="/js/main" src="/js/require.js"></script>
     <script type="text/x-jquery-tmpl" id="tmpl_instructions">
         {{if condition == 1}}
             {{if role == 'insurer'}}You are the <span class="insurer">mediator</span>.The <span class="buyer">buyer</span> can send 25 cents to you, but not directly to the <span class="seller">seller</span>.  You can send 25 cents to the <span class="seller">seller</span> or the <span class="buyer">buyer</span> at any time. The <span class="seller">seller</span> can send the gold token directly to the <span class="buyer">buyer</span>. You can chat with both the <span class="buyer">buyer</span> and <span class="seller">seller</span>. Chat with them to help the deal go through, you'll earn additional 25 cents if it does! Make sure that both the <span class="seller">seller</span> and the <span class="buyer">buyer</span> understand the deal and are willing to trade fairly.
@@ -20,6 +19,9 @@
             {{else role == 'seller'}}You are the <span class="seller">seller</span>. You can offer to sell your <span class="gold">gold token</span> if the <span class="buyer">buyer</span> pays you 25 cents. The <span class="insurer">mediator</span>is able to seize back the payment and offer the <span class="buyer">buyer</span> a refund if you do not send the <span class="gold">gold token</span>.  Talk with the <span class="insurer">mediator</span>to find out if the <span class="buyer">buyer</span> agrees to the trade.{{/if}}
         {{/if}}
     </script>
+    <script type="text/javascript" src="/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script type="text/javascript" data-main="/js/main" src="/js/require.js"></script>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
   </head>
@@ -32,7 +34,7 @@
             <span class="profilename" id="buyer_profilename">Buyer</span>
             <span class="profilewallet money">$0.25</span>
           </div>
-          <div class="profiletoken token_missing" id="buyer_token"> </div>
+          <img class="profiletoken token_missing" id="buyer_token" src="/img/token_missing.png" />
         </div>
         <div id="buyer_seller_arrows">
           <div id="buyer_send_seller_box">
@@ -63,7 +65,7 @@
             <span class="profilename" id="seller_profilename">Seller</span>
             <span class="profilewallet money">$0.25</span>
           </div>
-          <div class="profiletoken token_missing" id="seller_token"> </div>
+          <img class="profiletoken token_missing" id="seller_token" src="/img/token_missing.png" />
         </div>
         <div class="clear"> </div>
         <div class="chatbox" id="buyer_chatbox">
