@@ -214,7 +214,8 @@ def startapp(args):
         queue = []
         for user,queuetime in db.zrange('queue', 0, -1, withscores=True):
             waited = time() - queuetime
-            queue.append({'waited': waited, 'userkey': user})
+            lastseen = time() - float(json.loads(db['user_status:' + user])['time'])
+            queue.append({'waited': waited, 'userkey': user, 'lastseen': lastseen})
         
         return flask.render_template('admin.htm', games=games, queue=queue)
 

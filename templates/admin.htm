@@ -18,7 +18,7 @@
       <div id="queue">
         <h2>Users queued</h2>
         <ul>{% for user in queue %}
-          <li>{{ user.userkey }}: queued for {{ "%d:%02d"|format(user.waited / 60, user.waited % 60) }}</li>{% endfor %}
+          <li>{{ user.userkey }}: queued for {{ "%d:%02d"|format(user.waited / 60, user.waited % 60) }}, last seen {{ "%d:%02d"|format(user.lastseen / 60, user.lastseen % 60) }} ago</li>{% endfor %}
         </ul>
       </div>
       <h2>Games recorded and in play</h2>
