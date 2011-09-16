@@ -117,6 +117,7 @@ def startapp(args):
                 status['lastseen'] = repr(time())
                 pipe['user_status:%s' % userkey] = json.dumps(status)
                 pipe.execute()
+                print 'refreshed!'
 
         for i in range(30):
             since = None
@@ -225,8 +226,10 @@ def startapp(args):
         queue = []
         for user,queuetime in db.zrange('queue', 0, -1, withscores=True):
             waited = time() - queuetime
-            lastseen = time() - float(json.loads(db['user_status:' + user])['time'])
-            queue.append({'waited': waited, 'userkey': user, 'lastseen': lastseen})
+            lastseen = time() - float(json.loads(db['user_status:' +
+                                                    user])['lastseen'])
+            queue.append({'waited': waited,
+                          'userkey': user, 'lastseen': lastseen})
         
         return flask.render_template('admin.htm', games=games, queue=queue)
 

@@ -538,6 +538,5 @@ function jQueryInit()
     
     $(window).unload(function ()
     {
-        // Pass
     });
 }
