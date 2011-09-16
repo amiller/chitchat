@@ -165,6 +165,7 @@ def startapp(args):
                 'situation_fair': flask.request.form['situation_fair'],
                 'seller_truth': flask.request.form['seller_truth'],
                 'buyer_truth': flask.request.form['buyer_truth'],
+                'insurer_truth': flask.request.form['insurer_truth'],
                 'comments': flask.request.form['comments'],
             });
 
@@ -186,6 +187,15 @@ def startapp(args):
         # Create a new random string
         userkey = game.add_invite()
         return flask.redirect('/' + userkey)
+
+    @app.route('/adminueqytMXDDS/')
+    def admin():
+        games = []
+        for key in dbkeys('games:*'):
+            game = db[key]
+            
+        
+        return flask.render_template('admin.htm', games=games)
 
     @app.route('/adminueqytMXDDS/table')
     def admin_table():
