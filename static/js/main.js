@@ -55,7 +55,7 @@ function setToken(role, state)
 {
     var name = {'no': 'no_token', 'has': 'has_token', 'missing': 'token_missing'}[state];
     $('#' + role + '_token').removeClass('no_token has_token token_missing').addClass(name)
-        .attr('src', '/img/' + name + '.png'));
+        .attr('src', '/img/' + name + '.png');
 }
 
 function setCurrentProfile(role)
@@ -338,6 +338,7 @@ function jQueryInit()
                     window.timer = window.setTimeout(gameTimer, 1000);
                 
                 setTimer(window.timeleft);
+                $('#timer').show()
                 if (window.timeleft % 60 == 0)
                     $('#timer').effect('highlight', 750);
             }
@@ -361,6 +362,7 @@ function jQueryInit()
                     window.timer = window.setTimeout(timerFunc, 1000);
                 
                 setTimer(window.timeleft);
+                $('#timer').show()
                 if (window.timeleft % 60 == 0)
                     $('#timer').effect('highlight', 750);
             }
