@@ -11,7 +11,7 @@ db = None
 pubsub = None
 
 QUEUE_TIMELIMIT = 10*60
-GAME_TIMELIMIT = 5*60
+GAME_TIMELIMIT = 7*60
 
 
 def setup_redis(port):

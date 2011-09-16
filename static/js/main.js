@@ -191,9 +191,9 @@ function setWallet(person, amount)
     if (person == role)
     {
         if (wallets[person] == 0)
-            $('button.' + person + '.yours:not(.pressed):not(.disabled)').addClass('notyours').removeClass('yours');
+            $('button.' + person + '.yours:not(.pressed):not(.disabled)').addClass('unpushable');
         else
-            $('button.' + person + ':not(.pressed):not(.disabled)').removeClass('notyours').addClass('yours');
+            $('button.' + person + ':not(.pressed):not(.disabled)').removeClass('unpushable');
     }
 }
 
@@ -427,7 +427,7 @@ function jQueryInit()
             $('#insurer_take_seller').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             
-            $('#seller_send_insurer').addClass('notyours').removeClass('yours');
+            $('#seller_send_insurer').addClass('unpushable');
             break;
         
         case 3:
@@ -435,7 +435,7 @@ function jQueryInit()
             $('#buyer_send_insurer').addClass('disabled');
             $('#insurer_take_buyer').addClass('disabled');
             
-            $('#insurer_take_seller').addClass('notyours').removeClass('yours');
+            $('#insurer_take_seller').addClass('unpushable');
             break;
         }
     });
@@ -448,9 +448,9 @@ function jQueryInit()
         seller_got_money = true;
         
         if (condition == 3 && role == 'insurer')
-            $('#insurer_take_seller').addClass('yours').removeClass('notyours');
+            $('#insurer_take_seller').removeClass('unpushable');
         else if (condition == 2 && role == 'seller')
-            $('#seller_send_insurer').addClass('yours').removeClass('notyours');
+            $('#seller_send_insurer').removeClass('unpushable');
     });
     
     events.bind('server:send_money_seller_insurer', function () {

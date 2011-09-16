@@ -9,6 +9,8 @@
 .nofloat { float: none; }
 .clear { clear: both; }
 
+.blink { visibility: hidden; }
+
 .hand {
   cursor: pointer;
   cursor: hand;
@@ -109,9 +111,8 @@ span.gold { color: #992; }
 .seller { background-color: #EE9933 !important; }
 .insurer { background-color: #9ACD32 !important; }
 
-#content.disabled { opacity: 0.3; }
+#content.disabled { opacity: 0.5; }
 #content.enabled { opacity: 1; }
-#content { display: none;  }
 
 #seller_token_info {
   font-size: 14px;
@@ -125,13 +126,12 @@ span.gold { color: #992; }
 #insurer_profile { float: none; }
 
 .profiletoken {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 48px;
   float: right;
-  height: 48px;
-  margin-right: 5px;
-  width: 48px;
+  height: 80px;
+  margin-right: -20px;
+  margin-top: -10px;
+  position: relative;
+  width: 80px;
 }
 /*.has_token { background-image: url(/img/has_token.png); }
 .no_token { background-image: url(/img/no_token.png); }
@@ -175,7 +175,7 @@ button.yours {
   background-color: #F0F0F0;
   color: black;
 }
-button.notyours {
+button.notyours, button.unpushable {
   background-color: #888;
   border: 3px solid #555;
   color: #666;
@@ -199,11 +199,13 @@ button.yours.buyer:active, button.yours.buyer.pressed { background-color: #1FADF
 button.yours.seller:active, button.yours.seller.pressed { background-color: #E28512 !important; }
 button.yours.insurer:active, button.yours.insurer.pressed { background-color: #83B819 !important; }
 
-button.yours.pressed  { border-color: #25F722; }
+button.pressed  { border-color: #25F722; }
 
-.notyours.buyer { background-color: #7293A7 !important; }
-.notyours.seller { background-color: #AB9478 !important; }
-.notyours.insurer { background-color: #85916E !important; }
+button.notyours.buyer { background-color: #4E626E !important; }
+button.notyours.seller { background-color: #64533F !important; }
+button.notyours.insurer { background-color: #404635 !important; }
+
+button.notyours.buyer, button.notyours.seller, button.notyours.insurer { color: #888; }
 
 button.notyours.buyer.pressed { background-color: #A7DCFB !important; }
 button.notyours.seller.pressed { background-color: #DF9943 !important; }
