@@ -10,6 +10,9 @@ import sys
 db = None
 pubsub = None
 
+QUEUE_TIMELIMIT = 10*60
+GAME_TIMELIMIT = 5*60
+
 
 def setup_redis(port):
     global db, pubsub
@@ -139,7 +142,7 @@ def user_status(userkey):
                     pipe.multi()
                     # Timeout the game after 5 minutes
                     if time.time() - float(json.loads(status)['starttime']) > \
-                           5*60.0:
+                           GAME_TIMELIMIT:
                         role = json.loads(status)['role']
                         status = json.dumps({'status': 'gameover',
                                              'role': role})
@@ -147,7 +150,7 @@ def user_status(userkey):
                 elif json.loads(status)['status'] == 'queued':
                     # Timeout the queue after 15 minutes
                     if time.time() - float(json.loads(status)['time']) > \
-                           15*60.0:
+                           QUEUE_TIMELIMIT:
                         pipe.watch('queue')
                         pipe.multi()
                         status = json.dumps({'status': 'overqueued'})
