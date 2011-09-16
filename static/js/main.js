@@ -338,6 +338,7 @@ function jQueryInit()
                     window.timer = window.setTimeout(gameTimer, 1000);
                 
                 setTimer(window.timeleft);
+                $('#timer').show()
                 if (window.timeleft % 60 == 0)
                     $('#timer').effect('highlight', 750);
             }
@@ -361,6 +362,7 @@ function jQueryInit()
                     window.timer = window.setTimeout(timerFunc, 1000);
                 
                 setTimer(window.timeleft);
+                $('#timer').show()
                 if (window.timeleft % 60 == 0)
                     $('#timer').effect('highlight', 750);
             }
