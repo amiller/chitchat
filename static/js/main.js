@@ -396,7 +396,7 @@ function jQueryInit()
         condition = data.condition;
         
         setCurrentProfile(role);
-        $('#content').show();
+        $('#content').show(1200);
         $('#content').removeClass('disabled').addClass('enabled');
         $('#tmpl_instructions').tmpl(data).appendTo('#instructions_role .body');
         $('#instructions_role .title span').html(role == 'insurer' ? 'Mediator' : role.capitalize());

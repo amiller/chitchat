@@ -9,19 +9,24 @@
   <body>
     <div id="body" class="survey">
       <h1>Post Questionnaire Survey</h1>
+      That was 5:00 minutes. The game ended! 
       <form method="POST" action="/questover/{{userkey}}/">
         <ol>
           <li>
             <label for="situation_fair">At the end of the game, did you think the situation was fair? Why or why not?</label>
             <textarea name="situation_fair" id="situation_fair"></textarea>
           </li>
-          <li>
+          <li id="seller">
             <label for="seller_truth">Did you believe the seller was telling the truth? Why or why not?</label>
             <textarea name="seller_truth" id="seller_truth"></textarea>
           </li>
-          <li>
+          <li id="buyer">
             <label for="buyer_truth">Did you believe the buyer was telling the truth? Why or why not?</label>
             <textarea name="buyer_truth" id="buyer_truth"></textarea>
+          </li>
+          <li id="insurer">
+            <label for="insurer_truth">Did you believe the mediator was fair? Why or why not?</label>
+            <textarea name="insurer_truth" id="insurer_truth"></textarea>
           </li>
           <li>
             <label for="comments">Do you have any other comments about this experiment? We appreciate your feedback.</label>
@@ -31,5 +36,11 @@
         <input type="submit" value="Complete Survey" />
       </form>
     </div>
+    <script type="text/javascript">
+      var role = '{{role}}';
+      if (role == 'seller') document.getElementById('seller').style.display = 'none';
+      if (role == 'buyer') document.getElementById('buyer').style.display = 'none';
+      if (role == 'insurer') document.getElementById('insurer').style.display = 'none';
+    </script>
   </body>
 </html>
