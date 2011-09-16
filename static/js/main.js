@@ -168,9 +168,9 @@ function setCurrentWait(sec_diff)
     if (!queued)
         window.timeleft = 0;
     else if (game_started)
-        window.timeleft = 5*60 - sec_diff;
+        window.timeleft = 7*60 - sec_diff;
     else
-        window.timeleft = 15*60 - sec_diff;
+        window.timeleft = 10*60 - sec_diff;
     setTimer(window.timeleft);
 }
 
