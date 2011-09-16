@@ -191,11 +191,32 @@ def startapp(args):
     @app.route('/adminueqytMXDDS/')
     def admin():
         games = []
-        for key in dbkeys('games:*'):
-            game = db[key]
+        for key in db.keys('game:*'):
+            events = db.zrange('events_' + key, 0, -1)
             
+            buyer_chatlog = []
+            seller_chatlog = []
+            
+            for event in events:
+                event = json.loads(event)
+                if event['name'] != 'chat':
+                    continue
+                
+                if event['data']['chatbox'] == 'buyer':
+                    buyer_chatlog.append(event['data'])
+                elif event['data']['chatbox'] == 'seller':
+                    seller_chatlog.append(event['data'])
+            
+            games.append({'key': key, 'buyer_chatlog': buyer_chatlog,
+                'seller_chatlog': seller_chatlog,
+                'has_chat': len(buyer_chatlog) + len(seller_chatlog) > 0})
         
-        return flask.render_template('admin.htm', games=games)
+        queue = []
+        for user,queuetime in db.zrange('queue', 0, -1, withscores=True):
+            waited = time() - queuetime
+            queue.append({'waited': waited, 'userkey': user})
+        
+        return flask.render_template('admin.htm', games=games, queue=queue)
 
     @app.route('/adminueqytMXDDS/table')
     def admin_table():

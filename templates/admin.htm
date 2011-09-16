@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>CHITchat Admin</title>
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#games').accordion();
+        })
+    </script>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+  </head>
+  <body class="admin">
+    <div id="content">
+      <div id="queue">
+        <h2>Users queued</h2>
+        <ul>{% for user in queue %}
+          <li>{{ user.userkey }}: queued for {{ "%d:%02d"|format(user.waited / 60, user.waited % 60) }}</li>{% endfor %}
+        </ul>
+      </div>
+      <h2>Games recorded and in play</h2>
+      <div id="games">
+{% for game in games %}       <h3>{{ game.key }}{% if game.has_chat %} - <span class="nochat">HAS CHAT</span>{% endif %}</h3>
+        <div class="messages">
+          <div class="buyer_insurer_chat lfloat">
+            <h4>Buyer to Insurer</h4>
+            <div class="chatmessages" id="buyer_chatmessages">{% for msg in game.buyer_chatlog %}
+              <div class="message {{ msg.from }}">{{ msg.message }}</div>{% endfor %}
+            </div>
+          </div>
+          <div class="seller_insurer_chat lfloat" style="margin-left: 20px;">
+            <h4>Seller to Insurer</h4>
+            <div class="chatmessages" id="buyer_chatmessages">{% for msg in game.seller_chatlog %}
+              <div class="message {{ msg.from }}">{{ msg.message }}</div>{% endfor %}
+            </div>
+          </div>
+        </div>
+{% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

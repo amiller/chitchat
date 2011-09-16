@@ -383,3 +383,9 @@ button.yours.unpushable.insurer:hover { background-color: #404635 !important; }
 	color:#232d3d;
 	cursor:pointer;
 }
+
+
+/* Admin */
+.admin .game { margin-bottom: 20px; }
+.admin .chatmessages { width: 300px; }
+.admin h4 { margin: 5px 0; }
