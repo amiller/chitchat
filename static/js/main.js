@@ -55,7 +55,7 @@ function setToken(role, state)
 {
     var name = {'no': 'no_token', 'has': 'has_token', 'missing': 'token_missing'}[state];
     $('#' + role + '_token').removeClass('no_token has_token token_missing').addClass(name)
-        .attr('src', '/img/' + name + '.png'));
+        .attr('src', '/img/' + name + '.png');
 }
 
 function setCurrentProfile(role)

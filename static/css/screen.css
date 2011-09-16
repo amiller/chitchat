@@ -141,9 +141,12 @@ span.gold { color: #992; }
   background-size: 20px;
 }*/
 .token_missing {
-  margin: 10px 10px 0 0;
-  height: 25px;
-  width: 20px;
+  float: right;
+  height: 100px;
+  margin-right: -30px;
+  margin-top: -20px;
+  position: relative;
+  width: 100px;
 }
 
 #seller_chatbox { margin-left: 10px; }
@@ -269,7 +272,7 @@ button.yours.unpushable.insurer:hover { background-color: #404635 !important; }
 
 
 #buyer_seller_arrows {
-  background: transparent url(/img/buyer_seller_arrows.png) no-repeat top left;
+  background: transparent /*url(/img/buyer_seller_arrows.png)*/ no-repeat top left;
   float: left;
   height: 50px;
   margin-left: 10px;
@@ -284,7 +287,7 @@ button.yours.unpushable.insurer:hover { background-color: #404635 !important; }
 #seller_send_buyer { margin-left: 21px; }
 
 #insurer_arrows {
-  background: transparent url(/img/insurer_arrows.png) no-repeat top left;
+  background: transparent /*url(/img/insurer_arrows.png)*/ no-repeat top left;
   float: left;
   margin: 10px 0 0 10px;
   min-height: 220px;
