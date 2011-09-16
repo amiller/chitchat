@@ -389,3 +389,20 @@ button.yours.unpushable.insurer:hover { background-color: #404635 !important; }
 .admin .game { margin-bottom: 20px; }
 .admin .chatmessages { width: 300px; }
 .admin h4 { margin: 5px 0; }
+.admin .event {
+  background-color: #EC6565 !important;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.admin .post_buyer .post_buyer { display: none; }
+.admin .post_seller .post_seller { display: none; }
+.admin .post_insurer .post_insurer { display: none; }
+
+.admin .post_questionnaires {
+  margin-left: 20px;
+  min-height: 50px;
+  width: 500px;
+}
+.admin .post_questionnaires h4 { color: #AAF575 !important; }
+.admin .post_questionnaires h4.noanswers { color: #EC6565 !important; }
