@@ -107,7 +107,18 @@ def startapp(args):
         if status['status'] == 'uninvited':
             return response([status])
 
-        for i in range(60):
+        if status['status'] == 'queued':
+            # try to avoid a race condition here
+            with db.pipeline() as pipe:
+                pipe.watch('user_status:%s' % userkey)
+                status = json.loads(pipe.get('user_status:%s' % userkey))
+                pipe.multi()
+                assert status['status'] == 'queued'
+                status['lastseen'] = repr(time())
+                pipe['user_status:%s' % userkey] = json.dumps(status)
+                pipe.execute()
+
+        for i in range(30):
             since = None
             if 'since' in flask.request.form:
                 since = flask.request.form['since']
