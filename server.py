@@ -188,28 +188,78 @@ def startapp(args):
         userkey = game.add_invite()
         return flask.redirect('/' + userkey)
 
+    seller_sends = {
+        'send_money_insurer_seller': ('insurer', 'seller'),
+        'send_money_seller_insurer': ('seller', 'insurer'),
+    }
+    buyer_sends = {
+        'send_money_insurer_buyer': ('insurer', 'buyer'),
+        'send_money_buyer_insurer': ('buyer', 'insurer'),
+    }
+    both_sends = {
+        'send_money_buyer_seller': ('buyer', 'seller'),
+        'send_token': ('seller', 'buyer')
+    }
+    
     @app.route('/adminueqytMXDDS/')
     def admin():
+        mturk_users = db.hgetall('notified_workers').values()
+        
         games = []
         for key in db.keys('game:*'):
             events = db.zrange('events_' + key, 0, -1)
             
-            buyer_chatlog = []
-            seller_chatlog = []
+            game = {
+                'key': key,
+                'buyer_log': [],
+                'seller_log': [],
+                'has_chat': False
+            }
+            
+            state = json.loads(db[key])
+            for role in ('buyer', 'seller', 'insurer'):
+                game[role] = {}
+                
+                userkey = state[role]['userkey']
+                game[role]['key'] = userkey
+                if db.exists('survey_user:%s' % userkey):
+                    game[role]['answers'] = json.loads(db['survey_user:%s' % userkey])
+                else:
+                    game[role]['answers'] = {'none': True}
+                game[role]['is_mturk'] = userkey in mturk_users
             
             for event in events:
                 event = json.loads(event)
-                if event['name'] != 'chat':
-                    continue
+                event['data']['name'] = event['name']
                 
-                if event['data']['chatbox'] == 'buyer':
-                    buyer_chatlog.append(event['data'])
-                elif event['data']['chatbox'] == 'seller':
-                    seller_chatlog.append(event['data'])
+                if event['name'] == 'chat':
+                    game['has_chat'] = True
+                    if event['data']['chatbox'] == 'buyer':
+                        game['buyer_log'].append(event['data'])
+                    elif event['data']['chatbox'] == 'seller':
+                        game['seller_log'].append(event['data'])
+                
+                elif event['name'] in seller_sends:
+                    send = seller_sends[event['name']]
+                    event['data']['from'] = send[0]
+                    event['data']['to'] = send[1]
+                    game['seller_log'].append(event['data'])
+                
+                elif event['name'] in buyer_sends:
+                    send = buyer_sends[event['name']]
+                    event['data']['from'] = send[0]
+                    event['data']['to'] = send[1]
+                    game['buyer_log'].append(event['data'])
+                
+                elif event['name'] in both_sends:
+                    send = both_sends[event['name']]
+                    event['data']['from'] = send[0]
+                    event['data']['to'] = send[1]
+                    
+                    game['buyer_log'].append(event['data'])
+                    game['seller_log'].append(event['data'])
             
-            games.append({'key': key, 'buyer_chatlog': buyer_chatlog,
-                'seller_chatlog': seller_chatlog,
-                'has_chat': len(buyer_chatlog) + len(seller_chatlog) > 0})
+            games.append(game)
         
         queue = []
         for user,queuetime in db.zrange('queue', 0, -1, withscores=True):
