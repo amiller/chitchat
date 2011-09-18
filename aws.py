@@ -120,8 +120,9 @@ def notify_worker(workerid, invite):
                           MessageText="""You are receiving this notification because you have completed the pre-questionnaire for the Peer-to-Peer Trading Game assignment on Mechanical Turk.
 
 In order to finish the assignment, please visit the following URL and play the game: %s
+You must go to this url within the next hour, that is in between 1:30am-2:30am EDT (11:00am and 12:00pm IST)
 
-The game will take exactly 5 minutes, but you may have to wait for (no longer than) 15 minutes for other players to join.
+The game will take exactly 7 minutes, but you may have to wait for (no longer than) 10 minutes for other players to join.
 
 This game is part of research conducted by the University of Central Florida. For more information about this study, go here: https://s3.amazonaws.com/ucfuserstudy/tradeconsentform.doc""" % url,
                           WorkerId=workerid)

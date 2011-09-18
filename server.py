@@ -179,6 +179,7 @@ def startapp(args):
                 'buyer_truth': flask.request.form['buyer_truth'],
                 'insurer_truth': flask.request.form['insurer_truth'],
                 'comments': flask.request.form['comments'],
+                'interest': flask.request.form['interest'],                
             });
 
         # Return an error if they are not a valid user
