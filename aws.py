@@ -8,6 +8,7 @@ import base64
 import urllib
 import xml.dom.minidom
 import game
+import json
 
 # Define constants
 REDIS_PORT = 9201
@@ -17,7 +18,7 @@ SANDBOX = False
 if SANDBOX:
     HITTYPEID = "2XLNTL0XULRGRMCPCTDD05FP7PLO2I"
 else:
-    HITTYPEID = "22TXULRGNTBJ7FNJ6C6PBN62KR1S6S"
+    HITTYPEID = "2R59KSSZVXX2UX603RHO2GNIWBF4M9"
 
 from aws_credentials import AWS_ACCESS_KEY_ID
 from aws_credentials import AWS_SECRET_ACCESS_KEY
@@ -106,8 +107,9 @@ def get_all_hitids():
     hitids = []
     for hit in results_xml.getElementsByTagName('HIT'):
         hitid = hit.getElementsByTagName('HITId')[0].childNodes[0].data
-        hittypeid = hit.getElementsByTagName('HITTypeId')[0].childNodes[0].data
-        if hittypeid == HITTYPEID:
+        #hittypeid = hit.getElementsByTagName('HITTypeId')[0].childNodes[0].data
+        title = hit.getElementsByTagName('Title')[0].childNodes[0].data
+        if title == 'Peer-to-Peer Trading Game':
             hitids.append(hitid)
     return hitids
 
@@ -119,12 +121,38 @@ def notify_worker(workerid, invite):
                           MessageText="""You are receiving this notification because you have completed the pre-questionnaire for the Peer-to-Peer Trading Game assignment on Mechanical Turk.
 
 In order to finish the assignment, please visit the following URL and play the game: %s
+You must go to this url within the next hour, that is in between 5:00pm-6:00pm EDT (2:30am and 3:30pm IST)
 
-The game will take exactly 5 minutes, but you may have to wait for (no longer than) 15 minutes for other players to join.
+The game will take exactly 7 minutes, but you may have to wait for (no longer than) 10 minutes for other players to join.
 
 This game is part of research conducted by the University of Central Florida. For more information about this study, go here: https://s3.amazonaws.com/ucfuserstudy/tradeconsentform.doc""" % url,
                           WorkerId=workerid)
     print results_xml.toxml()
+
+
+def get_assignments():
+    for hitid in get_all_hitids():
+        results_xml = request('GetAssignmentsForHIT',
+                              HITId=hitid,
+                              AssignmentStatus='Submitted',
+                              PageSize=100) 
+        assignments = results_xml.getElementsByTagName('Assignment')
+        for ass in assignments:
+            # TODO Check that the assignment is legit?
+            workerid = ass.getElementsByTagName('WorkerId')[0].childNodes[0].data
+            answer = ass.getElementsByTagName('Answer')[0].childNodes[0].data
+            result_xml = xml.dom.minidom.parseString(answer)
+            answers = result_xml.getElementsByTagName('Answer')
+            d = {}
+            for ans in answers:
+                tag = ans.getElementsByTagName('QuestionIdentifier')[0].childNodes[0].data
+                try:
+                    answer = ans.getElementsByTagName('FreeText')[0].childNodes[0].data
+                except IndexError:
+                    answer = ''
+                d[tag] = answer
+            d = json.dumps(d)
+            game.db.hset('presurvey', workerid, d)
 
 
 def get_all_assignments():

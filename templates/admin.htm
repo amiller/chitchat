@@ -63,13 +63,13 @@
         <div class="messages">
           <div class="buyer_insurer_chat lfloat">
             <h4>Buyer to Mediator</h4>
-            <div class="chatmessages" id="buyer_chatmessages">{% for evt in game.buyer_log %}
+            <div class="chatmessages" style="height:2000px" id="buyer_chatmessages">{% for evt in game.buyer_log %}
               <div class="message {{ evt.from }}{% if evt.name != 'chat' %} event{% endif %}">{% if evt.name == 'chat' %}{{ evt.message }}{% else %}*** {{ evt.from|capitalize }} gave {% if evt.name == 'send_token' %}the token{% else %}25c{% endif %} to {{ evt.to|capitalize }}{% endif %}</div>{% endfor %}
             </div>
           </div>
           <div class="seller_insurer_chat lfloat" style="margin-left: 20px;">
             <h4>Seller to Mediator</h4>
-            <div class="chatmessages" id="seller_chatmessages">{% for evt in game.seller_log %}
+            <div class="chatmessages" style="height:2000px" id="seller_chatmessages">{% for evt in game.seller_log %}
               <div class="message {{ evt.from }}{% if evt.name != 'chat' %} event{% endif %}">{% if evt.name == 'chat' %}{{ evt.message }}{% else %}*** {{ evt.from|capitalize }} gave {% if evt.name == 'send_token' %}the token{% else %}25c{% endif %} to {{ evt.to|capitalize }}{% endif %}</div>{% endfor %}
             </div>
           </div>

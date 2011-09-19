@@ -93,7 +93,8 @@ def queue_user(userkey):
                 queuetime = repr(time.time())
                 pipe['user_status:%s' % userkey] = \
                                       json.dumps({'status': 'queued',
-                                                  'time': queuetime})
+                                                  'time': queuetime,
+                                                  'lastseen': queuetime})
                 pipe.zadd('queue', **{userkey: queuetime})
                 pipe.execute()
                 print 'queued:', userkey
@@ -170,6 +171,11 @@ def process_user_event(userkey, event):
         queue_user(userkey)
         return
 
+    if event['name'] == 'unload' and status['status'] == 'queued':
+        db.zrem('queue', userkey)
+        db['userkey:%s' % userkey] = json.dumps({'status': 'prequeue'})
+        return
+
     # Refresh in the queue
     if event['name'] == 'refresh':
         pass
@@ -197,6 +203,30 @@ def handle_queue():
                     return
                 users = pipe.zrange('queue', 0, 2)
 
+                pipe.watch('user_status:%s' % users[0])
+                pipe.watch('user_status:%s' % users[1])
+                pipe.watch('user_status:%s' % users[2])
+
+                hadtobail = False
+                for u in users:
+                    # Squash the user if he's stale
+                    status = json.loads(pipe.get('user_status:%s' % u))
+                    diff = time.time() - float(status['lastseen'])
+                    if diff > 60:
+                        print 'unqueueing a user: %s' % u
+                        pipe.multi()
+                        pipe['user_status:%s' % u] = \
+                                              json.dumps({'status':'prequeue'})
+                        pipe.zrem('queue', u)
+                        pipe.execute()
+                        print 'unqueued'
+                        hadtobail = True
+                        break
+                if hadtobail:
+                    print 'skipping queue attempt'
+                    continue
+
+
                 # Create a fresh game
                 next_condition = None
                 game = Game(users=users, condition=next_condition)
@@ -208,9 +238,6 @@ def handle_queue():
                 buyer = state.buyer.userkey
                 seller = state.seller.userkey
                 insurer = state.insurer.userkey
-                pipe.watch('user_status:%s' % buyer)
-                pipe.watch('user_status:%s' % seller)
-                pipe.watch('user_status:%s' % insurer)
 
                 pipe.multi()
                 pipe.zremrangebyrank('queue', 0, 2)
@@ -228,8 +255,9 @@ def handle_queue():
                 pipe['user_status:%s'%insurer] = json.dumps(d)
 
                 pipe.execute()
-            except:
-                game.commit_events()
+            except redis.WatchError:
+                continue
+            game.commit_events()
 
 
 class Game(object):

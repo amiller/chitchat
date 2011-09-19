@@ -115,7 +115,19 @@ def startapp(args):
         if status['status'] == 'uninvited':
             return response([status])
 
-        for i in range(60):
+        if status['status'] == 'queued':
+            # try to avoid a race condition here
+            with db.pipeline() as pipe:
+                pipe.watch('user_status:%s' % userkey)
+                status = json.loads(pipe.get('user_status:%s' % userkey))
+                pipe.multi()
+                assert status['status'] == 'queued'
+                status['lastseen'] = repr(time())
+                pipe['user_status:%s' % userkey] = json.dumps(status)
+                pipe.execute()
+                print 'refreshed!'
+
+        for i in range(30):
             since = None
             if 'since' in flask.request.form:
                 since = flask.request.form['since']
@@ -175,6 +187,7 @@ def startapp(args):
                 'buyer_truth': flask.request.form['buyer_truth'],
                 'insurer_truth': flask.request.form['insurer_truth'],
                 'comments': flask.request.form['comments'],
+                'interest': flask.request.form['interest'],
             });
 
         # Return an error if they are not a valid user
@@ -272,8 +285,10 @@ def startapp(args):
         queue = []
         for user,queuetime in db.zrange('queue', 0, -1, withscores=True):
             waited = time() - queuetime
-            lastseen = time() - float(json.loads(db['user_status:' + user])['time'])
-            queue.append({'waited': waited, 'userkey': user, 'lastseen': lastseen})
+            lastseen = time() - float(json.loads(db['user_status:' +
+                                                    user])['lastseen'])
+            queue.append({'waited': waited,
+                          'userkey': user, 'lastseen': lastseen})
         
         return flask.render_template('admin.htm', games=games, queue=queue)
     
