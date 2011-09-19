@@ -1,0 +1,106 @@
+{% macro answers(user) -%}
+{% if not user.answers.none -%}
+              <ol>
+                <li>
+                  <span class="question">At the end of the game, did you think the situation was fair? Why or why not?</span>
+                  <br />
+                  <blockquote class="answer">{{ user.answers.situation_fair }}</blockquote>
+                </li>
+                <li class="post_seller">
+                  <span class="question">Did you believe the seller was telling the truth? Why or why not?</span>
+                  <br />
+                  <blockquote class="answer">{{ user.answers.seller_truth }}</blockquote>
+                </li>
+                <li class="post_buyer">
+                  <span class="question">Did you believe the buyer was telling the truth? Why or why not?</span>
+                  <br />
+                  <blockquote class="answer">{{ user.answers.buyer_truth }}</blockquote>
+                </li>
+                <li class="post_insurer">
+                  <span class="question">Did you believe the mediator was fair? Why or why not?</span>
+                  <br />
+                  <blockquote class="answer">{{ user.answers.insurer_truth }}</blockquote>
+                </li>
+                <li>
+                  <span class="question">Do you have any other comments about this experiment? We appreciate your feedback.</span>
+                  <br />
+                  <blockquote class="answer">{{ user.answers.comments }}</blockquote>
+                </li>
+              </ol>
+{%- else -%}
+              <span>User did not complete survey.</span>
+{%- endif %}
+{% endmacro -%}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>CHITchat Admin</title>
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('#games tr.head').click(function() {
+                $(this).next().toggle();
+                return false;
+            }).next().hide();
+        });
+    </script>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+  </head>
+  <body class="admin tagging">
+    <div id="content">
+      <h2>TAGGALORE</h2>
+      <table id="games">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Has chat</td>
+            <th>All Mturk</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for game in games %}          <tr class="head {% cycle '' 'alt' %}">
+            <td><h3>Game {{ util.gamekey(game.key) }}</h3></td>
+            <td>{{ game.has_chat }}</td>
+            <td>{{ util.is_game_mturk(util.gamekey(game.key)) }}</td>
+          </tr>
+          <tr>
+            <td colspan="50">
+              <div class="messages">
+                <div class="buyer_insurer_chat lfloat">
+                  <h4>Buyer to Mediator</h4>
+                  <div class="chatmessages" id="buyer_chatmessages">{% for evt in game.buyer_log %}
+                    <div class="message {{ evt.from }}{% if evt.name != 'chat' %} event{% endif %}">{% if evt.name == 'chat' %}{{ evt.message }}{% else %}*** {{ evt.from|capitalize }} gave {% if evt.name == 'send_token' %}the token{% else %}25c{% endif %} to {{ evt.to|capitalize }}{% endif %}</div>{% endfor %}
+                  </div>
+                </div>
+                <div class="seller_insurer_chat lfloat" style="margin-left: 20px;">
+                  <h4>Seller to Mediator</h4>
+                  <div class="chatmessages" id="seller_chatmessages">{% for evt in game.seller_log %}
+                    <div class="message {{ evt.from }}{% if evt.name != 'chat' %} event{% endif %}">{% if evt.name == 'chat' %}{{ evt.message }}{% else %}*** {{ evt.from|capitalize }} gave {% if evt.name == 'send_token' %}the token{% else %}25c{% endif %} to {{ evt.to|capitalize }}{% endif %}</div>{% endfor %}
+                  </div>
+                </div>
+                <div class="post_questionnaires lfloat">
+                  <h4 class="{% if game.insurer.answers.none %}noanswers{% endif %}">Buyer - {{ game.buyer.key }}{% if game.buyer.is_mturk %} (MTURK){% endif %}</h4>
+                  <div class="post_answers post_buyer">
+      {{ answers(game.buyer) }}
+                  </div>
+                  <h4 class="{% if game.insurer.answers.none %}noanswers{% endif %}">Seller - {{ game.seller.key }}{% if game.seller.is_mturk %} (MTURK){% endif %}</h4>
+                  <div class="post_answers post_seller">
+      {{ answers(game.seller) }}
+                  </div>
+                  <h4 class="{% if game.insurer.answers.none %}noanswers{% endif %}">Mediator - {{ game.insurer.key }}{% if game.insurer.is_mturk %} (MTURK){% endif %}</h4>
+                  <div class="post_answers post_insurer">
+      {{ answers(game.insurer) }}
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

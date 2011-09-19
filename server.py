@@ -27,6 +27,9 @@ import gevent
 import redis
 from werkzeug import SharedDataMiddleware
 
+from data.tags import Tagging
+from data.util import Util
+
 from gevent import monkey
 monkey.patch_all()
 
@@ -35,6 +38,8 @@ reload(game)
 
 app = None
 db = None
+tags = None
+util = None
 base = os.path.dirname(__file__)
 
 ADMIN_KEY = 'adminueqytMXDDS'
@@ -59,6 +64,9 @@ def startapp(args):
 
     db = redis.Redis(port=args.redis_port)
     game.setup_redis(args.redis_port)
+    
+    tags = Tagging(db)
+    util = Util(db)
 
     @app.route('/')
     def index(**kwargs):
@@ -268,7 +276,74 @@ def startapp(args):
             queue.append({'waited': waited, 'userkey': user, 'lastseen': lastseen})
         
         return flask.render_template('admin.htm', games=games, queue=queue)
+    
+    @app.route('/adminueqytMXDDS/tags/add/', methods=['POST'])
+    def admin_tags_add():
+        tags.addtag(flask.request.form['key'], flask.request.form['tag'])
+        return json.dumps(tags.gettags(flask.request.form['key']))
 
+    @app.route('/adminueqytMXDDS/tags/')
+    def admin_tags():
+        mturk_users = db.hgetall('notified_workers').values()
+        
+        games = []
+        for key in db.keys('game:*'):
+            events = db.zrange('events_' + key, 0, -1)
+            
+            game = {
+                'key': key,
+                'buyer_log': [],
+                'seller_log': [],
+                'has_chat': False
+            }
+            
+            state = json.loads(db[key])
+            for role in ('buyer', 'seller', 'insurer'):
+                game[role] = {}
+                
+                userkey = state[role]['userkey']
+                game[role]['key'] = userkey
+                if db.exists('survey_user:%s' % userkey):
+                    game[role]['answers'] = json.loads(db['survey_user:%s' % userkey])
+                else:
+                    game[role]['answers'] = {'none': True}
+                game[role]['is_mturk'] = userkey in mturk_users
+            
+            for event in events:
+                event = json.loads(event)
+                event['data']['name'] = event['name']
+                
+                if event['name'] == 'chat':
+                    game['has_chat'] = True
+                    if event['data']['chatbox'] == 'buyer':
+                        game['buyer_log'].append(event['data'])
+                    elif event['data']['chatbox'] == 'seller':
+                        game['seller_log'].append(event['data'])
+                
+                elif event['name'] in seller_sends:
+                    send = seller_sends[event['name']]
+                    event['data']['from'] = send[0]
+                    event['data']['to'] = send[1]
+                    game['seller_log'].append(event['data'])
+                
+                elif event['name'] in buyer_sends:
+                    send = buyer_sends[event['name']]
+                    event['data']['from'] = send[0]
+                    event['data']['to'] = send[1]
+                    game['buyer_log'].append(event['data'])
+                
+                elif event['name'] in both_sends:
+                    send = both_sends[event['name']]
+                    event['data']['from'] = send[0]
+                    event['data']['to'] = send[1]
+                    
+                    game['buyer_log'].append(event['data'])
+                    game['seller_log'].append(event['data'])
+            
+            games.append(game)
+        
+        return flask.render_template('tags.htm', games=games, util=util)
+    
     @app.route('/adminueqytMXDDS/table')
     def admin_table():
         if not app.debug:

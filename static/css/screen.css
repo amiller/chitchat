@@ -406,3 +406,9 @@ button.yours.unpushable.insurer:hover { background-color: #404635 !important; }
 }
 .admin .post_questionnaires h4 { color: #AAF575 !important; }
 .admin .post_questionnaires h4.noanswers { color: #EC6565 !important; }
+
+
+/* Admin Tagging */
+.admin.tagging h3 { margin: 0; }
+.admin.tagging tr.head { padding: 2px 5px; }
+.admin.tagging tr.head.alt { background-color: #EEE; }
