@@ -130,6 +130,16 @@ This game is part of research conducted by the University of Central Florida. Fo
     print results_xml.toxml()
 
 
+def grant_bonus(workerid, assid, amount=0.50, reason='Thanks!'):
+    d = {'Reward.1.Amount':str(amount), 'Reward.1.CurrencyCode':'USD'}
+    result = request('GrantBonus',
+                     WorkerId=workerid,
+                     AssignmentId=assid,
+                     Reason=reason,
+                     **d)
+    print result.toxml()
+
+
 def get_assignments():
     for hitid in get_all_hitids():
         results_xml = request('GetAssignmentsForHIT',
@@ -153,6 +163,36 @@ def get_assignments():
                 d[tag] = answer
             d = json.dumps(d)
             game.db.hset('presurvey', workerid, d)
+
+
+def do_bonuses():
+    for hitid in get_all_hitids():
+        results_xml = request('GetAssignmentsForHIT',
+                              HITId=hitid,
+                              PageSize=100)
+        assignments = results_xml.getElementsByTagName('Assignment')
+        for ass in assignments:
+            # TODO Check that the assignment is legit?
+            workerid = ass.getElementsByTagName('WorkerId')[0].childNodes[0].data
+            assid = ass.getElementsByTagName('AssignmentId')[0].childNodes[0].data
+            code = game.db.hget('notified_workers', workerid)
+            status = game.db.get('user_status:%s' % code)
+            bonus_text = """
+            Thank you for taking part in our study. In the game you played,
+            there was a deliberate problem where the buyer wouldn't get the
+            token even if the seller sent it. This was so we could collect
+            data about the techniques and language used during a disagreement.
+            
+            So, regardless of the outcome of your game, all parties get the
+            50 cent bonus.
+
+            Thank you again for participating.
+            Andrew Miller, University of Central Florida
+            amiller@cs.ucf.edu
+            """
+            if status and 'gameover' in status and not workerid in ('AIQ1I6ODSIO56', 'A3GPGSHQY2JGPY'):
+                print workerid, assid
+                #grant_bonus(workerid, assid, 0.5, bonus_text)
 
 
 def get_all_assignments():
